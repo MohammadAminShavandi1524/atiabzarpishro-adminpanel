@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef } from "react";
+
 import {
   LayoutDashboard,
   Package,
@@ -17,23 +19,97 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import Logo from "./Logo";
 import SidebarItem from "./SidebarItem";
 import SideBarItemHeader from "./SideBarItemHeader";
 
+gsap.registerPlugin(useGSAP);
+
 const Sidebar = () => {
   const t = useTranslations("Sidebar");
   const locale = useLocale();
   const pathname = usePathname();
 
+  const sidebarRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (!sidebarRef.current) return;
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (reduceMotion) return;
+
+      const timeline = gsap.timeline({
+        defaults: {
+          ease: "power3.out",
+        },
+      });
+
+      timeline.fromTo(
+        sidebarRef.current,
+        {
+          opacity: 0,
+          x: locale === "fa" ? 18 : -18,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.55,
+        },
+      );
+
+      timeline.fromTo(
+        ".sidebar-brand",
+        {
+          opacity: 0,
+          y: -10,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+        },
+        "-=0.3",
+      );
+
+      timeline.fromTo(
+        ".sidebar-section",
+        {
+          opacity: 0,
+          y: 12,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.42,
+          stagger: 0.055,
+        },
+        "-=0.2",
+      );
+    },
+    {
+      scope: sidebarRef,
+      dependencies: [locale],
+    },
+  );
+
   if (pathname === `/${locale}/login`) return null;
 
   return (
-    <aside className="border-e-border-secondary flex h-screen w-75 flex-col border-e pb-4">
+    <aside
+      ref={sidebarRef}
+      className="border-e-border-secondary flex h-screen w-75 flex-col border-e pb-4"
+    >
       {/* Header */}
-      <div className="mb-4 shrink-0 px-5">
+      <div className="sidebar-brand mb-4 shrink-0 px-5">
         <div className="border-b-border-secondary flex w-full items-center gap-x-2.25 border-b ps-1 pt-4 pb-4">
           <Logo />
 
@@ -55,7 +131,7 @@ const Sidebar = () => {
       >
         <nav className="flex flex-col gap-y-4 px-5">
           {/* Overview */}
-          <div>
+          <div className="sidebar-section">
             <SideBarItemHeader label={t("overview")} />
 
             <SidebarItem
@@ -67,7 +143,7 @@ const Sidebar = () => {
           </div>
 
           {/* Requests */}
-          <div>
+          <div className="sidebar-section">
             <SideBarItemHeader label={t("requests")} />
 
             <SidebarItem
@@ -79,7 +155,7 @@ const Sidebar = () => {
           </div>
 
           {/* Products */}
-          <div>
+          <div className="sidebar-section">
             <SideBarItemHeader label={t("productsSection")} />
 
             <SidebarItem
@@ -98,7 +174,7 @@ const Sidebar = () => {
           </div>
 
           {/* Video Clips */}
-          <div>
+          <div className="sidebar-section">
             <SideBarItemHeader label={t("videoSection")} />
 
             <SidebarItem
@@ -110,7 +186,7 @@ const Sidebar = () => {
           </div>
 
           {/* Catalogues */}
-          <div>
+          <div className="sidebar-section">
             <SideBarItemHeader label={t("cataloguesSection")} />
 
             <SidebarItem
@@ -129,7 +205,7 @@ const Sidebar = () => {
           </div>
 
           {/* Brochures */}
-          <div>
+          <div className="sidebar-section">
             <SideBarItemHeader label={t("brochuresSection")} />
 
             <SidebarItem
@@ -148,7 +224,7 @@ const Sidebar = () => {
           </div>
 
           {/* Blogs */}
-          <div>
+          <div className="sidebar-section">
             <SideBarItemHeader label={t("blogsSection")} />
 
             <SidebarItem
