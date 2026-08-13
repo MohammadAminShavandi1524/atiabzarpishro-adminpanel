@@ -34,10 +34,10 @@ const Sidebar = () => {
     <aside className="border-e-border-secondary flex h-screen w-75 flex-col border-e pb-4">
       {/* Header */}
       <div className="mb-4 shrink-0 px-5">
-        <div className="border-b-border-secondary flex w-full items-center gap-x-3 border-b ps-1 pt-4 pb-4">
+        <div className="border-b-border-secondary flex w-full items-center gap-x-2.5 border-b ps-1 pt-4 pb-4">
           <Logo />
 
-          <div className="flex flex-col pt-0.5">
+          <div className="flex flex-col">
             <div className="text-xl font-medium">{t("logoTitle")}</div>
 
             <div className="text-muted-foreground text-sm">

@@ -44,6 +44,36 @@
     "addBlog": "Add Blog"
   },
 
+  "Login": {
+    "brand": "ATI ABZAR PISHRO",
+    "panel": "Administration Panel",
+
+    "title": "Sign in to your account",
+    "description": "Enter your account credentials to access the administration panel.",
+
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+
+    "submit": "Sign in",
+
+    "restricted": "Access to this area is restricted to authorized users.",
+
+    "invalidCredentials": "The email or password you entered is incorrect.",
+
+    "validation": {
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Password is required."
+    },
+
+    "errors": {
+      "loginFailed": "Unable to sign in. Please check your credentials and try again."
+    }
+  },
+
   "Dashboard": {
     "header": {
       "title": "Dashboard",

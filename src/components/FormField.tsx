@@ -1,8 +1,9 @@
 "use client";
 
+import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type { FieldError, UseFormRegisterReturn } from "react-hook-form";
+
 import { cn } from "@/lib/utils";
-import { TextareaHTMLAttributes, InputHTMLAttributes } from "react";
-import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 interface BaseProps {
   label: string;
@@ -32,12 +33,29 @@ export const FormField = (props: FormFieldProps) => {
     ...rest
   } = props;
 
-  return (
-    <div className={cn("flex flex-col gap-2 sm:gap-3", containerClassName)}>
-      <div className="flex  gap-1 px-1.5 sm:flex-row items-center justify-between">
-        <label className="text-foreground text-sm font-semibold">{label}</label>
+  const fieldClassName = cn(
+    "bg-background text-foreground placeholder:text-muted-foreground",
+    "w-full border border-border-secondary",
+    "outline-none",
+    "transition-[border-color,background-color,box-shadow] duration-300",
+    "focus:border-custom-primary",
+    "focus:ring-2 focus:ring-custom-primary/10",
+    "disabled:cursor-not-allowed disabled:opacity-50",
+    "rtl:text-right",
+    error &&
+      "border-destructive focus:border-destructive focus:ring-destructive/10",
+  );
 
-        {error && <p className="text-xs text-red-500 pt-0.5">{error.message}</p>}
+  return (
+    <div className={cn("flex flex-col gap-2.5", containerClassName)}>
+      <div className="flex items-center justify-between gap-3 px-0.5">
+        <label className="text-foreground text-sm font-medium">{label}</label>
+
+        {error && (
+          <p className="text-destructive text-xs font-medium mt-1">
+            {error.message}
+          </p>
+        )}
       </div>
 
       {as === "textarea" ? (
@@ -45,24 +63,15 @@ export const FormField = (props: FormFieldProps) => {
           {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
           {...register}
           className={cn(
-            "bg-secondary-bg text-foreground placeholder:text-muted-foreground h-28 w-full resize-none rounded-lg border px-3 py-3 text-sm transition-colors outline-none sm:h-24 sm:px-4 sm:py-2.5 sm:text-base rtl:text-right",
-
-            error
-              ? "border-red-500 focus:border-red-500"
-              : "border-foreground/8 focus:border-primary",
+            fieldClassName,
+            "min-h-32 resize-none px-4 py-3 text-[15px] leading-7",
           )}
         />
       ) : (
         <input
           {...(rest as InputHTMLAttributes<HTMLInputElement>)}
           {...register}
-          className={cn(
-            "bg-secondary-bg text-foreground placeholder:text-muted-foreground h-11 w-full rounded-lg border px-3 text-sm transition-colors outline-none sm:h-12 sm:px-4 sm:text-base rtl:text-right",
-
-            error
-              ? "border-red-500 focus:border-red-500"
-              : "border-foreground/8 focus:border-primary",
-          )}
+          className={cn(fieldClassName, "h-12 px-4 text-[15px]")}
         />
       )}
     </div>
