@@ -6,13 +6,13 @@ export function getCustomButtonFill(intent?: CustomButtonVariants["intent"]) {
       return "bg-destructive";
 
     case "success":
-      return "bg-green-500";
+      return "bg-success";
 
     case "warning":
-      return "bg-yellow-500";
+      return "bg-warning";
 
     case "info":
-      return "bg-sky-500";
+      return "bg-info";
 
     case "secondary":
       return "bg-secondary";

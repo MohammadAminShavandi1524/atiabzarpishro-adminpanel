@@ -1,3 +1,4 @@
+import HeaderLayout from "@/components/layout/HeaderLayout";
 import { Locale, useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 
@@ -9,5 +10,9 @@ export default function IndexPage({ params }: PageProps<"/[locale]">) {
   // Enable static rendering
   setRequestLocale(locale as Locale);
 
-  return <div className="h-250"></div>;
+  return (
+    <div className="h-250">
+      <HeaderLayout title="" descrption="" />
+    </div>
+  );
 }

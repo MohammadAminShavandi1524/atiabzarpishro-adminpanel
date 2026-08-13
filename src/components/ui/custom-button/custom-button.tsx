@@ -10,28 +10,20 @@ const CustomButton = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
   (
     {
       className,
-
       contentClassName,
-
+      leftSectionClassName,
+      rightSectionClassName,
       leftSection,
       rightSection,
-
       loading = false,
       loadingContent,
-
       disabled,
-
       asChild = false,
-
       holdProgress,
-
       holdColor,
-
       children,
-
       ...props
     },
-
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
@@ -39,49 +31,35 @@ const CustomButton = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
     return (
       <Comp
         ref={ref}
-
         disabled={asChild ? undefined : disabled || loading}
-
         className={cn(
-          "relative overflow-hidden",
-
           customButtonVariants({
             variant: props.variant,
             intent: props.intent,
             size: props.size,
           }),
-
           className,
         )}
-
         {...props}
       >
-        {/* Hold Fill */}
-
         {holdProgress !== undefined && (
           <span
             aria-hidden
-
             className={cn(
-              `pointer-events-none absolute inset-y-0 start-0 z-0 transition-[width] duration-75 ease-linear rtl:start-auto rtl:end-0`,
-
+              "pointer-events-none absolute inset-y-0 start-0 z-0",
+              "transition-[width] duration-75 ease-linear",
               holdColor ?? "bg-primary/30",
             )}
-
             style={{
               width: `${holdProgress}%`,
             }}
           />
         )}
 
-        {/* Button Content */}
-
         <span
           className={cn(
-            `relative z-10 inline-flex items-center justify-center gap-2`,
-
+            "relative z-10 inline-flex items-center justify-center gap-2",
             loading && "opacity-80",
-
             contentClassName,
           )}
         >
@@ -92,13 +70,21 @@ const CustomButton = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
           ) : (
             <>
               {leftSection && (
-                <span className="inline-flex shrink-0">{leftSection}</span>
+                <span
+                  className={cn("inline-flex shrink-0", leftSectionClassName)}
+                >
+                  {leftSection}
+                </span>
               )}
 
               {children}
 
               {rightSection && (
-                <span className="inline-flex shrink-0">{rightSection}</span>
+                <span
+                  className={cn("inline-flex shrink-0", rightSectionClassName)}
+                >
+                  {rightSection}
+                </span>
               )}
             </>
           )}

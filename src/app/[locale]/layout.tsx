@@ -16,8 +16,8 @@ import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme/Providers";
 import AppToaster from "@/components/AppToaster";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
+import Sidebar from "@/components/layout/Sidebar";
+
 
 // import {
 //   MobileSidebar,
@@ -103,12 +103,12 @@ export default async function LocaleLayout({
           <ThemeProvider>
             <AppToaster />
 
-            <div className="text-foreground bg-background relative">
-              <Header />
+            <div className="bg-background text-foreground flex h-screen overflow-hidden">
+              <Sidebar />
 
-              <main className="">{children}</main>
-
-              {/* <Footer /> */}
+              <div className="flex flex-1 flex-col overflow-hidden">
+                {children}
+              </div>
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>
