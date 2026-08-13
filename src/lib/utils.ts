@@ -34,4 +34,21 @@ export function englishToPersianNumber(input: string) {
   return output;
 }
 
+export function formatDate(
+  date: string | Date,
+  locale: string,
+  options?: Intl.DateTimeFormatOptions,
+) {
+  const value = typeof date === "string" ? new Date(date) : date;
 
+  if (Number.isNaN(value.getTime())) {
+    return "";
+  }
+
+  return new Intl.DateTimeFormat(locale === "fa" ? "fa-IR" : "en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    ...options,
+  }).format(value);
+}

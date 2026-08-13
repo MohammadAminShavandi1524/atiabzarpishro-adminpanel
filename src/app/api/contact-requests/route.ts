@@ -1,17 +1,16 @@
-import { serverApi } from "@/lib/server-api";
 import { NextResponse } from "next/server";
 
+import { serverApi } from "@/lib/server-api";
 
 export async function GET() {
   try {
-    const data = await serverApi("/support/get_requests/");
+    const data = await serverApi("/support/contact/get/");
 
     return NextResponse.json(data);
   } catch (error: any) {
     return NextResponse.json(
       {
-        message: "Failed to fetch requests",
-        error: error.body,
+        error: error.body ?? "Internal Server Error",
       },
       {
         status: error.status ?? 500,

@@ -79,5 +79,53 @@
       "title": "Dashboard",
       "description": "Monitor and manage your website content, requests, and recent activity."
     }
+  },
+
+  "ClientRequests": {
+    "header": {
+      "title": "Client Requests",
+      "description": "View and manage requests submitted by clients"
+    },
+    "loading": "Loading requests...",
+    "filters": {
+      "searchPlaceholder": "Search by name, phone, email, company or message...",
+      "newestFirst": "Newest first",
+      "oldestFirst": "Oldest first"
+    },
+    "table": {
+      "id": "ID",
+      "fullName": "Full Name",
+      "phoneNumber": "Phone Number",
+      "email": "Email",
+      "company": "Company",
+      "message": "Message",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "details": {
+      "title": "Request Details",
+      "description": "Complete information about the request submitted by the client",
+      "fullName": "Full Name",
+      "phoneNumber": "Phone Number",
+      "email": "Email",
+      "company": "Company",
+      "message": "Message",
+      "date": "Submitted Date",
+      "requestId": "Request ID",
+      "close": "Close"
+    },
+    "actions": {
+      "delete": "Delete"
+    },
+    "empty": {
+      "title": "No requests found",
+      "description": "No requests match your current search."
+    },
+    "toast": {
+      "delete": {
+        "success": "The client request was deleted successfully.",
+        "error": "Unable to delete the client request."
+      }
+    }
   }
 }

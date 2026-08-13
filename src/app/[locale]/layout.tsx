@@ -17,7 +17,7 @@ import { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme/Providers";
 import AppToaster from "@/components/AppToaster";
 import Sidebar from "@/components/layout/Sidebar";
-
+import { CustomToastProvider } from "@/components/ui/custom-toast";
 
 // import {
 //   MobileSidebar,
@@ -107,7 +107,7 @@ export default async function LocaleLayout({
               <Sidebar />
 
               <div className="flex flex-1 flex-col overflow-hidden">
-                {children}
+                <CustomToastProvider>{children}</CustomToastProvider>
               </div>
             </div>
           </ThemeProvider>

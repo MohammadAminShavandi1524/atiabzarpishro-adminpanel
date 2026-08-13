@@ -34,7 +34,7 @@ const Sidebar = () => {
     <aside className="border-e-border-secondary flex h-screen w-75 flex-col border-e pb-4">
       {/* Header */}
       <div className="mb-4 shrink-0 px-5">
-        <div className="border-b-border-secondary flex w-full items-center gap-x-2.5 border-b ps-1 pt-4 pb-4">
+        <div className="border-b-border-secondary flex w-full items-center gap-x-2.25 border-b ps-1 pt-4 pb-4">
           <Logo />
 
           <div className="flex flex-col">
@@ -66,6 +66,18 @@ const Sidebar = () => {
             />
           </div>
 
+          {/* Requests */}
+          <div>
+            <SideBarItemHeader label={t("requests")} />
+
+            <SidebarItem
+              href={`/${locale}/client-requests`}
+              title={t("clientRequests")}
+              icon={ClipboardList}
+              active={pathname.startsWith(`/${locale}/client-requests`)}
+            />
+          </div>
+
           {/* Products */}
           <div>
             <SideBarItemHeader label={t("productsSection")} />
@@ -94,18 +106,6 @@ const Sidebar = () => {
               title={t("videoClips")}
               icon={Video}
               active={pathname.startsWith(`/${locale}/video-clips`)}
-            />
-          </div>
-
-          {/* Requests */}
-          <div>
-            <SideBarItemHeader label={t("requests")} />
-
-            <SidebarItem
-              href={`/${locale}/client-requests`}
-              title={t("clientRequests")}
-              icon={ClipboardList}
-              active={pathname.startsWith(`/${locale}/client-requests`)}
             />
           </div>
 

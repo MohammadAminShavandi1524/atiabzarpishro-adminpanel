@@ -1,21 +1,22 @@
+import { NextResponse } from "next/server";
+
 import { serverApi } from "@/lib/server-api";
-import { NextRequest, NextResponse } from "next/server";
 
 interface RouteContext {
   params: Promise<{
-    requestId: string;
+    id: string;
   }>;
 }
 
-export async function DELETE(_req: NextRequest, { params }: RouteContext) {
+export async function DELETE(_request: Request, { params }: RouteContext) {
   try {
-    const { requestId } = await params;
+    const { id } = await params;
 
-    const data = await serverApi(`/support/delete_request/${requestId}/`, {
+    const data = await serverApi(`/support/contact/delete/${id}/`, {
       method: "DELETE",
     });
 
-    return NextResponse.json(data);
+    return NextResponse.json(data ?? { success: true });
   } catch (error: any) {
     return NextResponse.json(
       {
