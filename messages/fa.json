@@ -13,7 +13,7 @@
   "LocaleLayout": {
     "title": "آتی ابزار پیشرو"
   },
-
+  
   "Sidebar": {
     "logoTitle": "آتی ابزار پیشرو",
     "logoSubtitle": "پنل مدیریت",
@@ -40,9 +40,9 @@
     "brochures": "بروشورها",
     "addBrochure": "افزودن بروشور",
 
-    "blogsSection": "مقالات",
-    "blogs": "مقالات",
-    "addBlog": "افزودن مقاله"
+    "newsSection": "اخبار",
+    "news": "اخبار",
+    "addNews": "افزودن خبر"
   },
 
   "Login": {
@@ -127,6 +127,332 @@
         "success": "درخواست مشتری با موفقیت حذف شد.",
         "error": "حذف درخواست مشتری انجام نشد."
       }
+    }
+  },
+
+  "news": {
+    "header": {
+      "title": "اخبار",
+      "description": "اخبار و دسته‌بندی‌های آن‌ها را از یک بخش مدیریت کنید."
+    },
+    "tabs": {
+      "categories": "دسته‌بندی‌ها",
+      "news": "اخبار"
+    },
+    "categories": {
+      "table": {
+        "id": "شناسه",
+        "name": "نام",
+        "language": "زبان",
+        "actions": "عملیات"
+      }
+    },
+    "newsTable": {
+      "searchPlaceholder": "جستجو در عنوان خبر...",
+      "newestFirst": "جدیدترین",
+      "oldestFirst": "قدیمی‌ترین",
+      "table": {
+        "id": "شناسه",
+        "title": "عنوان",
+        "category": "دسته‌بندی",
+        "tags": "برچسب‌ها",
+        "date": "تاریخ",
+        "actions": "عملیات"
+      },
+      "empty": {
+        "title": "خبری یافت نشد",
+        "description": "عبارت دیگری را برای جستجو امتحان کنید."
+      }
+    },
+    "deleteModal": {
+      "deleteNews": "حذف خبر",
+      "deleteCategory": "حذف دسته‌بندی",
+      "description": "آیا از حذف «{name}» اطمینان دارید؟"
+    },
+    "toast": {
+      "deleteSuccess": "با موفقیت حذف شد.",
+      "deleteError": "حذف با خطا مواجه شد.",
+      "rootNewsDeleteSuccess": "خبر اصلی با موفقیت حذف شد.",
+      "rootNewsDeleteError": "حذف خبر اصلی با خطا مواجه شد.",
+      "parentNewsDeleteSuccess": "خبر والد با موفقیت حذف شد.",
+      "parentNewsDeleteError": "حذف خبر والد با خطا مواجه شد.",
+      "childNewsDeleteSuccess": "خبر زیرمجموعه با موفقیت حذف شد.",
+      "childNewsDeleteError": "حذف خبر زیرمجموعه با خطا مواجه شد.",
+      "newsPublishedSuccess": "خبر با موفقیت منتشر شد.",
+      "newsUnpublishedSuccess": "خبر با موفقیت از حالت انتشار خارج شد.",
+      "newsPublishError": "تغییر وضعیت انتشار خبر با خطا مواجه شد."
+    },
+    "actions": {
+      "edit": "ویرایش",
+      "delete": "حذف",
+      "more": "بیشتر",
+      "publish": "انتشار",
+      "unpublish": "لغو انتشار",
+      "downloadImage": "دانلود تصویر"
+    },
+    "hierarchy": {
+      "published": "منتشر شده",
+      "draft": "پیش‌نویس",
+      "category": "دسته‌بندی",
+      "id": "شناسه",
+      "imageAttached": "دارای تصویر",
+      "noChildNews": "خبر زیرمجموعه‌ای وجود ندارد.",
+      "rootNews": "خبر اصلی",
+      "parentNews": "خبر والد",
+      "childNews": "خبر زیرمجموعه"
+    }
+  },
+
+  "editRootNews": {
+    "header": {
+      "title": "ویرایش خبر اصلی",
+      "description": "عنوان خبر اصلی را ویرایش کنید."
+    },
+    "form": {
+      "title": {
+        "label": "عنوان خبر",
+        "placeholder": "عنوان خبر را وارد کنید"
+      },
+      "validation": {
+        "required": "وارد کردن عنوان خبر الزامی است.",
+        "max": "عنوان خبر نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد."
+      },
+      "actions": {
+        "saveChanges": "ذخیره تغییرات",
+        "saving": "در حال ذخیره..."
+      }
+    },
+    "toast": {
+      "success": "خبر اصلی با موفقیت ویرایش شد.",
+      "error": "ویرایش خبر اصلی با خطا مواجه شد.",
+      "loadError": "دریافت اطلاعات خبر اصلی با خطا مواجه شد."
+    }
+  },
+
+  "editParentNews": {
+    "header": {
+      "title": "ویرایش خبر والد",
+      "description": "اطلاعات خبر والد را ویرایش کنید."
+    },
+    "form": {
+      "title": {
+        "label": "عنوان",
+        "placeholder": "عنوان خبر را وارد کنید"
+      },
+      "description": {
+        "label": "توضیحات",
+        "placeholder": "توضیحات خبر را وارد کنید"
+      },
+      "image": {
+        "label": "تصویر شاخص",
+        "placeholder": "آدرس تصویر را وارد کنید"
+      },
+      "category": {
+        "label": "دسته‌بندی"
+      },
+      "tags": {
+        "label": "برچسب‌ها",
+        "placeholder": "برچسب‌های خبر را انتخاب کنید"
+      },
+      "validation": {
+        "titleRequired": "وارد کردن عنوان خبر الزامی است.",
+        "titleMax": "عنوان خبر نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد.",
+        "descriptionRequired": "وارد کردن توضیحات خبر الزامی است.",
+        "imageRequired": "تصویر خبر الزامی است.",
+        "categoryRequired": "انتخاب دسته‌بندی الزامی است.",
+        "tagsRequired": "حداقل یک برچسب انتخاب کنید."
+      },
+      "actions": {
+        "saveChanges": "ذخیره تغییرات",
+        "saving": "در حال ذخیره..."
+      }
+    },
+    "toast": {
+      "success": "خبر والد با موفقیت ویرایش شد.",
+      "error": "ویرایش خبر والد با خطا مواجه شد.",
+      "loadError": "دریافت اطلاعات خبر والد با خطا مواجه شد."
+    }
+  },
+
+  "editChildNews": {
+    "header": {
+      "title": "ویرایش خبر زیرمجموعه",
+      "description": "اطلاعات خبر زیرمجموعه را ویرایش کنید."
+    },
+    "form": {
+      "title": {
+        "label": "عنوان",
+        "placeholder": "عنوان خبر را وارد کنید"
+      },
+      "description": {
+        "label": "توضیحات",
+        "placeholder": "توضیحات خبر را وارد کنید"
+      },
+      "image": {
+        "label": "تصویر",
+        "placeholder": "آدرس تصویر را وارد کنید (اختیاری)"
+      },
+      "validation": {
+        "titleRequired": "وارد کردن عنوان خبر الزامی است.",
+        "titleMax": "عنوان خبر نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد.",
+        "descriptionRequired": "وارد کردن توضیحات خبر الزامی است."
+      },
+      "actions": {
+        "saveChanges": "ذخیره تغییرات",
+        "saving": "در حال ذخیره..."
+      }
+    },
+    "toast": {
+      "success": "خبر زیرمجموعه با موفقیت ویرایش شد.",
+      "error": "ویرایش خبر زیرمجموعه با خطا مواجه شد.",
+      "loadError": "دریافت اطلاعات خبر زیرمجموعه با خطا مواجه شد."
+    }
+  },
+
+  "editCategory": {
+    "header": {
+      "title": "ویرایش دسته‌بندی",
+      "description": "نام دسته‌بندی را ویرایش کنید."
+    },
+    "form": {
+      "name": {
+        "label": "نام دسته‌بندی",
+        "placeholder": "نام دسته‌بندی را وارد کنید"
+      },
+      "validation": {
+        "required": "وارد کردن نام دسته‌بندی الزامی است.",
+        "max": "نام دسته‌بندی نمی‌تواند بیشتر از ۳۰ کاراکتر باشد."
+      },
+      "actions": {
+        "saveChanges": "ذخیره تغییرات",
+        "saving": "در حال ذخیره..."
+      }
+    },
+    "toast": {
+      "success": "دسته‌بندی با موفقیت ویرایش شد.",
+      "error": "ویرایش دسته‌بندی با خطا مواجه شد.",
+      "loadError": "دریافت اطلاعات دسته‌بندی با خطا مواجه شد."
+    }
+  },
+
+  "addNews": {
+    "header": {
+      "category": {
+        "title": "افزودن دسته‌بندی",
+        "description": "یک دسته‌بندی جدید برای سازمان‌دهی اخبار ایجاد کنید."
+      },
+      "rootNews": {
+        "title": "افزودن خبر اصلی",
+        "description": "یک خبر اصلی به‌عنوان بالاترین سطح ساختار اخبار ایجاد کنید."
+      },
+      "parentNews": {
+        "title": "افزودن خبر والد",
+        "description": "یک خبر والد برای مدیریت و سازمان‌دهی اخبار مرتبط ایجاد کنید."
+      },
+      "news": {
+        "title": "افزودن خبر",
+        "description": "یک خبر جدید ایجاد کرده و آن را به یکی از خبرهای والد موجود اختصاص دهید."
+      }
+    },
+    "tabs": {
+      "category": "دسته‌بندی",
+      "rootNews": "خبر اصلی",
+      "parentNews": "خبر والد",
+      "news": "خبر"
+    },
+    "submitButton": {
+      "category": "ذخیره دسته‌بندی",
+      "rootNews": "ذخیره خبر اصلی",
+      "parentNews": "ذخیره خبر والد",
+      "news": "ذخیره خبر"
+    },
+    "forms": {
+      "category": {
+        "validation": {
+          "required": "عنوان دسته‌بندی الزامی است.",
+          "max": "عنوان دسته‌بندی نمی‌تواند بیشتر از ۳۰ کاراکتر باشد.",
+          "language": "لطفاً یک زبان انتخاب کنید."
+        },
+        "label": "دسته‌بندی",
+        "placeholder": "مثلاً فناوری",
+        "selectCategory": "انتخاب دسته‌بندی"
+      },
+      "rootNews": {
+        "title": "عنوان",
+        "titlePlaceholder": "عنوان خبر اصلی را وارد کنید",
+        "validation": {
+          "required": "وارد کردن عنوان الزامی است.",
+          "max": "عنوان باید حداکثر ۲۵۵ کاراکتر باشد."
+        }
+      },
+      "parentNews": {
+        "category": "دسته‌بندی",
+        "tags": "برچسب‌ها",
+        "tagsPlaceholder": "انتخاب برچسب‌ها",
+        "createTag": "ایجاد برچسب جدید",
+        "tagNamePlaceholder": "نام برچسب...",
+        "cancel": "انصراف",
+        "save": "ذخیره",
+        "title": "عنوان",
+        "titlePlaceholder": "عنوان خبر والد را وارد کنید",
+        "featuredImage": "آدرس تصویر شاخص",
+        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "description": "توضیحات",
+        "descriptionPlaceholder": "توضیح کوتاهی برای این خبر والد بنویسید",
+        "language": "زبان",
+        "languagePlaceholder": "انتخاب زبان",
+        "rootNews": "خبر اصلی",
+        "rootNewsPlaceholder": "خبر اصلی را انتخاب کنید",
+        "loadingRootNews": "در حال بارگذاری...",
+        "validation": {
+          "rootNewsRequired": "لطفاً یک خبر اصلی انتخاب کنید.",
+          "categoryRequired": "لطفاً یک دسته‌بندی انتخاب کنید.",
+          "titleRequired": "وارد کردن عنوان الزامی است.",
+          "descriptionRequired": "وارد کردن توضیحات الزامی است.",
+          "imageInvalid": "لطفاً یک آدرس معتبر برای تصویر وارد کنید.",
+          "languageRequired": "لطفاً یک زبان انتخاب کنید.",
+          "tagsRequired": "لطفاً حداقل یک برچسب انتخاب کنید."
+        }
+      },
+      "news": {
+        "title": "عنوان",
+        "titlePlaceholder": "عنوان خبر را وارد کنید",
+        "featuredImage": "آدرس تصویر شاخص",
+        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "description": "توضیحات",
+        "descriptionPlaceholder": "توضیح کوتاهی برای این خبر بنویسید",
+        "parentNews": "خبر والد",
+        "parentNewsPlaceholder": "خبر والد را انتخاب کنید",
+        "loadingParentNews": "در حال بارگذاری خبرهای والد...",
+        "validation": {
+          "parentNewsRequired": "لطفاً یک خبر والد انتخاب کنید.",
+          "titleRequired": "وارد کردن عنوان الزامی است.",
+          "descriptionRequired": "وارد کردن توضیحات الزامی است.",
+          "imageInvalid": "لطفاً یک آدرس معتبر برای تصویر وارد کنید."
+        }
+      }
+    },
+    "toast": {
+      "category": {
+        "success": "دسته‌بندی با موفقیت ایجاد شد.",
+        "error": "ایجاد دسته‌بندی با خطا مواجه شد."
+      },
+      "rootNews": {
+        "success": "خبر اصلی با موفقیت ایجاد شد.",
+        "error": "ایجاد خبر اصلی با خطا مواجه شد."
+      },
+      "parentNews": {
+        "success": "خبر والد با موفقیت ایجاد شد.",
+        "error": "ایجاد خبر والد با خطا مواجه شد."
+      },
+      "news": {
+        "success": "خبر با موفقیت ایجاد شد.",
+        "error": "ایجاد خبر با خطا مواجه شد."
+      }
+    },
+    "languages": {
+      "fa": "فارسی",
+      "en": "انگلیسی"
     }
   }
 }

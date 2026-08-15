@@ -39,9 +39,9 @@
     "brochures": "Brochures",
     "addBrochure": "Add Brochure",
 
-    "blogsSection": "Blogs",
-    "blogs": "Blogs",
-    "addBlog": "Add Blog"
+    "newsSection": "News",
+    "news": "News",
+    "addNews": "Add News"
   },
 
   "Login": {
@@ -126,6 +126,332 @@
         "success": "The client request was deleted successfully.",
         "error": "Unable to delete the client request."
       }
+    }
+  },
+
+  "news": {
+    "header": {
+      "title": "News",
+      "description": "Manage news posts and categories from one place."
+    },
+    "tabs": {
+      "categories": "Categories",
+      "news": "News"
+    },
+    "categories": {
+      "table": {
+        "id": "ID",
+        "name": "Name",
+        "language": "Language",
+        "actions": "Actions"
+      }
+    },
+    "newsTable": {
+      "searchPlaceholder": "Search news title...",
+      "newestFirst": "Newest First",
+      "oldestFirst": "Oldest First",
+      "table": {
+        "id": "ID",
+        "title": "Title",
+        "category": "Category",
+        "tags": "Tags",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "empty": {
+        "title": "No news found",
+        "description": "Try another search keyword."
+      }
+    },
+    "deleteModal": {
+      "deleteNews": "Delete News",
+      "deleteCategory": "Delete Category",
+      "description": "Are you sure you want to delete \"{name}\"?"
+    },
+    "toast": {
+      "deleteSuccess": "Deleted successfully.",
+      "deleteError": "Failed to delete.",
+      "rootNewsDeleteSuccess": "Root news deleted successfully.",
+      "rootNewsDeleteError": "Failed to delete root news.",
+      "parentNewsDeleteSuccess": "Parent news deleted successfully.",
+      "parentNewsDeleteError": "Failed to delete parent news.",
+      "childNewsDeleteSuccess": "Child news deleted successfully.",
+      "childNewsDeleteError": "Failed to delete child news.",
+      "newsPublishedSuccess": "News published successfully.",
+      "newsUnpublishedSuccess": "News unpublished successfully.",
+      "newsPublishError": "Failed to change news publish status."
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "more": "More",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "downloadImage": "Download Image"
+    },
+    "hierarchy": {
+      "published": "Published",
+      "draft": "Draft",
+      "category": "Category",
+      "id": "ID",
+      "imageAttached": "Image attached",
+      "noChildNews": "No child news available.",
+      "rootNews": "Root News",
+      "parentNews": "Parent News",
+      "childNews": "Child News"
+    }
+  },
+
+  "editRootNews": {
+    "header": {
+      "title": "Edit Root News",
+      "description": "Update the root news title."
+    },
+    "form": {
+      "title": {
+        "label": "News Title",
+        "placeholder": "Enter news title"
+      },
+      "validation": {
+        "required": "News title is required.",
+        "max": "News title cannot exceed 100 characters."
+      },
+      "actions": {
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+      }
+    },
+    "toast": {
+      "success": "Root news updated successfully.",
+      "error": "Failed to update root news.",
+      "loadError": "Failed to load root news."
+    }
+  },
+
+  "editParentNews": {
+    "header": {
+      "title": "Edit Parent News",
+      "description": "Update the parent news information."
+    },
+    "form": {
+      "title": {
+        "label": "Title",
+        "placeholder": "Enter news title"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Enter news description"
+      },
+      "image": {
+        "label": "Featured Image",
+        "placeholder": "Enter image URL"
+      },
+      "category": {
+        "label": "Category"
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "Select news tags"
+      },
+      "validation": {
+        "titleRequired": "News title is required.",
+        "titleMax": "News title cannot exceed 100 characters.",
+        "descriptionRequired": "News description is required.",
+        "imageRequired": "News image is required.",
+        "categoryRequired": "Category is required.",
+        "tagsRequired": "At least one tag is required."
+      },
+      "actions": {
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+      }
+    },
+    "toast": {
+      "success": "Parent news updated successfully.",
+      "error": "Failed to update parent news.",
+      "loadError": "Failed to load parent news."
+    }
+  },
+
+  "editChildNews": {
+    "header": {
+      "title": "Edit Child News",
+      "description": "Update the child news information."
+    },
+    "form": {
+      "title": {
+        "label": "Title",
+        "placeholder": "Enter news title"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Enter news description"
+      },
+      "image": {
+        "label": "Image",
+        "placeholder": "Enter image URL (optional)"
+      },
+      "validation": {
+        "titleRequired": "News title is required.",
+        "titleMax": "News title cannot exceed 100 characters.",
+        "descriptionRequired": "News description is required."
+      },
+      "actions": {
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+      }
+    },
+    "toast": {
+      "success": "Child news updated successfully.",
+      "error": "Failed to update child news.",
+      "loadError": "Failed to load child news."
+    }
+  },
+
+  "editCategory": {
+    "header": {
+      "title": "Edit Category",
+      "description": "Update the category name."
+    },
+    "form": {
+      "name": {
+        "label": "Category Name",
+        "placeholder": "Enter category name"
+      },
+      "validation": {
+        "required": "Category name is required.",
+        "max": "Category name cannot exceed 30 characters."
+      },
+      "actions": {
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+      }
+    },
+    "toast": {
+      "success": "Category updated successfully.",
+      "error": "Failed to update category.",
+      "loadError": "Failed to load category."
+    }
+  },
+
+  "addNews": {
+    "header": {
+      "category": {
+        "title": "Add Category",
+        "description": "Create a new category to organize your news content."
+      },
+      "rootNews": {
+        "title": "Add Root News",
+        "description": "Create a root news item that serves as the top-level container for your news hierarchy."
+      },
+      "parentNews": {
+        "title": "Add Parent News",
+        "description": "Create a parent news item that acts as the main container for related news posts."
+      },
+      "news": {
+        "title": "Add News",
+        "description": "Create a new news post and assign it to an existing parent news item."
+      }
+    },
+    "tabs": {
+      "category": "Category",
+      "rootNews": "Root News",
+      "parentNews": "Parent News",
+      "news": "News"
+    },
+    "submitButton": {
+      "category": "Save Category",
+      "rootNews": "Save Root News",
+      "parentNews": "Save Parent News",
+      "news": "Save News"
+    },
+    "forms": {
+      "category": {
+        "validation": {
+          "required": "Category title is required.",
+          "max": "Category title cannot exceed 30 characters.",
+          "language": "Please select a language."
+        },
+        "label": "Category",
+        "placeholder": "e.g. Technology",
+        "selectCategory": "Select category"
+      },
+      "rootNews": {
+        "title": "Title",
+        "titlePlaceholder": "Enter the root news title",
+        "validation": {
+          "required": "Title is required.",
+          "max": "Title must be at most 255 characters."
+        }
+      },
+      "parentNews": {
+        "category": "Category",
+        "tags": "Tags",
+        "tagsPlaceholder": "Select tags",
+        "createTag": "Create new tag",
+        "tagNamePlaceholder": "Tag name...",
+        "cancel": "Cancel",
+        "save": "Save",
+        "title": "Title",
+        "titlePlaceholder": "Enter the parent news title",
+        "featuredImage": "Featured Image URL",
+        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "description": "Description",
+        "descriptionPlaceholder": "Write a short description for this parent news item",
+        "language": "Language",
+        "languagePlaceholder": "Select language",
+        "rootNews": "Root News",
+        "rootNewsPlaceholder": "Select root news",
+        "loadingRootNews": "Loading...",
+        "validation": {
+          "rootNewsRequired": "Please select root news.",
+          "categoryRequired": "Please select a category.",
+          "titleRequired": "Title is required.",
+          "descriptionRequired": "Description is required.",
+          "imageInvalid": "Please enter a valid image URL.",
+          "languageRequired": "Please select a language.",
+          "tagsRequired": "Please select at least one tag."
+        }
+      },
+      "news": {
+        "title": "Title",
+        "titlePlaceholder": "Enter the news title",
+        "featuredImage": "Featured Image URL",
+        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "description": "Description",
+        "descriptionPlaceholder": "Write a short description for this news item",
+        "parentNews": "Parent News",
+        "parentNewsPlaceholder": "Select parent news",
+        "loadingParentNews": "Loading parent news...",
+        "validation": {
+          "parentNewsRequired": "Please select parent news.",
+          "titleRequired": "Title is required.",
+          "descriptionRequired": "Description is required.",
+          "imageInvalid": "Please enter a valid image URL."
+        }
+      }
+    },
+    "toast": {
+      "category": {
+        "success": "Category created successfully.",
+        "error": "Failed to create category."
+      },
+      "rootNews": {
+        "success": "Root news created successfully.",
+        "error": "Failed to create root news."
+      },
+      "parentNews": {
+        "success": "Parent news created successfully.",
+        "error": "Failed to create parent news."
+      },
+      "news": {
+        "success": "News created successfully.",
+        "error": "Failed to create news."
+      }
+    },
+    "languages": {
+      "fa": "Persian",
+      "en": "English"
     }
   }
 }

@@ -163,7 +163,7 @@ export default function ClientRequestsPage() {
         <section className="requests-panel border-border bg-card flex min-h-0 flex-1 flex-col overflow-hidden border">
           {/* Toolbar */}
           <div
-            dir="ltr"
+        
             className="border-border flex shrink-0 items-center justify-between gap-5 border-b p-5"
           >
             {/* Search */}

@@ -339,4 +339,44 @@
   .footer-link:hover::after {
     transform: scaleX(1);
   }
+
+  /* Global Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar) transparent;
+  }
+
+  /* Chrome / Edge / Safari */
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--scrollbar);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  :lang(fa) {
+    font-family: var(--font-IRANYekanX), sans-serif;
+  }
+
+  :lang(en) {
+    font-family: var(--font-space), sans-serif;
+  }
 }

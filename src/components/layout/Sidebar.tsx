@@ -225,20 +225,20 @@ const Sidebar = () => {
 
           {/* Blogs */}
           <div className="sidebar-section">
-            <SideBarItemHeader label={t("blogsSection")} />
+            <SideBarItemHeader label={t("newsSection")} />
 
             <SidebarItem
-              href={`/${locale}/blogs`}
-              title={t("blogs")}
+              href={`/${locale}/news`}
+              title={t("news")}
               icon={Newspaper}
-              active={pathname.startsWith(`/${locale}/blogs`)}
+              active={pathname.startsWith(`/${locale}/news`)}
             />
 
             <SidebarItem
-              href={`/${locale}/add-blog`}
-              title={t("addBlog")}
+              href={`/${locale}/add-news`}
+              title={t("addNews")}
               icon={FilePenLine}
-              active={pathname.startsWith(`/${locale}/add-blog`)}
+              active={pathname.startsWith(`/${locale}/add-news`)}
             />
           </div>
         </nav>
