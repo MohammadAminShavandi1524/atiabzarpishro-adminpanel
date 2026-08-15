@@ -30,7 +30,7 @@ export const Tab = ({
       disabled={disabled}
       onClick={() => setCurrent(label)}
       className={cn(
-        "group relative min-w-[150px] cursor-pointer px-5 pt-3 pb-4 text-start",
+        "group relative cursor-pointer px-5 pt-3 pb-4 text-start",
         "disabled:cursor-not-allowed",
       )}
     >
