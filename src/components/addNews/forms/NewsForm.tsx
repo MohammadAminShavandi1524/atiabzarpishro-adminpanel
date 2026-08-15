@@ -84,14 +84,7 @@ const NewsForm = () => {
             />
           </div>
 
-          <div className="mt-7">
-            <div
-              lang="en"
-              className="text-custom-primary text-[10px] tracking-[0.14em]"
-            >
-              NEWS / 01
-            </div>
-
+          <div className="mt-5">
             <h2 className="text-foreground mt-3 text-xl font-semibold">
               {t("header.news.title")}
             </h2>

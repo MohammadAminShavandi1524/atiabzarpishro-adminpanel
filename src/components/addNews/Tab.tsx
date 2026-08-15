@@ -14,13 +14,6 @@ interface TabProps {
   disabled?: boolean;
 }
 
-const tabIndex: Record<NewsTab, string> = {
-  category: "01",
-  rootNews: "02",
-  parentNews: "03",
-  news: "04",
-};
-
 export const Tab = ({
   label,
   current,
@@ -41,18 +34,7 @@ export const Tab = ({
         "disabled:cursor-not-allowed",
       )}
     >
-      <div className="flex items-center gap-3">
-        <span
-          lang="en"
-          dir="ltr"
-          className={cn(
-            "text-[10px] tracking-[0.1em] transition-colors duration-300",
-            active ? "text-custom-primary" : "text-muted-foreground/60",
-          )}
-        >
-          {tabIndex[label]}
-        </span>
-
+      <div className="flex items-center justify-center gap-3">
         <span
           className={cn(
             "text-sm font-medium transition-colors duration-300",

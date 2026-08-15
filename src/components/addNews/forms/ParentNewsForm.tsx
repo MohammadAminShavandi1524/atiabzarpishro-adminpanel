@@ -137,14 +137,7 @@ const ParentNewsForm = () => {
             <Layers3 className="text-custom-primary size-5" strokeWidth={1.6} />
           </div>
 
-          <div className="mt-7">
-            <div
-              lang="en"
-              className="text-custom-primary text-[10px] tracking-[0.14em]"
-            >
-              PARENT / 01
-            </div>
-
+          <div className="mt-5">
             <h2 className="text-foreground mt-3 text-xl font-semibold">
               {t("header.parentNews.title")}
             </h2>
