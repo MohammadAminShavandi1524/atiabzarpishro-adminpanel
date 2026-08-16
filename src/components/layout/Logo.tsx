@@ -19,7 +19,7 @@ const Logo = ({ size }: LogoProps) => {
       href={`/${locale}`}
     >
       <Image
-        src="/ati_abzar.webp"
+        src="/logo.webp"
         alt="logo"
         width={size ? size * 4 : 64}
         height={size ? size * 4 : 64}
