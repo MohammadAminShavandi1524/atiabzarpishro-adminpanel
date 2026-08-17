@@ -14,6 +14,7 @@ import {
   FilePlus2,
   Newspaper,
   FilePenLine,
+  Plus,
 } from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
@@ -183,6 +184,13 @@ const Sidebar = () => {
               icon={Video}
               active={pathname.startsWith(`/${locale}/video-clips`)}
             />
+
+            <SidebarItem
+              href={`/${locale}/add-video`}
+              title={t("addVideoClip")}
+              icon={Plus}
+              active={pathname.startsWith(`/${locale}/add-video`)}
+            />
           </div>
 
           {/* Catalogues */}
@@ -223,7 +231,7 @@ const Sidebar = () => {
             />
           </div>
 
-          {/* Blogs */}
+          {/* news */}
           <div className="sidebar-section">
             <SideBarItemHeader label={t("newsSection")} />
 

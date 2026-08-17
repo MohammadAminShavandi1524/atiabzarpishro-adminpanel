@@ -129,6 +129,153 @@
     }
   },
 
+  "VideoClips": {
+    "header": {
+      "title": "Video Clips",
+      "description": "View, search, edit, delete, and manage video content."
+    },
+    "filters": {
+      "searchPlaceholder": "Search by English or Persian title...",
+      "results": "videos"
+    },
+    "table": {
+      "id": "ID",
+      "nameEn": "English Title",
+      "nameFa": "Persian Title",
+      "descriptionEn": "English Description",
+      "descriptionFa": "Persian Description",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "empty": {
+      "title": "No videos found",
+      "description": "No videos match your current search."
+    },
+    "toast": {
+      "delete": {
+        "success": "Video deleted successfully.",
+        "error": "Failed to delete the video."
+      }
+    }
+  },
+
+  "editVideo": {
+    "pageHeader": {
+      "title": "Edit Video",
+      "description": "Edit and update the video information and content."
+    },
+    "header": {
+      "title": "Edit Video Information",
+      "description": "Review and update the video titles, descriptions, and media file as needed."
+    },
+    "form": {
+      "nameEn": {
+        "label": "English Title",
+        "placeholder": "Enter the English video title"
+      },
+      "nameFa": {
+        "label": "Persian Title",
+        "placeholder": "Enter the Persian video title"
+      },
+      "descriptionEn": {
+        "label": "English Description",
+        "placeholder": "Enter the English video description"
+      },
+      "descriptionFa": {
+        "label": "Persian Description",
+        "placeholder": "Enter the Persian video description"
+      },
+      "submit": "Save Changes",
+      "submitting": "Saving...",
+      "finalizing": "Finalizing...",
+      "uploaded": "Changes Saved"
+    },
+    "validation": {
+      "nameEnRequired": "English title is required.",
+      "nameFaRequired": "Persian title is required.",
+      "nameMax": "Title cannot exceed 250 characters.",
+      "descriptionEnRequired": "English description is required.",
+      "descriptionFaRequired": "Persian description is required.",
+      "videoInvalid": "Please select a valid video file."
+    },
+    "toast": {
+      "videoSelected": "Video selected successfully.",
+      "updateSuccess": "Video updated successfully.",
+      "error": "An error occurred while updating the video."
+    }
+  },
+
+  "addVideo": {
+    "header": {
+      "title": "Create Video",
+      "description": "Add a new video by entering its English and Persian information and uploading the video file."
+    },
+
+    "form": {
+      "nameEn": {
+        "label": "English Name",
+        "placeholder": "Enter the video name in English"
+      },
+
+      "nameFa": {
+        "label": "Persian Name",
+        "placeholder": "Enter the video name in Persian"
+      },
+
+      "descriptionEn": {
+        "label": "English Description",
+        "placeholder": "Enter the video description in English"
+      },
+
+      "descriptionFa": {
+        "label": "Persian Description",
+        "placeholder": "Enter the video description in Persian"
+      },
+
+      "video": {
+        "label": "Video File",
+        "select": "Select Video",
+        "hint": "Select or drop a video file here",
+        "ready": "Video selected and ready to upload",
+        "uploading": "Uploading video...",
+        "finalizing": "Finalizing upload...",
+        "doNotClose": "Please keep this page open while the video is uploading.",
+        "finalizingDescription": "The file has been sent and is being finalized on the server.",
+        "completed": "Video uploaded successfully",
+        "completedDescription": "The video has been successfully stored on the server.",
+        "remove": "Remove video"
+      },
+      "submit": "Create Video",
+      "submitting": "Uploading...",
+      "finalizing": "Finalizing...",
+      "uploaded": "Uploaded",
+
+      "submit": "Create Video",
+      "submitting": "Uploading...",
+      "uploaded": "Uploaded"
+    },
+
+    "validation": {
+      "nameEnRequired": "English name is required",
+      "nameFaRequired": "Persian name is required",
+      "nameMax": "Name cannot exceed 250 characters",
+      "descriptionEnRequired": "English description is required",
+      "descriptionFaRequired": "Persian description is required",
+      "videoRequired": "Video file is required",
+      "videoInvalid": "Selected file must be a video"
+    },
+
+    "toast": {
+      "videoSelected": "Video selected successfully",
+      "uploadSuccess": "Video created and uploaded successfully",
+      "error": "Failed to upload video"
+    }
+  },
+
   "news": {
     "header": {
       "title": "News",
