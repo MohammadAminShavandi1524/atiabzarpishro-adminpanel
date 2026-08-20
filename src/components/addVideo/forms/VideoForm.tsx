@@ -1,183 +1,289 @@
 "use client";
 
 import { useState } from "react";
-
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Clapperboard, LoaderCircle } from "lucide-react";
+import {
+  Clapperboard,
+  LoaderCircle,
+} from "lucide-react";
 
 import { FormField } from "@/components/FormField";
 import { useCustomToast } from "@/components/ui/custom-toast";
 
 import VideoUploadField from "../VideoUploadField";
 
+interface UploadResponse {
+  success: boolean;
+  url: string;
+}
+
 const VideoForm = () => {
   const t = useTranslations("addVideo");
   const toast = useCustomToast();
 
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadCompleted, setUploadCompleted] = useState(false);
   const [isFinalizing, setIsFinalizing] = useState(false);
 
   const schema = z.object({
     name_en: z
       .string()
       .trim()
-      .min(1, t("validation.nameEnRequired"))
-      .max(250, t("validation.nameMax")),
+      .min(
+        1,
+        t("validation.nameEnRequired"),
+      )
+      .max(
+        250,
+        t("validation.nameMax"),
+      ),
 
     name_fa: z
       .string()
       .trim()
-      .min(1, t("validation.nameFaRequired"))
-      .max(250, t("validation.nameMax")),
+      .min(
+        1,
+        t("validation.nameFaRequired"),
+      )
+      .max(
+        250,
+        t("validation.nameMax"),
+      ),
 
     description_en: z
       .string()
       .trim()
-      .min(1, t("validation.descriptionEnRequired")),
+      .min(
+        1,
+        t(
+          "validation.descriptionEnRequired",
+        ),
+      ),
 
     description_fa: z
       .string()
       .trim()
-      .min(1, t("validation.descriptionFaRequired")),
+      .min(
+        1,
+        t(
+          "validation.descriptionFaRequired",
+        ),
+      ),
 
     video: z
-      .custom<File>((value) => value instanceof File, {
-        message: t("validation.videoRequired"),
-      })
+      .custom<File>(
+        (value) =>
+          value instanceof File,
+        {
+          message: t(
+            "validation.videoRequired",
+          ),
+        },
+      )
       .refine(
         (file) =>
           file instanceof File &&
-          file.type.startsWith("video/"),
+          file.type.startsWith(
+            "video/",
+          ),
         {
-          message: t("validation.videoInvalid"),
+          message: t(
+            "validation.videoInvalid",
+          ),
         },
       ),
   });
 
-  type FormValues = z.infer<typeof schema>;
+  type FormValues =
+    z.infer<typeof schema>;
 
   const {
     register,
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: {
+      errors,
+      isSubmitting,
+    },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
 
     defaultValues: {
       name_en: "video title",
       name_fa: "تیتر ویدیو",
-      description_en: "video description",
-      description_fa: "توضیح ویدیو",
+      description_en:
+        "video description",
+      description_fa:
+        "توضیح ویدیو",
       video: undefined,
     },
   });
 
-  const uploadVideo = (data: FormValues): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData();
+  const uploadVideoToArvan = (
+    file: File,
+  ): Promise<string> => {
+    return new Promise(
+      (resolve, reject) => {
+        const formData =
+          new FormData();
 
-      formData.append("name_en", data.name_en);
-      formData.append("name_fa", data.name_fa);
-      formData.append("description_en", data.description_en);
-      formData.append("description_fa", data.description_fa);
-      formData.append("video", data.video);
-
-      // فقط Payload نهایی ارسالی
-      console.log(
-        "PAYLOAD =>",
-        Object.fromEntries(formData.entries()),
-      );
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.open("POST", "/api/video/create");
-
-      // شروع آپلود
-      xhr.upload.onloadstart = () => {
-        setUploadProgress(0);
-        setIsFinalizing(false);
-      };
-
-      // درصد واقعی ارسال Browser -> Next
-      xhr.upload.onprogress = (event) => {
-        if (!event.lengthComputable) return;
-
-        const rawProgress = Math.round(
-          (event.loaded / event.total) * 100,
+        formData.append(
+          "file",
+          file,
         );
 
-        // تا قبل از پاسخ موفق Backend روی حداکثر 95 نگه می‌داریم
-        const percentage = Math.min(rawProgress, 95);
+        const xhr =
+          new XMLHttpRequest();
 
-        setUploadProgress(percentage);
-      };
+        xhr.open(
+          "POST",
+          "/api/video/upload",
+        );
 
-      // فایل به Next رسیده و منتظر Backend هستیم
-      xhr.upload.onload = () => {
-        setUploadProgress(95);
-        setIsFinalizing(true);
-      };
+        xhr.upload.onloadstart =
+          () => {
+            setUploadProgress(0);
+            setIsFinalizing(false);
+          };
 
-      // پاسخ نهایی Backend
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          setUploadProgress(100);
-          setUploadCompleted(true);
+        xhr.upload.onprogress = (
+          event,
+        ) => {
+          if (
+            !event.lengthComputable
+          ) {
+            return;
+          }
+
+          const rawProgress =
+            Math.round(
+              (event.loaded /
+                event.total) *
+                100,
+            );
+
+          setUploadProgress(
+            Math.min(
+              rawProgress,
+              95,
+            ),
+          );
+        };
+
+        xhr.upload.onload =
+          () => {
+            setUploadProgress(95);
+            setIsFinalizing(true);
+          };
+
+        xhr.onload = () => {
+          if (
+            xhr.status < 200 ||
+            xhr.status >= 300
+          ) {
+            setIsFinalizing(false);
+
+            reject(
+              new Error(
+                "Video upload failed",
+              ),
+            );
+
+            return;
+          }
+
+          try {
+            const response: UploadResponse =
+              JSON.parse(
+                xhr.responseText,
+              );
+
+            if (!response.url) {
+              throw new Error(
+                "Video URL not returned",
+              );
+            }
+
+            setUploadProgress(100);
+            setIsFinalizing(false);
+
+            resolve(response.url);
+          } catch {
+            setIsFinalizing(false);
+
+            reject(
+              new Error(
+                "Invalid upload response",
+              ),
+            );
+          }
+        };
+
+        xhr.onerror = () => {
           setIsFinalizing(false);
 
-          resolve();
+          reject(
+            new Error(
+              "Video upload failed",
+            ),
+          );
+        };
 
-          return;
-        }
+        xhr.onabort = () => {
+          setIsFinalizing(false);
 
-        setIsFinalizing(false);
+          reject(
+            new Error(
+              "Video upload aborted",
+            ),
+          );
+        };
 
-        reject(
-          new Error(
-            `Upload failed with status ${xhr.status}`,
-          ),
-        );
-      };
-
-      xhr.onerror = () => {
-        setIsFinalizing(false);
-
-        reject(
-          new Error("Video upload failed"),
-        );
-      };
-
-      xhr.onabort = () => {
-        setIsFinalizing(false);
-
-        reject(
-          new Error("Video upload aborted"),
-        );
-      };
-
-      xhr.send(formData);
-    });
+        xhr.send(formData);
+      },
+    );
   };
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (
+    data: FormValues,
+  ) => {
     try {
       setUploadProgress(0);
-      setUploadCompleted(false);
       setIsFinalizing(false);
 
-      await uploadVideo(data);
+      const videoUrl =
+        await uploadVideoToArvan(
+          data.video,
+        );
+
+      const payload = {
+        name_en: data.name_en,
+        name_fa: data.name_fa,
+
+        description_en:
+          data.description_en,
+
+        description_fa:
+          data.description_fa,
+
+        video: videoUrl,
+      };
+
+      console.log(
+        "PAYLOAD =>",
+        payload,
+      );
 
       toast.success(
         t("toast.uploadSuccess"),
       );
+
+      setUploadProgress(0);
+      setIsFinalizing(false);
     } catch {
       setUploadProgress(0);
-      setUploadCompleted(false);
       setIsFinalizing(false);
 
       toast.error(
@@ -188,7 +294,9 @@ const VideoForm = () => {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={
+        handleSubmit(onSubmit)
+      }
       className="border-border-secondary bg-secondary-bg grid min-h-[620px] grid-cols-[0.36fr_1fr] overflow-hidden border"
     >
       {/* Information */}
@@ -207,7 +315,9 @@ const VideoForm = () => {
             </h2>
 
             <p className="text-muted-foreground mt-3 max-w-[280px] text-sm leading-7">
-              {t("header.description")}
+              {t(
+                "header.description",
+              )}
             </p>
           </div>
         </div>
@@ -227,22 +337,34 @@ const VideoForm = () => {
           {/* Names */}
           <div className="grid grid-cols-2 gap-6">
             <FormField
-              label={t("form.nameEn.label")}
+              label={t(
+                "form.nameEn.label",
+              )}
               placeholder={t(
                 "form.nameEn.placeholder",
               )}
-              register={register("name_en")}
-              error={errors.name_en}
+              register={register(
+                "name_en",
+              )}
+              error={
+                errors.name_en
+              }
               as="input"
             />
 
             <FormField
-              label={t("form.nameFa.label")}
+              label={t(
+                "form.nameFa.label",
+              )}
               placeholder={t(
                 "form.nameFa.placeholder",
               )}
-              register={register("name_fa")}
-              error={errors.name_fa}
+              register={register(
+                "name_fa",
+              )}
+              error={
+                errors.name_fa
+              }
               as="input"
             />
           </div>
@@ -259,7 +381,9 @@ const VideoForm = () => {
               register={register(
                 "description_en",
               )}
-              error={errors.description_en}
+              error={
+                errors.description_en
+              }
               as="textarea"
             />
 
@@ -273,7 +397,9 @@ const VideoForm = () => {
               register={register(
                 "description_fa",
               )}
-              error={errors.description_fa}
+              error={
+                errors.description_fa
+              }
               as="textarea"
             />
           </div>
@@ -286,28 +412,43 @@ const VideoForm = () => {
               <VideoUploadField
                 value={field.value}
                 onChange={(file) => {
-                  field.onChange(file);
+                  field.onChange(
+                    file,
+                  );
 
-                  setUploadProgress(0);
-                  setUploadCompleted(false);
-                  setIsFinalizing(false);
+                  setUploadProgress(
+                    0,
+                  );
+
+                  setIsFinalizing(
+                    false,
+                  );
 
                   if (file) {
                     toast.success(
-                      t("toast.videoSelected"),
+                      t(
+                        "toast.videoSelected",
+                      ),
                     );
                   }
                 }}
                 error={
-                  errors.video?.message as
+                  errors.video
+                    ?.message as
                     | string
                     | undefined
                 }
-                progress={uploadProgress}
-                isUploading={isSubmitting}
-                isFinalizing={isFinalizing}
+                progress={
+                  uploadProgress
+                }
+                isUploading={
+                  isSubmitting
+                }
+                isFinalizing={
+                  isFinalizing
+                }
                 uploadCompleted={
-                  uploadCompleted
+                  false
                 }
               />
             )}
@@ -318,10 +459,7 @@ const VideoForm = () => {
         <div className="border-border-secondary mt-10 flex justify-end border-t pt-6">
           <button
             type="submit"
-            disabled={
-              isSubmitting ||
-              uploadCompleted
-            }
+            disabled={isSubmitting}
             className="bg-custom-primary text-primary-foreground flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting && (
@@ -331,13 +469,17 @@ const VideoForm = () => {
               />
             )}
 
-            {uploadCompleted
-              ? t("form.uploaded")
-              : isFinalizing
-                ? t("form.finalizing")
-                : isSubmitting
-                  ? `${t("form.submitting")} ${uploadProgress}%`
-                  : t("form.submit")}
+            {isFinalizing
+              ? t(
+                  "form.finalizing",
+                )
+              : isSubmitting
+                ? `${t(
+                    "form.submitting",
+                  )} ${uploadProgress}%`
+                : t(
+                    "form.submit",
+                  )}
           </button>
         </div>
       </div>

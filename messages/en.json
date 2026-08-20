@@ -20,6 +20,10 @@
     "overview": "Overview",
     "dashboard": "Dashboard",
 
+    "brandsSection": "BRANDS",
+    "brands": "Brands",
+    "addBrand": "Add Brand",
+
     "productsSection": "Products",
     "products": "Products",
     "addProduct": "Add Product",
@@ -126,6 +130,169 @@
         "success": "The client request was deleted successfully.",
         "error": "Unable to delete the client request."
       }
+    }
+  },
+
+  "Brands": {
+    "header": {
+      "title": "Brands",
+      "description": "Manage product brands, descriptions, images and catalogs."
+    },
+
+    "filters": {
+      "searchPlaceholder": "Search brands...",
+      "newestFirst": "Newest first",
+      "oldestFirst": "Oldest first"
+    },
+
+    "table": {
+      "id": "ID",
+      "name": "Brand Name",
+      "descriptionEn": "English Description",
+      "descriptionFa": "Persian Description",
+      "date": "Created",
+      "actions": "Actions"
+    },
+
+    "actions": {
+      "image": "Image",
+      "catalog": "Catalog",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+
+    "loading": "Loading brands...",
+
+    "empty": {
+      "title": "No brands found",
+      "description": "There are no brands matching your current search."
+    },
+
+    "toast": {
+      "delete": {
+        "success": "Brand deleted successfully.",
+        "error": "Failed to delete brand."
+      }
+    }
+  },
+
+  "editBrand": {
+    "header": {
+      "title": "Edit Brand",
+      "description": "Update the brand information or optionally replace its image and catalog."
+    },
+
+    "form": {
+      "nameEn": {
+        "label": "Brand Name (English)",
+        "placeholder": "Enter the brand name in English"
+      },
+
+      "nameFa": {
+        "label": "Brand Name (Persian)",
+        "placeholder": "Enter the brand name in Persian"
+      },
+
+      "descriptionEn": {
+        "label": "Description (English)",
+        "placeholder": "Enter the brand description in English"
+      },
+
+      "descriptionFa": {
+        "label": "Description (Persian)",
+        "placeholder": "Enter the brand description in Persian"
+      },
+
+      "filesHint": "Image and catalog are optional. Leave them empty to keep the current files.",
+
+      "uploading": "Uploading...",
+      "finalizing": "Finalizing upload...",
+      "submitting": "Updating Brand...",
+      "submit": "Update Brand"
+    },
+
+    "validation": {
+      "nameEnRequired": "Please enter the brand name in English.",
+      "nameFaRequired": "Please enter the brand name in Persian.",
+      "nameMax": "Brand name must be 300 characters or less.",
+
+      "descriptionEnRequired": "Please enter the brand description in English.",
+      "descriptionFaRequired": "Please enter the brand description in Persian.",
+
+      "imageInvalid": "Please select a valid image file.",
+      "catalogInvalid": "The brand catalog must be a PDF file."
+    },
+
+    "toast": {
+      "previewSuccess": "Brand changes are ready to be submitted.",
+      "updateSuccess": "Brand updated successfully.",
+      "error": "Failed to update the brand. Please try again."
+    }
+  },
+
+  "addBrand": {
+    "header": {
+      "title": "Add Brand",
+      "description": "Create a new brand by entering its bilingual information, uploading a brand image and attaching the product catalog."
+    },
+
+    "form": {
+      "nameEn": {
+        "label": "Brand Name (English)",
+        "placeholder": "Enter the brand name in English"
+      },
+
+      "nameFa": {
+        "label": "Brand Name (Persian)",
+        "placeholder": "Enter the brand name in Persian"
+      },
+
+      "descriptionEn": {
+        "label": "Description (English)",
+        "placeholder": "Enter the brand description in English"
+      },
+
+      "descriptionFa": {
+        "label": "Description (Persian)",
+        "placeholder": "Enter the brand description in Persian"
+      },
+
+      "image": {
+        "label": "Brand Image",
+        "placeholder": "Select or drop a brand image"
+      },
+
+      "catalog": {
+        "label": "Brand Catalog",
+        "placeholder": "Select or drop the brand catalog"
+      },
+
+      "uploading": "Uploading...",
+      "finalizing": "Finalizing upload...",
+      "submitting": "Creating Brand...",
+      "submit": "Create Brand"
+    },
+
+    "validation": {
+      "nameEnRequired": "Please enter the brand name in English.",
+      "nameFaRequired": "Please enter the brand name in Persian.",
+      "nameMax": "Brand name must be 300 characters or less.",
+
+      "descriptionEnRequired": "Please enter the brand description in English.",
+      "descriptionFaRequired": "Please enter the brand description in Persian.",
+
+      "imageRequired": "Please select a brand image.",
+      "imageInvalid": "Please select a valid image file.",
+
+      "catalogRequired": "Please select a brand catalog.",
+      "catalogInvalid": "The brand catalog must be a PDF file."
+    },
+
+    "toast": {
+      "imageSelected": "Brand image selected successfully.",
+      "catalogSelected": "Brand catalog selected successfully.",
+      "createSuccess": "Brand created successfully.",
+      "error": "Failed to create the brand. Please try again."
     }
   },
 

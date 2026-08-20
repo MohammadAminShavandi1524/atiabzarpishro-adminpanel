@@ -1,9 +1,16 @@
 import { NextConfig } from "next";
+
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "atihooshbonyanco.s3.ir-thr-at1.arvanstorage.ir",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

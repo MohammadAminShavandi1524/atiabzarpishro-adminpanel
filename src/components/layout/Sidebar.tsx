@@ -15,6 +15,8 @@ import {
   Newspaper,
   FilePenLine,
   Plus,
+  Tags,
+  BadgePlus,
 } from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
@@ -152,6 +154,25 @@ const Sidebar = () => {
               title={t("clientRequests")}
               icon={ClipboardList}
               active={pathname.startsWith(`/${locale}/client-requests`)}
+            />
+          </div>
+
+          {/* Brands */}
+          <div className="sidebar-section">
+            <SideBarItemHeader label={t("brandsSection")} />
+
+            <SidebarItem
+              href={`/${locale}/brands`}
+              title={t("brands")}
+              icon={Tags}
+              active={pathname.startsWith(`/${locale}/brands`)}
+            />
+
+            <SidebarItem
+              href={`/${locale}/add-brand`}
+              title={t("addBrand")}
+              icon={BadgePlus}
+              active={pathname.startsWith(`/${locale}/add-brand`)}
             />
           </div>
 
