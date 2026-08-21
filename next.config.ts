@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "atiabzar.s3.ir-thr-at1.arvanstorage.ir",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "atihooshbonyanco.s3.ir-thr-at1.arvanstorage.ir",
         pathname: "/**",
       },

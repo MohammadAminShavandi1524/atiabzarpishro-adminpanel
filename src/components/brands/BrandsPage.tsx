@@ -127,10 +127,12 @@ export default function BrandsPage() {
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {/* Header */}
             <div className="border-border bg-card-secondary shrink-0 border-b ps-9 pe-11">
-              <div className="text-muted-foreground grid h-13 grid-cols-[60px_1fr_1.65fr_1.65fr_135px_400px] items-center gap-5 text-sm font-semibold">
+              <div className="text-muted-foreground grid h-13 grid-cols-[60px_1fr_110px_1.55fr_1.55fr_135px_310px] items-center gap-5 text-sm font-semibold">
                 <div>{t("table.id")}</div>
 
                 <div>{t("table.name")}</div>
+
+                <div>{t("table.image")}</div>
 
                 <div>{t("table.descriptionEn")}</div>
 

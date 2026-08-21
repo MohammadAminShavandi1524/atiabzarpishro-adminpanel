@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { z } from "zod";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -27,7 +27,7 @@ interface UploadResponse {
 
 export default function ProductForm() {
   const t = useTranslations("addProduct");
-
+  const locale = useLocale();
   const toast = useCustomToast();
 
   const [imageUploadProgress, setImageUploadProgress] = useState(0);

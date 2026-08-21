@@ -61,6 +61,8 @@ export async function POST(req: Request) {
         Body: buffer,
 
         ContentType: "application/pdf",
+
+        ACL: "public-read",
       }),
     );
 

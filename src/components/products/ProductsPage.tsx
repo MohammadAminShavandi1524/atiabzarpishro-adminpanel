@@ -22,13 +22,9 @@ export default function ProductsPage() {
   const locale = useLocale();
 
   const [products, setProducts] = useState<Product[]>([]);
-
   const [search, setSearch] = useState("");
-
   const [sort, setSort] = useState<SortType>("newest");
-
   const [brandFilter, setBrandFilter] = useState("all");
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -80,7 +76,6 @@ export default function ProductsPage() {
       })
       .sort((a, b) => {
         const firstDate = new Date(a.created).getTime();
-
         const secondDate = new Date(b.created).getTime();
 
         return sort === "newest"
@@ -155,12 +150,14 @@ export default function ProductsPage() {
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {/* Header */}
             <div className="border-border bg-card-secondary shrink-0 border-b ps-9 pe-11">
-              <div className="text-muted-foreground grid h-13 grid-cols-[60px_1.2fr_1.2fr_1fr_135px_400px] items-center gap-5 text-sm font-semibold">
+              <div className="text-muted-foreground grid h-13 grid-cols-[60px_1.05fr_1.05fr_100px_1fr_135px_360px] items-center gap-5 text-sm font-semibold">
                 <div>{t("table.id")}</div>
 
                 <div>{t("table.nameEn")}</div>
 
                 <div>{t("table.nameFa")}</div>
+
+                <div>{t("table.image")}</div>
 
                 <div>{t("table.brand")}</div>
 

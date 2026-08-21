@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 
-import {
-  PutObjectCommand,
-  S3Client,
-} from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({
   region: process.env.ARVAN_REGION!,
@@ -48,8 +45,7 @@ export async function POST(req: Request) {
 
     const buffer = Buffer.from(bytes);
 
-    const extension =
-      file.name.split(".").pop()?.toLowerCase() || "webp";
+    const extension = file.name.split(".").pop()?.toLowerCase() || "webp";
 
     const fileName = `${crypto.randomUUID()}.${extension}`;
 
@@ -61,6 +57,7 @@ export async function POST(req: Request) {
         Key: key,
         Body: buffer,
         ContentType: file.type,
+        ACL: "public-read",
       }),
     );
 

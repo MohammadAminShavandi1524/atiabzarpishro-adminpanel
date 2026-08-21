@@ -148,6 +148,7 @@
     "table": {
       "id": "ID",
       "name": "Brand Name",
+      "image": "Image",
       "descriptionEn": "English Description",
       "descriptionFa": "Persian Description",
       "date": "Created",
@@ -155,8 +156,8 @@
     },
 
     "actions": {
-      "image": "Image",
-      "catalog": "Catalog",
+      "viewImage": "View Image",
+      "viewCatalog": "View Catalog",
       "edit": "Edit",
       "delete": "Delete"
     },
@@ -314,14 +315,15 @@
       "id": "ID",
       "nameEn": "English Name",
       "nameFa": "Persian Name",
+      "image": "Image",
       "brand": "Brand",
       "date": "Created",
       "actions": "Actions"
     },
 
     "actions": {
-      "image": "Image",
-      "brochure": "Brochure",
+      "viewImage": "View Image",
+      "viewBrochure": "View Brochure",
       "edit": "Edit",
       "delete": "Delete"
     },
@@ -332,6 +334,7 @@
       "title": "No products found",
       "description": "There are no products matching your current search or filters."
     },
+
     "toast": {
       "delete": {
         "success": "Product deleted successfully.",

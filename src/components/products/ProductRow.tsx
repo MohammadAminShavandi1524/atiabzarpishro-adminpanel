@@ -1,12 +1,14 @@
 "use client";
 
+import Image from "next/image";
+
 import { type Dispatch, type SetStateAction } from "react";
 
 import { useRouter } from "next/navigation";
 
 import { useLocale, useTranslations } from "next-intl";
 
-import { Download, FileDown, Pencil, Trash2 } from "lucide-react";
+import { Eye, FileText, Pencil, Trash2 } from "lucide-react";
 
 import { englishToPersianNumber, formatDate } from "@/lib/utils";
 
@@ -20,7 +22,6 @@ import { deleteProduct } from "./delete-product.api";
 
 interface ProductRowProps {
   product: Product;
-
   setProducts: Dispatch<SetStateAction<Product[]>>;
 }
 
@@ -47,11 +48,11 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
     }
   };
 
-  const handleImageDownload = () => {
+  const handleViewImage = () => {
     window.open(product.image, "_blank", "noopener,noreferrer");
   };
 
-  const handleBrochureDownload = () => {
+  const handleViewBrochure = () => {
     window.open(product.brochure, "_blank", "noopener,noreferrer");
   };
 
@@ -60,7 +61,7 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
       {/* Hover Indicator */}
       <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/product:scale-y-100" />
 
-      <div className="grid min-h-[76px] grid-cols-[60px_1.2fr_1.2fr_1fr_135px_400px] items-center gap-5 px-5 py-3">
+      <div className="grid min-h-[94px] grid-cols-[60px_1.05fr_1.05fr_100px_1fr_135px_360px] items-center gap-5 px-5 py-3">
         {/* ID */}
         <div className="text-muted-foreground text-sm">
           {locale === "fa"
@@ -85,6 +86,26 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
           </p>
         </div>
 
+        {/* Image Preview */}
+        <button
+          type="button"
+          onClick={handleViewImage}
+          aria-label={t("actions.viewImage")}
+          className="group/image relative size-14 cursor-pointer overflow-hidden"
+        >
+          <Image
+            src={product.image}
+            alt={product.name_en}
+            fill
+            sizes="56px"
+            className="object-contain transition-transform duration-300 group-hover/image:scale-105"
+          />
+
+          <span className="bg-background/75 absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover/image:opacity-100">
+            <Eye size={18} strokeWidth={1.8} className="text-foreground" />
+          </span>
+        </button>
+
         {/* Brand */}
         <div className="min-w-0">
           <p className="text-foreground truncate text-sm font-medium">
@@ -97,30 +118,20 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-2">
+          {/* View Brochure */}
           <CustomButton
             type="button"
             variant="soft"
             intent="secondary"
             size="sm"
-            onClick={handleImageDownload}
-            leftSection={<Download size={16} strokeWidth={1.8} />}
+            onClick={handleViewBrochure}
+            leftSection={<FileText size={16} strokeWidth={1.8} />}
             className="h-9 px-3 text-sm"
           >
-            {t("actions.image")}
+            {t("actions.viewBrochure")}
           </CustomButton>
 
-          <CustomButton
-            type="button"
-            variant="soft"
-            intent="secondary"
-            size="sm"
-            onClick={handleBrochureDownload}
-            leftSection={<FileDown size={16} strokeWidth={1.8} />}
-            className="h-9 px-3 text-sm"
-          >
-            {t("actions.brochure")}
-          </CustomButton>
-
+          {/* Edit */}
           <CustomButton
             type="button"
             variant="soft"
@@ -135,6 +146,7 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
             {t("actions.edit")}
           </CustomButton>
 
+          {/* Delete */}
           <CustomHoldButton
             type="button"
             intent="destructive"
