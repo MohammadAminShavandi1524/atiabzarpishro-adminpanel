@@ -7,55 +7,43 @@ import { z } from "zod";
 import { useTranslations } from "next-intl";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Controller, useForm } from "react-hook-form";
 
-import { BadgePlus, LoaderCircle } from "lucide-react";
+import { LoaderCircle, PackagePlus } from "lucide-react";
 
 import { FormField } from "@/components/FormField";
 import { useCustomToast } from "@/components/ui/custom-toast";
 
-import BrandImageUploadField from "../BrandImageUploadField";
-import BrandCatalogUploadField from "../BrandCatalogUploadField";
+import BrandSelect from "../BrandSelect";
+
+import ProductImageUploadField from "../ProductImageUploadField";
+import ProductBrochureUploadField from "../ProductBrochureUploadField";
 
 interface UploadResponse {
   success: boolean;
   url: string;
 }
 
-const BrandForm = () => {
-  const t = useTranslations("addBrand");
+export default function ProductForm() {
+  const t = useTranslations("addProduct");
+
   const toast = useCustomToast();
 
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
 
-  const [catalogUploadProgress, setCatalogUploadProgress] = useState(0);
+  const [brochureUploadProgress, setBrochureUploadProgress] = useState(0);
 
   const [isImageFinalizing, setIsImageFinalizing] = useState(false);
 
-  const [isCatalogFinalizing, setIsCatalogFinalizing] = useState(false);
+  const [isBrochureFinalizing, setIsBrochureFinalizing] = useState(false);
 
   const schema = z.object({
-    name_en: z
-      .string()
-      .trim()
-      .min(1, t("validation.nameEnRequired"))
-      .max(300, t("validation.nameMax")),
+    name_en: z.string().trim().min(1, t("validation.nameEnRequired")),
 
-    name_fa: z
-      .string()
-      .trim()
-      .min(1, t("validation.nameFaRequired"))
-      .max(300, t("validation.nameMax")),
+    name_fa: z.string().trim().min(1, t("validation.nameFaRequired")),
 
-    description_en: z
-      .string()
-      .trim()
-      .min(1, t("validation.descriptionEnRequired")),
-
-    description_fa: z
-      .string()
-      .trim()
-      .min(1, t("validation.descriptionFaRequired")),
+    brand_id: z.number().int().positive(t("validation.brandRequired")),
 
     image: z
       .custom<File>((value) => value instanceof File, {
@@ -68,14 +56,14 @@ const BrandForm = () => {
         },
       ),
 
-    catalog: z
+    brochure: z
       .custom<File>((value) => value instanceof File, {
-        message: t("validation.catalogRequired"),
+        message: t("validation.brochureRequired"),
       })
       .refine(
         (file) => file instanceof File && file.type === "application/pdf",
         {
-          message: t("validation.catalogInvalid"),
+          message: t("validation.brochureInvalid"),
         },
       ),
   });
@@ -87,7 +75,6 @@ const BrandForm = () => {
     control,
     handleSubmit,
     reset,
-
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -95,10 +82,9 @@ const BrandForm = () => {
     defaultValues: {
       name_en: "",
       name_fa: "",
-      description_en: "",
-      description_fa: "",
+      brand_id: 0,
       image: undefined,
-      catalog: undefined,
+      brochure: undefined,
     },
   });
 
@@ -190,19 +176,18 @@ const BrandForm = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       setImageUploadProgress(0);
-      setCatalogUploadProgress(0);
+
+      setBrochureUploadProgress(0);
 
       setIsImageFinalizing(false);
-      setIsCatalogFinalizing(false);
 
-      /*
-       * Upload image + catalog
-       */
-      const [imageUrl, catalogUrl] = await Promise.all([
+      setIsBrochureFinalizing(false);
+
+      const [imageUrl, brochureUrl] = await Promise.all([
         uploadFile({
           file: data.image,
 
-          url: "/api/brand/upload-image",
+          url: "/api/product/upload-image",
 
           onProgress: setImageUploadProgress,
 
@@ -210,39 +195,31 @@ const BrandForm = () => {
         }),
 
         uploadFile({
-          file: data.catalog,
+          file: data.brochure,
 
-          url: "/api/brand/upload-catalog",
+          url: "/api/product/upload-brochure",
 
-          onProgress: setCatalogUploadProgress,
+          onProgress: setBrochureUploadProgress,
 
-          onFinalizing: setIsCatalogFinalizing,
+          onFinalizing: setIsBrochureFinalizing,
         }),
       ]);
 
-      /*
-       * Backend payload
-       */
       const payload = {
         name_en: data.name_en,
 
         name_fa: data.name_fa,
 
-        description_en: data.description_en,
-
-        description_fa: data.description_fa,
+        brand_id: data.brand_id,
 
         image: imageUrl,
 
-        catalog: catalogUrl,
+        brochure: brochureUrl,
       };
 
-      console.log("PAYLOAD =>", payload);
+      console.log("CREATE PRODUCT PAYLOAD =>", payload);
 
-      /*
-       * Create Brand
-       */
-      const response = await fetch("/api/brand/create", {
+      const response = await fetch("/api/product/create", {
         method: "POST",
 
         headers: {
@@ -253,78 +230,51 @@ const BrandForm = () => {
       });
 
       if (!response.ok) {
-        let errorMessage = "Create brand failed";
-
-        try {
-          const errorData = await response.json();
-
-          errorMessage =
-            errorData?.error?.detail ??
-            errorData?.error ??
-            errorData?.detail ??
-            errorData?.message ??
-            errorMessage;
-        } catch {
-          // Response may not be JSON.
-        }
-
-        throw new Error(errorMessage);
+        throw new Error("Create product failed");
       }
 
-      const result = await response.json();
-
-      console.log("CREATE BRAND RESPONSE =>", result);
-
-      /*
-       * Success
-       */
       toast.success(t("toast.createSuccess"));
 
-      /*
-       * Reset form
-       */
       reset({
         name_en: "",
         name_fa: "",
-        description_en: "",
-        description_fa: "",
+        brand_id: 0,
         image: undefined,
-        catalog: undefined,
+        brochure: undefined,
       });
 
-      /*
-       * Reset upload states
-       */
       setImageUploadProgress(0);
-      setCatalogUploadProgress(0);
+
+      setBrochureUploadProgress(0);
 
       setIsImageFinalizing(false);
-      setIsCatalogFinalizing(false);
+
+      setIsBrochureFinalizing(false);
     } catch (error) {
+      console.error("CREATE PRODUCT ERROR =>", error);
+
       setImageUploadProgress(0);
-      setCatalogUploadProgress(0);
+
+      setBrochureUploadProgress(0);
 
       setIsImageFinalizing(false);
-      setIsCatalogFinalizing(false);
 
-      console.error("CREATE BRAND ERROR =>", error);
+      setIsBrochureFinalizing(false);
 
       toast.error(t("toast.error"));
     }
   };
 
-  const isFinalizing = isImageFinalizing || isCatalogFinalizing;
-
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="border-border-secondary bg-secondary-bg grid min-h-[700px] grid-cols-[0.36fr_1fr] overflow-hidden border"
+      className="border-border-secondary bg-secondary-bg grid min-h-[650px] grid-cols-[0.36fr_1fr] overflow-hidden border"
     >
       {/* Information */}
       <div className="border-border-secondary relative flex flex-col justify-between border-e p-7">
         <div>
           <div className="border-border-secondary flex size-11 items-center justify-center border">
-            <BadgePlus
+            <PackagePlus
               className="text-custom-primary size-5"
               strokeWidth={1.6}
             />
@@ -346,7 +296,7 @@ const BrandForm = () => {
           lang="en"
           className="text-muted-foreground/60 text-[10px] tracking-[0.12em]"
         >
-          ATI / BRAND MANAGEMENT
+          ATI / PRODUCT MANAGEMENT
         </div>
       </div>
 
@@ -372,32 +322,22 @@ const BrandForm = () => {
             />
           </div>
 
-          {/* Descriptions */}
-          <div className="grid grid-cols-2 gap-6">
-            <FormField
-              label={t("form.descriptionEn.label")}
-              placeholder={t("form.descriptionEn.placeholder")}
-              register={register("description_en")}
-              error={errors.description_en}
-              as="textarea"
-            />
+          {/* Brand */}
+          <Controller
+            control={control}
+            name="brand_id"
+            render={({ field }) => (
+              <BrandSelect field={field} error={errors.brand_id} />
+            )}
+          />
 
-            <FormField
-              label={t("form.descriptionFa.label")}
-              placeholder={t("form.descriptionFa.placeholder")}
-              register={register("description_fa")}
-              error={errors.description_fa}
-              as="textarea"
-            />
-          </div>
-
-          {/* Image + Catalog */}
+          {/* Files */}
           <div className="grid grid-cols-2 gap-6">
             <Controller
               control={control}
               name="image"
               render={({ field }) => (
-                <BrandImageUploadField
+                <ProductImageUploadField
                   value={field.value}
                   onChange={(file) => {
                     field.onChange(file);
@@ -416,21 +356,21 @@ const BrandForm = () => {
 
             <Controller
               control={control}
-              name="catalog"
+              name="brochure"
               render={({ field }) => (
-                <BrandCatalogUploadField
+                <ProductBrochureUploadField
                   value={field.value}
                   onChange={(file) => {
                     field.onChange(file);
 
-                    setCatalogUploadProgress(0);
+                    setBrochureUploadProgress(0);
 
-                    setIsCatalogFinalizing(false);
+                    setIsBrochureFinalizing(false);
                   }}
-                  error={errors.catalog?.message as string | undefined}
-                  progress={catalogUploadProgress}
+                  error={errors.brochure?.message as string | undefined}
+                  progress={brochureUploadProgress}
                   isUploading={isSubmitting}
-                  isFinalizing={isCatalogFinalizing}
+                  isFinalizing={isBrochureFinalizing}
                 />
               )}
             />
@@ -448,16 +388,10 @@ const BrandForm = () => {
               <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
             )}
 
-            {isFinalizing
-              ? t("form.finalizing")
-              : isSubmitting
-                ? t("form.submitting")
-                : t("form.submit")}
+            {isSubmitting ? t("form.submitting") : t("form.submit")}
           </button>
         </div>
       </div>
     </form>
   );
-};
-
-export default BrandForm;
+}

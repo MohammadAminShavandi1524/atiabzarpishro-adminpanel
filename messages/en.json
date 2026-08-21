@@ -296,6 +296,154 @@
     }
   },
 
+  "Products": {
+    "header": {
+      "title": "Products",
+      "description": "Manage products, assigned brands, images and brochures."
+    },
+
+    "filters": {
+      "searchPlaceholder": "Search products...",
+      "brand": "Brand",
+      "allBrands": "All Brands",
+      "newestFirst": "Newest first",
+      "oldestFirst": "Oldest first"
+    },
+
+    "table": {
+      "id": "ID",
+      "nameEn": "English Name",
+      "nameFa": "Persian Name",
+      "brand": "Brand",
+      "date": "Created",
+      "actions": "Actions"
+    },
+
+    "actions": {
+      "image": "Image",
+      "brochure": "Brochure",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+
+    "loading": "Loading products...",
+
+    "empty": {
+      "title": "No products found",
+      "description": "There are no products matching your current search or filters."
+    },
+    "toast": {
+      "delete": {
+        "success": "Product deleted successfully.",
+        "error": "Failed to delete product."
+      }
+    }
+  },
+
+  "editProduct": {
+    "header": {
+      "title": "Edit Product",
+      "description": "Update the product information, assigned brand or optionally replace its image and brochure."
+    },
+
+    "form": {
+      "nameEn": {
+        "label": "Product Name (English)",
+        "placeholder": "Enter the product name in English"
+      },
+
+      "nameFa": {
+        "label": "Product Name (Persian)",
+        "placeholder": "Enter the product name in Persian"
+      },
+
+      "brand": {
+        "label": "Brand",
+        "placeholder": "Select a brand",
+        "loading": "Loading brands..."
+      },
+
+      "filesHint": "Image and brochure are optional. Leave them empty to keep the current files.",
+
+      "uploading": "Uploading...",
+      "finalizing": "Finalizing upload...",
+      "submitting": "Updating Product...",
+      "submit": "Update Product"
+    },
+
+    "validation": {
+      "nameEnRequired": "Please enter the product name in English.",
+      "nameFaRequired": "Please enter the product name in Persian.",
+      "brandRequired": "Please select a brand.",
+      "imageInvalid": "Please select a valid image file.",
+      "brochureInvalid": "The product brochure must be a PDF file."
+    },
+
+    "toast": {
+      "previewSuccess": "Product changes are ready to be submitted.",
+      "updateSuccess": "Product updated successfully.",
+      "error": "Failed to update the product. Please try again."
+    }
+  },
+
+  "addProduct": {
+    "header": {
+      "title": "Add Product",
+      "description": "Create a new product, assign it to a brand and upload its image and brochure."
+    },
+
+    "form": {
+      "nameEn": {
+        "label": "Product Name (English)",
+        "placeholder": "Enter the product name in English"
+      },
+
+      "nameFa": {
+        "label": "Product Name (Persian)",
+        "placeholder": "Enter the product name in Persian"
+      },
+
+      "brand": {
+        "label": "Brand",
+        "placeholder": "Select a brand",
+        "loading": "Loading brands..."
+      },
+
+      "image": {
+        "label": "Product Image",
+        "placeholder": "Select a product image"
+      },
+
+      "brochure": {
+        "label": "Product Brochure",
+        "placeholder": "Select the product brochure"
+      },
+
+      "uploading": "Uploading...",
+      "finalizing": "Finalizing upload...",
+      "submitting": "Creating Product...",
+      "submit": "Create Product"
+    },
+
+    "validation": {
+      "nameEnRequired": "Please enter the product name in English.",
+      "nameFaRequired": "Please enter the product name in Persian.",
+
+      "brandRequired": "Please select a brand.",
+
+      "imageRequired": "Please select a product image.",
+      "imageInvalid": "Please select a valid image file.",
+
+      "brochureRequired": "Please select a product brochure.",
+      "brochureInvalid": "The product brochure must be a PDF file."
+    },
+
+    "toast": {
+      "createSuccess": "Product created successfully.",
+      "error": "Failed to create the product. Please try again."
+    }
+  },
+
   "VideoClips": {
     "header": {
       "title": "Video Clips",

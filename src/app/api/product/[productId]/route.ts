@@ -1,0 +1,34 @@
+import { NextRequest, NextResponse } from "next/server";
+
+import { serverApi } from "@/lib/server-api";
+
+interface RouteContext {
+  params: Promise<{
+    productId: string;
+  }>;
+}
+
+export async function DELETE(_req: NextRequest, { params }: RouteContext) {
+  try {
+    const { productId } = await params;
+
+    const data = await serverApi(`/catalog/category/delete/${productId}/`, {
+      method: "DELETE",
+    });
+
+    return NextResponse.json(
+      data ?? {
+        success: true,
+      },
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      {
+        error: error.body ?? "Internal Server Error",
+      },
+      {
+        status: error.status ?? 500,
+      },
+    );
+  }
+}
