@@ -224,8 +224,10 @@
       "catalogInvalid": "The brand catalog must be a PDF file."
     },
 
+    "loading": "Loading brand information...",
+
     "toast": {
-      "previewSuccess": "Brand changes are ready to be submitted.",
+      "fetchError": "Failed to load the brand information.",
       "updateSuccess": "Brand updated successfully.",
       "error": "Failed to update the brand. Please try again."
     }

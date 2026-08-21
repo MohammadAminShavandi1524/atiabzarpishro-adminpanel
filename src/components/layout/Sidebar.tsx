@@ -132,7 +132,7 @@ const Sidebar = () => {
         className="min-h-0 flex-1"
         scrollBarClassName="me-1.5"
       >
-        <nav className="flex flex-col gap-y-4 px-5">
+        <nav className="flex flex-col gap-y-3.5 px-5">
           {/* Overview */}
           <div className="sidebar-section">
             <SideBarItemHeader label={t("overview")} />
@@ -215,7 +215,7 @@ const Sidebar = () => {
           </div>
 
           {/* Catalogues */}
-          <div className="sidebar-section">
+          {/* <div className="sidebar-section">
             <SideBarItemHeader label={t("cataloguesSection")} />
 
             <SidebarItem
@@ -231,10 +231,10 @@ const Sidebar = () => {
               icon={BookPlus}
               active={pathname.startsWith(`/${locale}/add-catalogue`)}
             />
-          </div>
+          </div> */}
 
           {/* Brochures */}
-          <div className="sidebar-section">
+          {/* <div className="sidebar-section">
             <SideBarItemHeader label={t("brochuresSection")} />
 
             <SidebarItem
@@ -250,7 +250,7 @@ const Sidebar = () => {
               icon={FilePlus2}
               active={pathname.startsWith(`/${locale}/add-brochure`)}
             />
-          </div>
+          </div> */}
 
           {/* news */}
           <div className="sidebar-section">

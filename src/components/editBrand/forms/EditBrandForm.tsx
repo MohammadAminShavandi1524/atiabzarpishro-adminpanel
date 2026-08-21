@@ -1,25 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { z } from "zod";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+
+import { Controller, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 
 import { Badge, LoaderCircle } from "lucide-react";
 
 import { FormField } from "@/components/FormField";
+
 import { useCustomToast } from "@/components/ui/custom-toast";
 
 import BrandImageUploadField from "@/components/addBrand/BrandImageUploadField";
+
 import BrandCatalogUploadField from "@/components/addBrand/BrandCatalogUploadField";
 
-const EditBrandForm = () => {
+import { getBrand } from "../get-brand.api";
+
+import { updateBrand, type UpdateBrandPayload } from "../update-brand.api";
+import { useRouter } from "next/navigation";
+
+interface EditBrandFormProps {
+  brandId: string;
+}
+
+interface UploadResponse {
+  success: boolean;
+  url: string;
+}
+
+const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
   const t = useTranslations("editBrand");
+  const router = useRouter();
+  const locale = useLocale();
   const toast = useCustomToast();
+
+  const [loading, setLoading] = useState(true);
 
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
 
@@ -81,76 +102,221 @@ const EditBrandForm = () => {
     register,
     control,
     handleSubmit,
+    reset,
 
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
 
-    /*
-     * فعلاً Fake Data
-     *
-     * بعداً این اطلاعات از GET Brand می‌آیند
-     * و با reset(...) فرم را پر می‌کنیم.
-     */
     defaultValues: {
-      name_en: "KORLOY",
-      name_fa: "کرولوی",
+      name_en: "",
+      name_fa: "",
 
-      description_en: "Brand description",
+      description_en: "",
+      description_fa: "",
 
-      description_fa: "توضیحات برند",
-
-      /*
-       * مهم:
-       * Image و Catalog همیشه خالی هستند.
-       */
       image: undefined,
       catalog: undefined,
     },
   });
 
-  const onSubmit = async (data: FormValues) => {
-    /*
-     * فعلاً فقط UI و ساخت Payload
-     * هیچ درخواست Update به Backend نمی‌زنیم.
-     */
+  /*
+   * Get current brand
+   */
+  useEffect(() => {
+    const fetchBrand = async () => {
+      try {
+        setLoading(true);
 
-    const payload: {
-      name_en: string;
-      name_fa: string;
+        const brand = await getBrand(brandId);
 
-      description_en: string;
-      description_fa: string;
+        reset({
+          name_en: brand.name_en,
 
-      image?: File;
-      catalog?: File;
-    } = {
-      name_en: data.name_en,
-      name_fa: data.name_fa,
+          name_fa: brand.name_fa,
 
-      description_en: data.description_en,
+          description_en: brand.description_en,
 
-      description_fa: data.description_fa,
+          description_fa: brand.description_fa,
+
+          image: undefined,
+
+          catalog: undefined,
+        });
+      } catch (error) {
+        console.error("GET BRAND ERROR =>", error);
+
+        toast.error(t("toast.fetchError"));
+      } finally {
+        setLoading(false);
+      }
     };
 
-    /*
-     * فقط اگر فایل جدید انتخاب شده باشد
-     * وارد payload می‌شود.
-     */
-    if (data.image) {
-      payload.image = data.image;
+    fetchBrand();
+  }, [brandId, reset, t, toast]);
+
+  const uploadFile = ({
+    file,
+    url,
+    onProgress,
+    onFinalizing,
+  }: {
+    file: File;
+
+    url: string;
+
+    onProgress: (value: number) => void;
+
+    onFinalizing: (value: boolean) => void;
+  }): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+
+      formData.append("file", file);
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.open("POST", url);
+
+      xhr.upload.onloadstart = () => {
+        onProgress(0);
+
+        onFinalizing(false);
+      };
+
+      xhr.upload.onprogress = (event) => {
+        if (!event.lengthComputable) {
+          return;
+        }
+
+        const rawProgress = Math.round((event.loaded / event.total) * 100);
+
+        onProgress(Math.min(rawProgress, 95));
+      };
+
+      xhr.upload.onload = () => {
+        onProgress(95);
+
+        onFinalizing(true);
+      };
+
+      xhr.onload = () => {
+        if (xhr.status < 200 || xhr.status >= 300) {
+          onFinalizing(false);
+
+          reject(new Error("Upload failed"));
+
+          return;
+        }
+
+        try {
+          const response: UploadResponse = JSON.parse(xhr.responseText);
+
+          if (!response.url) {
+            throw new Error("URL not returned");
+          }
+
+          onProgress(100);
+
+          onFinalizing(false);
+
+          resolve(response.url);
+        } catch {
+          onFinalizing(false);
+
+          reject(new Error("Invalid upload response"));
+        }
+      };
+
+      xhr.onerror = () => {
+        onFinalizing(false);
+
+        reject(new Error("Upload failed"));
+      };
+
+      xhr.onabort = () => {
+        onFinalizing(false);
+
+        reject(new Error("Upload aborted"));
+      };
+
+      xhr.send(formData);
+    });
+  };
+
+  const onSubmit = async (data: FormValues) => {
+    try {
+      setImageUploadProgress(0);
+      setCatalogUploadProgress(0);
+
+      setIsImageFinalizing(false);
+      setIsCatalogFinalizing(false);
+
+      const [imageUrl, catalogUrl] = await Promise.all([
+        data.image
+          ? uploadFile({
+              file: data.image,
+              url: "/api/brand/upload-image",
+              onProgress: setImageUploadProgress,
+              onFinalizing: setIsImageFinalizing,
+            })
+          : Promise.resolve(null),
+
+        data.catalog
+          ? uploadFile({
+              file: data.catalog,
+              url: "/api/brand/upload-catalog",
+              onProgress: setCatalogUploadProgress,
+              onFinalizing: setIsCatalogFinalizing,
+            })
+          : Promise.resolve(null),
+      ]);
+
+      const payload: UpdateBrandPayload = {
+        name_en: data.name_en,
+        name_fa: data.name_fa,
+        description_en: data.description_en,
+        description_fa: data.description_fa,
+        image: imageUrl,
+        catalog: catalogUrl,
+      };
+
+      console.log("UPDATE BRAND PAYLOAD =>", payload);
+
+      await updateBrand(brandId, payload);
+
+      toast.success(t("toast.updateSuccess"));
+
+      router.push(`/${locale}/brands`);
+    } catch (error) {
+      console.error("UPDATE BRAND ERROR =>", error);
+
+      setImageUploadProgress(0);
+      setCatalogUploadProgress(0);
+
+      setIsImageFinalizing(false);
+      setIsCatalogFinalizing(false);
+
+      toast.error(t("toast.error"));
     }
-
-    if (data.catalog) {
-      payload.catalog = data.catalog;
-    }
-
-    console.log("EDIT BRAND PAYLOAD =>", payload);
-
-    toast.success(t("toast.previewSuccess"));
   };
 
   const isFinalizing = isImageFinalizing || isCatalogFinalizing;
+
+  if (loading) {
+    return (
+      <div className="border-border-secondary bg-secondary-bg flex min-h-[700px] items-center justify-center border">
+        <div className="flex items-center gap-3">
+          <LoaderCircle
+            className="text-custom-primary size-5 animate-spin"
+            strokeWidth={1.8}
+          />
+
+          <span className="text-muted-foreground text-sm">{t("loading")}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -225,8 +391,8 @@ const EditBrandForm = () => {
             />
           </div>
 
-          {/* Optional Image + Catalog */}
-          <div className="grid grid-cols-2 gap-6">
+          {/* Optional files */}
+          <div className="mb-2 grid grid-cols-2 gap-6">
             <Controller
               control={control}
               name="image"
@@ -270,7 +436,7 @@ const EditBrandForm = () => {
             />
           </div>
 
-          {/* Help */}
+          {/* Hint */}
           <div className="border-border-secondary bg-background border px-5 py-4">
             <p className="text-muted-foreground text-sm leading-6">
               {t("form.filesHint")}
