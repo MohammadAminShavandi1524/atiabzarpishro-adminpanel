@@ -281,7 +281,7 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
         catalog: catalogUrl,
       };
 
-      console.log("UPDATE BRAND PAYLOAD =>", payload);
+   
 
       await updateBrand(brandId, payload);
 

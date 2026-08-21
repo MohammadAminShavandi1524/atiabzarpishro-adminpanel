@@ -1,15 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { serverApi } from "@/lib/server-api";
 
-export async function POST(req: NextRequest) {
+export async function GET() {
   try {
-    const body = await req.json();
-
-    const data = await serverApi("/video/create/", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
+    const data = await serverApi("/video/get/");
 
     return NextResponse.json(data);
   } catch (error: any) {

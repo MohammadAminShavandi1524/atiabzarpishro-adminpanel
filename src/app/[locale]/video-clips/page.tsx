@@ -1,12 +1,13 @@
 "use client";
 
-import HeaderLayout from "@/components/layout/HeaderLayout";
-import VideoClipsTable from "@/components/videoClips/VideoClipsTable";
-
 import { useTranslations } from "next-intl";
 
+import HeaderLayout from "@/components/layout/HeaderLayout";
+
+import VideosTable from "@/components/videos/VideosTable";
+
 const Page = () => {
-  const t = useTranslations("VideoClips")
+  const t = useTranslations("Videos");
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -16,7 +17,7 @@ const Page = () => {
       />
 
       <div className="flex min-h-0 flex-1 flex-col px-8 py-6">
-        <VideoClipsTable />
+        <VideosTable />
       </div>
     </div>
   );

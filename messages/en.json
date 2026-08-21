@@ -345,53 +345,53 @@
     }
   },
 
- "editProduct": {
-  "header": {
-    "title": "Edit Product",
-    "description": "Update the product information, assigned brand or optionally replace its image and brochure."
-  },
-
-  "form": {
-    "nameEn": {
-      "label": "Product Name (English)",
-      "placeholder": "Enter the product name in English"
+  "editProduct": {
+    "header": {
+      "title": "Edit Product",
+      "description": "Update the product information, assigned brand or optionally replace its image and brochure."
     },
 
-    "nameFa": {
-      "label": "Product Name (Persian)",
-      "placeholder": "Enter the product name in Persian"
+    "form": {
+      "nameEn": {
+        "label": "Product Name (English)",
+        "placeholder": "Enter the product name in English"
+      },
+
+      "nameFa": {
+        "label": "Product Name (Persian)",
+        "placeholder": "Enter the product name in Persian"
+      },
+
+      "brand": {
+        "label": "Brand",
+        "placeholder": "Select a brand",
+        "loading": "Loading brands..."
+      },
+
+      "filesHint": "Image and brochure are optional. Leave them empty to keep the current files.",
+
+      "uploading": "Uploading...",
+      "finalizing": "Finalizing upload...",
+      "submitting": "Updating Product...",
+      "submit": "Update Product"
     },
 
-    "brand": {
-      "label": "Brand",
-      "placeholder": "Select a brand",
-      "loading": "Loading brands..."
+    "validation": {
+      "nameEnRequired": "Please enter the product name in English.",
+      "nameFaRequired": "Please enter the product name in Persian.",
+      "brandRequired": "Please select a brand.",
+      "imageInvalid": "Please select a valid image file.",
+      "brochureInvalid": "The product brochure must be a PDF file."
     },
 
-    "filesHint": "Image and brochure are optional. Leave them empty to keep the current files.",
+    "loading": "Loading product information...",
 
-    "uploading": "Uploading...",
-    "finalizing": "Finalizing upload...",
-    "submitting": "Updating Product...",
-    "submit": "Update Product"
+    "toast": {
+      "fetchError": "Failed to load the product information.",
+      "updateSuccess": "Product updated successfully.",
+      "error": "Failed to update the product. Please try again."
+    }
   },
-
-  "validation": {
-    "nameEnRequired": "Please enter the product name in English.",
-    "nameFaRequired": "Please enter the product name in Persian.",
-    "brandRequired": "Please select a brand.",
-    "imageInvalid": "Please select a valid image file.",
-    "brochureInvalid": "The product brochure must be a PDF file."
-  },
-
-  "loading": "Loading product information...",
-
-  "toast": {
-    "fetchError": "Failed to load the product information.",
-    "updateSuccess": "Product updated successfully.",
-    "error": "Failed to update the product. Please try again."
-  }
-},
 
   "addProduct": {
     "header": {
@@ -451,15 +451,17 @@
     }
   },
 
-  "VideoClips": {
+  "Videos": {
     "header": {
-      "title": "Video Clips",
-      "description": "View, search, edit, delete, and manage video content."
+      "title": "Videos",
+      "description": "View, search, edit, delete and manage video content."
     },
+
     "filters": {
-      "searchPlaceholder": "Search by English or Persian title...",
+      "searchPlaceholder": "Search videos...",
       "results": "videos"
     },
+
     "table": {
       "id": "ID",
       "nameEn": "English Title",
@@ -468,15 +470,20 @@
       "descriptionFa": "Persian Description",
       "actions": "Actions"
     },
+
     "actions": {
-      "view": "View",
+      "view": "View Video",
       "edit": "Edit",
       "delete": "Delete"
     },
+
+    "loading": "Loading videos...",
+
     "empty": {
       "title": "No videos found",
-      "description": "No videos match your current search."
+      "description": "There are no videos matching your current search."
     },
+
     "toast": {
       "delete": {
         "success": "Video deleted successfully.",
@@ -490,32 +497,41 @@
       "title": "Edit Video",
       "description": "Edit and update the video information and content."
     },
+
     "header": {
       "title": "Edit Video Information",
       "description": "Review and update the video titles, descriptions, and media file as needed."
     },
+
     "form": {
       "nameEn": {
         "label": "English Title",
         "placeholder": "Enter the English video title"
       },
+
       "nameFa": {
         "label": "Persian Title",
         "placeholder": "Enter the Persian video title"
       },
+
       "descriptionEn": {
         "label": "English Description",
         "placeholder": "Enter the English video description"
       },
+
       "descriptionFa": {
         "label": "Persian Description",
         "placeholder": "Enter the Persian video description"
       },
+
+      "videoHint": "The video file is optional. Leave it empty to keep the current video.",
+
       "submit": "Save Changes",
       "submitting": "Saving...",
       "finalizing": "Finalizing...",
       "uploaded": "Changes Saved"
     },
+
     "validation": {
       "nameEnRequired": "English title is required.",
       "nameFaRequired": "Persian title is required.",
@@ -524,8 +540,12 @@
       "descriptionFaRequired": "Persian description is required.",
       "videoInvalid": "Please select a valid video file."
     },
+
+    "loading": "Loading video information...",
+
     "toast": {
       "videoSelected": "Video selected successfully.",
+      "fetchError": "Failed to load the video information.",
       "updateSuccess": "Video updated successfully.",
       "error": "An error occurred while updating the video."
     }

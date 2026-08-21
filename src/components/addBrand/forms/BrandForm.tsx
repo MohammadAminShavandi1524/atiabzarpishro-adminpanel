@@ -237,11 +237,9 @@ const BrandForm = () => {
         catalog: catalogUrl,
       };
 
-      console.log("PAYLOAD =>", payload);
+     
 
-      /*
-       * Create Brand
-       */
+      
       const response = await fetch("/api/brand/create", {
         method: "POST",
 
@@ -273,7 +271,7 @@ const BrandForm = () => {
 
       const result = await response.json();
 
-      console.log("CREATE BRAND RESPONSE =>", result);
+    
 
       /*
        * Success

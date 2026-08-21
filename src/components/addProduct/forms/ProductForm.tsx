@@ -217,7 +217,7 @@ export default function ProductForm() {
         brochure: brochureUrl,
       };
 
-      console.log("CREATE PRODUCT PAYLOAD =>", payload);
+    
 
       const response = await fetch("/api/product/create", {
         method: "POST",

@@ -2,14 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { serverApi } from "@/lib/server-api";
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
+interface RouteContext {
+  params: Promise<{
+    videoId: string;
+  }>;
+}
 
-    const data = await serverApi("/video/create/", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
+export async function GET(_req: NextRequest, { params }: RouteContext) {
+  try {
+    const { videoId } = await params;
+
+    const data = await serverApi(`/video/get/${videoId}/`);
 
     return NextResponse.json(data);
   } catch (error: any) {

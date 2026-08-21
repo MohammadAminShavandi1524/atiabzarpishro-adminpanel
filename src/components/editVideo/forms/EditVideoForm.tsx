@@ -24,26 +24,25 @@ import {
 } from "@hookform/resolvers/zod";
 
 import {
+  Clapperboard,
   LoaderCircle,
-  PackageSearch,
 } from "lucide-react";
 
 import { FormField } from "@/components/FormField";
+
 import { useCustomToast } from "@/components/ui/custom-toast";
 
-import BrandSelect from "@/components/addProduct/BrandSelect";
-import ProductImageUploadField from "@/components/addProduct/ProductImageUploadField";
-import ProductBrochureUploadField from "@/components/addProduct/ProductBrochureUploadField";
+import VideoUploadField from "@/components/addVideo/VideoUploadField";
 
-import { getProduct } from "../get-product.api";
+import { getVideo } from "../get-video.api";
 
 import {
-  updateProduct,
-  type UpdateProductPayload,
-} from "../update-product.api";
+  updateVideo,
+  type UpdateVideoPayload,
+} from "../update-video.api";
 
-interface EditProductFormProps {
-  productId: string;
+interface EditVideoFormProps {
+  videoId: string;
 }
 
 interface UploadResponse {
@@ -51,38 +50,32 @@ interface UploadResponse {
   url: string;
 }
 
-const EditProductForm = ({
-  productId,
-}: EditProductFormProps) => {
-  const t = useTranslations("editProduct");
+const EditVideoForm = ({
+  videoId,
+}: EditVideoFormProps) => {
+  const t =
+    useTranslations("editVideo");
 
   const locale = useLocale();
 
   const router = useRouter();
 
-  const toast = useCustomToast();
-
-  const [loading, setLoading] =
-    useState(true);
+  const toast =
+    useCustomToast();
 
   const [
-    imageUploadProgress,
-    setImageUploadProgress,
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  const [
+    uploadProgress,
+    setUploadProgress,
   ] = useState(0);
 
   const [
-    brochureUploadProgress,
-    setBrochureUploadProgress,
-  ] = useState(0);
-
-  const [
-    isImageFinalizing,
-    setIsImageFinalizing,
-  ] = useState(false);
-
-  const [
-    isBrochureFinalizing,
-    setIsBrochureFinalizing,
+    isFinalizing,
+    setIsFinalizing,
   ] = useState(false);
 
   const schema = z.object({
@@ -94,6 +87,12 @@ const EditProductForm = ({
         t(
           "validation.nameEnRequired",
         ),
+      )
+      .max(
+        250,
+        t(
+          "validation.nameMax",
+        ),
       ),
 
     name_fa: z
@@ -104,46 +103,49 @@ const EditProductForm = ({
         t(
           "validation.nameFaRequired",
         ),
-      ),
-
-    brand_id: z
-      .number()
-      .int()
-      .positive(
+      )
+      .max(
+        250,
         t(
-          "validation.brandRequired",
+          "validation.nameMax",
         ),
       ),
 
-    image: z
-      .custom<File | undefined>()
+    description_en: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(
+          "validation.descriptionEnRequired",
+        ),
+      ),
+
+    description_fa: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(
+          "validation.descriptionFaRequired",
+        ),
+      ),
+
+    video: z
+      .custom<
+        File | undefined
+      >()
       .optional()
       .refine(
         (file) =>
           !file ||
           (file instanceof File &&
             file.type.startsWith(
-              "image/",
+              "video/",
             )),
         {
           message: t(
-            "validation.imageInvalid",
-          ),
-        },
-      ),
-
-    brochure: z
-      .custom<File | undefined>()
-      .optional()
-      .refine(
-        (file) =>
-          !file ||
-          (file instanceof File &&
-            file.type ===
-              "application/pdf"),
-        {
-          message: t(
-            "validation.brochureInvalid",
+            "validation.videoInvalid",
           ),
         },
       ),
@@ -170,42 +172,42 @@ const EditProductForm = ({
       name_en: "",
       name_fa: "",
 
-      brand_id: 0,
+      description_en: "",
+      description_fa: "",
 
-      image: undefined,
-      brochure: undefined,
+      video: undefined,
     },
   });
 
   useEffect(() => {
-    const fetchProduct =
+    const fetchVideo =
       async () => {
         try {
           setLoading(true);
 
-          const product =
-            await getProduct(
-              productId,
+          const video =
+            await getVideo(
+              videoId,
             );
 
           reset({
             name_en:
-              product.name_en,
+              video.name_en,
 
             name_fa:
-              product.name_fa,
+              video.name_fa,
 
-            brand_id:
-              product.brand.id,
+            description_en:
+              video.description_en,
 
-            image: undefined,
+            description_fa:
+              video.description_fa,
 
-            brochure:
-              undefined,
+            video: undefined,
           });
         } catch (error) {
           console.error(
-            "GET PRODUCT ERROR =>",
+            "GET VIDEO ERROR =>",
             error,
           );
 
@@ -219,32 +221,17 @@ const EditProductForm = ({
         }
       };
 
-    fetchProduct();
+    fetchVideo();
   }, [
-    productId,
+    videoId,
     reset,
     t,
     toast,
   ]);
 
-  const uploadFile = ({
-    file,
-    url,
-    onProgress,
-    onFinalizing,
-  }: {
-    file: File;
-
-    url: string;
-
-    onProgress: (
-      value: number,
-    ) => void;
-
-    onFinalizing: (
-      value: boolean,
-    ) => void;
-  }): Promise<string> => {
+  const uploadVideo = (
+    file: File,
+  ): Promise<string> => {
     return new Promise(
       (
         resolve,
@@ -263,16 +250,13 @@ const EditProductForm = ({
 
         xhr.open(
           "POST",
-          url,
+          "/api/video/upload",
         );
 
         xhr.upload.onloadstart =
           () => {
-            onProgress(0);
-
-            onFinalizing(
-              false,
-            );
+            setUploadProgress(0);
+            setIsFinalizing(false);
           };
 
         xhr.upload.onprogress = (
@@ -291,7 +275,7 @@ const EditProductForm = ({
                 100,
             );
 
-          onProgress(
+          setUploadProgress(
             Math.min(
               rawProgress,
               95,
@@ -301,11 +285,8 @@ const EditProductForm = ({
 
         xhr.upload.onload =
           () => {
-            onProgress(95);
-
-            onFinalizing(
-              true,
-            );
+            setUploadProgress(95);
+            setIsFinalizing(true);
           };
 
         xhr.onload = () => {
@@ -313,13 +294,11 @@ const EditProductForm = ({
             xhr.status < 200 ||
             xhr.status >= 300
           ) {
-            onFinalizing(
-              false,
-            );
+            setIsFinalizing(false);
 
             reject(
               new Error(
-                "Upload failed",
+                "Video upload failed",
               ),
             );
 
@@ -332,25 +311,22 @@ const EditProductForm = ({
                 xhr.responseText,
               );
 
-            if (!response.url) {
+            if (
+              !response.url
+            ) {
               throw new Error(
-                "URL not returned",
+                "Video URL not returned",
               );
             }
 
-            onProgress(100);
-
-            onFinalizing(
-              false,
-            );
+            setUploadProgress(100);
+            setIsFinalizing(false);
 
             resolve(
               response.url,
             );
           } catch {
-            onFinalizing(
-              false,
-            );
+            setIsFinalizing(false);
 
             reject(
               new Error(
@@ -361,21 +337,21 @@ const EditProductForm = ({
         };
 
         xhr.onerror = () => {
-          onFinalizing(false);
+          setIsFinalizing(false);
 
           reject(
             new Error(
-              "Upload failed",
+              "Video upload failed",
             ),
           );
         };
 
         xhr.onabort = () => {
-          onFinalizing(false);
+          setIsFinalizing(false);
 
           reject(
             new Error(
-              "Upload aborted",
+              "Video upload aborted",
             ),
           );
         };
@@ -389,53 +365,17 @@ const EditProductForm = ({
     data: FormValues,
   ) => {
     try {
-      setImageUploadProgress(0);
-      setBrochureUploadProgress(0);
+      setUploadProgress(0);
+      setIsFinalizing(false);
 
-      setIsImageFinalizing(false);
-      setIsBrochureFinalizing(false);
+      const videoUrl =
+        data.video
+          ? await uploadVideo(
+              data.video,
+            )
+          : null;
 
-      const [
-        imageUrl,
-        brochureUrl,
-      ] = await Promise.all([
-        data.image
-          ? uploadFile({
-              file: data.image,
-
-              url:
-                "/api/product/upload-image",
-
-              onProgress:
-                setImageUploadProgress,
-
-              onFinalizing:
-                setIsImageFinalizing,
-            })
-          : Promise.resolve(
-              null,
-            ),
-
-        data.brochure
-          ? uploadFile({
-              file:
-                data.brochure,
-
-              url:
-                "/api/product/upload-brochure",
-
-              onProgress:
-                setBrochureUploadProgress,
-
-              onFinalizing:
-                setIsBrochureFinalizing,
-            })
-          : Promise.resolve(
-              null,
-            ),
-      ]);
-
-      const payload: UpdateProductPayload =
+      const payload: UpdateVideoPayload =
         {
           name_en:
             data.name_en,
@@ -443,20 +383,20 @@ const EditProductForm = ({
           name_fa:
             data.name_fa,
 
-          brand_id:
-            data.brand_id,
+          description_en:
+            data.description_en,
 
-          image:
-            imageUrl,
+          description_fa:
+            data.description_fa,
 
-          brochure:
-            brochureUrl,
+          video:
+            videoUrl,
         };
 
     
 
-      await updateProduct(
-        productId,
+      await updateVideo(
+        videoId,
         payload,
       );
 
@@ -467,19 +407,16 @@ const EditProductForm = ({
       );
 
       router.push(
-        `/${locale}/products`,
+        `/${locale}/video-clips`,
       );
     } catch (error) {
       console.error(
-        "UPDATE PRODUCT ERROR =>",
+        "UPDATE VIDEO ERROR =>",
         error,
       );
 
-      setImageUploadProgress(0);
-      setBrochureUploadProgress(0);
-
-      setIsImageFinalizing(false);
-      setIsBrochureFinalizing(false);
+      setUploadProgress(0);
+      setIsFinalizing(false);
 
       toast.error(
         t("toast.error"),
@@ -487,19 +424,13 @@ const EditProductForm = ({
     }
   };
 
-  const isFinalizing =
-    isImageFinalizing ||
-    isBrochureFinalizing;
-
   if (loading) {
     return (
-      <div className="border-border-secondary bg-secondary-bg flex min-h-[650px] items-center justify-center border">
+      <div className="border-border-secondary bg-secondary-bg flex min-h-[620px] items-center justify-center border">
         <div className="flex items-center gap-3">
           <LoaderCircle
             className="text-custom-primary size-5 animate-spin"
-            strokeWidth={
-              1.8
-            }
+            strokeWidth={1.8}
           />
 
           <span className="text-muted-foreground text-sm">
@@ -517,16 +448,15 @@ const EditProductForm = ({
           onSubmit,
         )
       }
-      className="border-border-secondary bg-secondary-bg grid min-h-[650px] grid-cols-[0.36fr_1fr] overflow-hidden border"
+      className="border-border-secondary bg-secondary-bg grid min-h-[620px] grid-cols-[0.36fr_1fr] overflow-hidden border"
     >
+      {/* Information */}
       <div className="border-border-secondary relative flex flex-col justify-between border-e p-7">
         <div>
           <div className="border-border-secondary flex size-11 items-center justify-center border">
-            <PackageSearch
+            <Clapperboard
               className="text-custom-primary size-5"
-              strokeWidth={
-                1.6
-              }
+              strokeWidth={1.6}
             />
           </div>
 
@@ -549,12 +479,14 @@ const EditProductForm = ({
           lang="en"
           className="text-muted-foreground/60 text-[10px] tracking-[0.12em]"
         >
-          ATI / PRODUCT MANAGEMENT
+          ATI / VIDEO MANAGEMENT
         </div>
       </div>
 
+      {/* Fields */}
       <div className="flex flex-col justify-between p-8">
         <div className="space-y-7">
+          {/* Names */}
           <div className="grid grid-cols-2 gap-6">
             <FormField
               label={t(
@@ -589,120 +521,115 @@ const EditProductForm = ({
             />
           </div>
 
+          {/* Descriptions */}
+          <div className="grid grid-cols-2 gap-6">
+            <FormField
+              label={t(
+                "form.descriptionEn.label",
+              )}
+              placeholder={t(
+                "form.descriptionEn.placeholder",
+              )}
+              register={register(
+                "description_en",
+              )}
+              error={
+                errors.description_en
+              }
+              as="textarea"
+            />
+
+            <FormField
+              label={t(
+                "form.descriptionFa.label",
+              )}
+              placeholder={t(
+                "form.descriptionFa.placeholder",
+              )}
+              register={register(
+                "description_fa",
+              )}
+              error={
+                errors.description_fa
+              }
+              as="textarea"
+            />
+          </div>
+
+          {/* Optional Video */}
           <Controller
             control={control}
-            name="brand_id"
+            name="video"
             render={({ field }) => (
-              <BrandSelect
-                field={field}
+              <VideoUploadField
+                value={
+                  field.value
+                }
+                onChange={(file) => {
+                  field.onChange(
+                    file,
+                  );
+
+                  setUploadProgress(
+                    0,
+                  );
+
+                  setIsFinalizing(
+                    false,
+                  );
+
+                  if (file) {
+                    toast.success(
+                      t(
+                        "toast.videoSelected",
+                      ),
+                    );
+                  }
+                }}
                 error={
-                  errors.brand_id
+                  errors.video
+                    ?.message as
+                    | string
+                    | undefined
+                }
+                progress={
+                  uploadProgress
+                }
+                isUploading={
+                  isSubmitting
+                }
+                isFinalizing={
+                  isFinalizing
+                }
+                uploadCompleted={
+                  false
                 }
               />
             )}
           />
 
-          <div className="grid grid-cols-2 gap-6">
-            <Controller
-              control={control}
-              name="image"
-              render={({ field }) => (
-                <ProductImageUploadField
-                  value={field.value}
-                  onChange={(file) => {
-                    field.onChange(
-                      file,
-                    );
-
-                    setImageUploadProgress(
-                      0,
-                    );
-
-                    setIsImageFinalizing(
-                      false,
-                    );
-                  }}
-                  error={
-                    errors.image
-                      ?.message as
-                      | string
-                      | undefined
-                  }
-                  progress={
-                    imageUploadProgress
-                  }
-                  isUploading={
-                    isSubmitting
-                  }
-                  isFinalizing={
-                    isImageFinalizing
-                  }
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="brochure"
-              render={({ field }) => (
-                <ProductBrochureUploadField
-                  value={
-                    field.value
-                  }
-                  onChange={(file) => {
-                    field.onChange(
-                      file,
-                    );
-
-                    setBrochureUploadProgress(
-                      0,
-                    );
-
-                    setIsBrochureFinalizing(
-                      false,
-                    );
-                  }}
-                  error={
-                    errors.brochure
-                      ?.message as
-                      | string
-                      | undefined
-                  }
-                  progress={
-                    brochureUploadProgress
-                  }
-                  isUploading={
-                    isSubmitting
-                  }
-                  isFinalizing={
-                    isBrochureFinalizing
-                  }
-                />
-              )}
-            />
-          </div>
-
           <div className="border-border-secondary bg-background border px-5 py-4">
             <p className="text-muted-foreground text-sm leading-6">
               {t(
-                "form.filesHint",
+                "form.videoHint",
               )}
             </p>
           </div>
         </div>
 
+        {/* Submit */}
         <div className="border-border-secondary mt-10 flex justify-end border-t pt-6">
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting
+            }
             className="bg-custom-primary text-primary-foreground flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting && (
               <LoaderCircle
                 className="size-4 animate-spin"
-                strokeWidth={
-                  1.8
-                }
+                strokeWidth={1.8}
               />
             )}
 
@@ -724,4 +651,4 @@ const EditProductForm = ({
   );
 };
 
-export default EditProductForm;
+export default EditVideoForm;
