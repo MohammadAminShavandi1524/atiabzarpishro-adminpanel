@@ -345,51 +345,53 @@
     }
   },
 
-  "editProduct": {
-    "header": {
-      "title": "Edit Product",
-      "description": "Update the product information, assigned brand or optionally replace its image and brochure."
-    },
-
-    "form": {
-      "nameEn": {
-        "label": "Product Name (English)",
-        "placeholder": "Enter the product name in English"
-      },
-
-      "nameFa": {
-        "label": "Product Name (Persian)",
-        "placeholder": "Enter the product name in Persian"
-      },
-
-      "brand": {
-        "label": "Brand",
-        "placeholder": "Select a brand",
-        "loading": "Loading brands..."
-      },
-
-      "filesHint": "Image and brochure are optional. Leave them empty to keep the current files.",
-
-      "uploading": "Uploading...",
-      "finalizing": "Finalizing upload...",
-      "submitting": "Updating Product...",
-      "submit": "Update Product"
-    },
-
-    "validation": {
-      "nameEnRequired": "Please enter the product name in English.",
-      "nameFaRequired": "Please enter the product name in Persian.",
-      "brandRequired": "Please select a brand.",
-      "imageInvalid": "Please select a valid image file.",
-      "brochureInvalid": "The product brochure must be a PDF file."
-    },
-
-    "toast": {
-      "previewSuccess": "Product changes are ready to be submitted.",
-      "updateSuccess": "Product updated successfully.",
-      "error": "Failed to update the product. Please try again."
-    }
+ "editProduct": {
+  "header": {
+    "title": "Edit Product",
+    "description": "Update the product information, assigned brand or optionally replace its image and brochure."
   },
+
+  "form": {
+    "nameEn": {
+      "label": "Product Name (English)",
+      "placeholder": "Enter the product name in English"
+    },
+
+    "nameFa": {
+      "label": "Product Name (Persian)",
+      "placeholder": "Enter the product name in Persian"
+    },
+
+    "brand": {
+      "label": "Brand",
+      "placeholder": "Select a brand",
+      "loading": "Loading brands..."
+    },
+
+    "filesHint": "Image and brochure are optional. Leave them empty to keep the current files.",
+
+    "uploading": "Uploading...",
+    "finalizing": "Finalizing upload...",
+    "submitting": "Updating Product...",
+    "submit": "Update Product"
+  },
+
+  "validation": {
+    "nameEnRequired": "Please enter the product name in English.",
+    "nameFaRequired": "Please enter the product name in Persian.",
+    "brandRequired": "Please select a brand.",
+    "imageInvalid": "Please select a valid image file.",
+    "brochureInvalid": "The product brochure must be a PDF file."
+  },
+
+  "loading": "Loading product information...",
+
+  "toast": {
+    "fetchError": "Failed to load the product information.",
+    "updateSuccess": "Product updated successfully.",
+    "error": "Failed to update the product. Please try again."
+  }
+},
 
   "addProduct": {
     "header": {

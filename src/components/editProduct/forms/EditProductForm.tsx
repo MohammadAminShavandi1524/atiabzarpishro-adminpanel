@@ -1,15 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import { z } from "zod";
 
-import { useTranslations } from "next-intl";
+import {
+  useLocale,
+  useTranslations,
+} from "next-intl";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
-import { LoaderCircle, PackageSearch } from "lucide-react";
+import {
+  Controller,
+  useForm,
+} from "react-hook-form";
+
+import {
+  zodResolver,
+} from "@hookform/resolvers/zod";
+
+import {
+  LoaderCircle,
+  PackageSearch,
+} from "lucide-react";
 
 import { FormField } from "@/components/FormField";
 import { useCustomToast } from "@/components/ui/custom-toast";
@@ -18,33 +35,100 @@ import BrandSelect from "@/components/addProduct/BrandSelect";
 import ProductImageUploadField from "@/components/addProduct/ProductImageUploadField";
 import ProductBrochureUploadField from "@/components/addProduct/ProductBrochureUploadField";
 
-const EditProductForm = () => {
+import { getProduct } from "../get-product.api";
+
+import {
+  updateProduct,
+  type UpdateProductPayload,
+} from "../update-product.api";
+
+interface EditProductFormProps {
+  productId: string;
+}
+
+interface UploadResponse {
+  success: boolean;
+  url: string;
+}
+
+const EditProductForm = ({
+  productId,
+}: EditProductFormProps) => {
   const t = useTranslations("editProduct");
+
+  const locale = useLocale();
+
+  const router = useRouter();
+
   const toast = useCustomToast();
 
-  const [imageUploadProgress, setImageUploadProgress] = useState(0);
+  const [loading, setLoading] =
+    useState(true);
 
-  const [brochureUploadProgress, setBrochureUploadProgress] = useState(0);
+  const [
+    imageUploadProgress,
+    setImageUploadProgress,
+  ] = useState(0);
 
-  const [isImageFinalizing, setIsImageFinalizing] = useState(false);
+  const [
+    brochureUploadProgress,
+    setBrochureUploadProgress,
+  ] = useState(0);
 
-  const [isBrochureFinalizing, setIsBrochureFinalizing] = useState(false);
+  const [
+    isImageFinalizing,
+    setIsImageFinalizing,
+  ] = useState(false);
+
+  const [
+    isBrochureFinalizing,
+    setIsBrochureFinalizing,
+  ] = useState(false);
 
   const schema = z.object({
-    name_en: z.string().trim().min(1, t("validation.nameEnRequired")),
+    name_en: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(
+          "validation.nameEnRequired",
+        ),
+      ),
 
-    name_fa: z.string().trim().min(1, t("validation.nameFaRequired")),
+    name_fa: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(
+          "validation.nameFaRequired",
+        ),
+      ),
 
-    brand_id: z.number().int().positive(t("validation.brandRequired")),
+    brand_id: z
+      .number()
+      .int()
+      .positive(
+        t(
+          "validation.brandRequired",
+        ),
+      ),
 
     image: z
       .custom<File | undefined>()
       .optional()
       .refine(
         (file) =>
-          !file || (file instanceof File && file.type.startsWith("image/")),
+          !file ||
+          (file instanceof File &&
+            file.type.startsWith(
+              "image/",
+            )),
         {
-          message: t("validation.imageInvalid"),
+          message: t(
+            "validation.imageInvalid",
+          ),
         },
       ),
 
@@ -53,107 +137,413 @@ const EditProductForm = () => {
       .optional()
       .refine(
         (file) =>
-          !file || (file instanceof File && file.type === "application/pdf"),
+          !file ||
+          (file instanceof File &&
+            file.type ===
+              "application/pdf"),
         {
-          message: t("validation.brochureInvalid"),
+          message: t(
+            "validation.brochureInvalid",
+          ),
         },
       ),
   });
 
-  type FormValues = z.infer<typeof schema>;
+  type FormValues =
+    z.infer<typeof schema>;
 
   const {
     register,
     control,
     handleSubmit,
+    reset,
 
-    formState: { errors, isSubmitting },
+    formState: {
+      errors,
+      isSubmitting,
+    },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver:
+      zodResolver(schema),
 
-    /*
-     * فعلاً داده تستی
-     *
-     * بعداً GET single product می‌زنیم
-     * و با reset() فرم رو پر می‌کنیم.
-     */
     defaultValues: {
-      name_en: "product1",
-      name_fa: "محصول 1",
+      name_en: "",
+      name_fa: "",
 
-      brand_id: 2,
+      brand_id: 0,
 
-      /*
-       * فایل‌ها در Edit همیشه خالی می‌مونن.
-       */
       image: undefined,
       brochure: undefined,
     },
   });
 
-  const onSubmit = async (data: FormValues) => {
-    /*
-     * فعلاً فقط Payload رو آماده می‌کنیم.
-     *
-     * هنوز Update واقعی به Backend وصل نشده.
-     */
+  useEffect(() => {
+    const fetchProduct =
+      async () => {
+        try {
+          setLoading(true);
 
-    const payload: {
-      name_en: string;
-      name_fa: string;
+          const product =
+            await getProduct(
+              productId,
+            );
 
-      brand_id: number;
+          reset({
+            name_en:
+              product.name_en,
 
-      image?: File;
-      brochure?: File;
-    } = {
-      name_en: data.name_en,
-      name_fa: data.name_fa,
+            name_fa:
+              product.name_fa,
 
-      brand_id: data.brand_id,
-    };
+            brand_id:
+              product.brand.id,
 
-    /*
-     * فایل جدید فقط در صورت انتخاب
-     * وارد Payload می‌شود.
-     */
-    if (data.image) {
-      payload.image = data.image;
-    }
+            image: undefined,
 
-    if (data.brochure) {
-      payload.brochure = data.brochure;
-    }
+            brochure:
+              undefined,
+          });
+        } catch (error) {
+          console.error(
+            "GET PRODUCT ERROR =>",
+            error,
+          );
 
-    console.log("EDIT PRODUCT PAYLOAD =>", payload);
+          toast.error(
+            t(
+              "toast.fetchError",
+            ),
+          );
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    toast.success(t("toast.previewSuccess"));
+    fetchProduct();
+  }, [
+    productId,
+    reset,
+    t,
+    toast,
+  ]);
+
+  const uploadFile = ({
+    file,
+    url,
+    onProgress,
+    onFinalizing,
+  }: {
+    file: File;
+
+    url: string;
+
+    onProgress: (
+      value: number,
+    ) => void;
+
+    onFinalizing: (
+      value: boolean,
+    ) => void;
+  }): Promise<string> => {
+    return new Promise(
+      (
+        resolve,
+        reject,
+      ) => {
+        const formData =
+          new FormData();
+
+        formData.append(
+          "file",
+          file,
+        );
+
+        const xhr =
+          new XMLHttpRequest();
+
+        xhr.open(
+          "POST",
+          url,
+        );
+
+        xhr.upload.onloadstart =
+          () => {
+            onProgress(0);
+
+            onFinalizing(
+              false,
+            );
+          };
+
+        xhr.upload.onprogress = (
+          event,
+        ) => {
+          if (
+            !event.lengthComputable
+          ) {
+            return;
+          }
+
+          const rawProgress =
+            Math.round(
+              (event.loaded /
+                event.total) *
+                100,
+            );
+
+          onProgress(
+            Math.min(
+              rawProgress,
+              95,
+            ),
+          );
+        };
+
+        xhr.upload.onload =
+          () => {
+            onProgress(95);
+
+            onFinalizing(
+              true,
+            );
+          };
+
+        xhr.onload = () => {
+          if (
+            xhr.status < 200 ||
+            xhr.status >= 300
+          ) {
+            onFinalizing(
+              false,
+            );
+
+            reject(
+              new Error(
+                "Upload failed",
+              ),
+            );
+
+            return;
+          }
+
+          try {
+            const response: UploadResponse =
+              JSON.parse(
+                xhr.responseText,
+              );
+
+            if (!response.url) {
+              throw new Error(
+                "URL not returned",
+              );
+            }
+
+            onProgress(100);
+
+            onFinalizing(
+              false,
+            );
+
+            resolve(
+              response.url,
+            );
+          } catch {
+            onFinalizing(
+              false,
+            );
+
+            reject(
+              new Error(
+                "Invalid upload response",
+              ),
+            );
+          }
+        };
+
+        xhr.onerror = () => {
+          onFinalizing(false);
+
+          reject(
+            new Error(
+              "Upload failed",
+            ),
+          );
+        };
+
+        xhr.onabort = () => {
+          onFinalizing(false);
+
+          reject(
+            new Error(
+              "Upload aborted",
+            ),
+          );
+        };
+
+        xhr.send(formData);
+      },
+    );
   };
 
-  const isFinalizing = isImageFinalizing || isBrochureFinalizing;
+  const onSubmit = async (
+    data: FormValues,
+  ) => {
+    try {
+      setImageUploadProgress(0);
+      setBrochureUploadProgress(0);
+
+      setIsImageFinalizing(false);
+      setIsBrochureFinalizing(false);
+
+      const [
+        imageUrl,
+        brochureUrl,
+      ] = await Promise.all([
+        data.image
+          ? uploadFile({
+              file: data.image,
+
+              url:
+                "/api/product/upload-image",
+
+              onProgress:
+                setImageUploadProgress,
+
+              onFinalizing:
+                setIsImageFinalizing,
+            })
+          : Promise.resolve(
+              null,
+            ),
+
+        data.brochure
+          ? uploadFile({
+              file:
+                data.brochure,
+
+              url:
+                "/api/product/upload-brochure",
+
+              onProgress:
+                setBrochureUploadProgress,
+
+              onFinalizing:
+                setIsBrochureFinalizing,
+            })
+          : Promise.resolve(
+              null,
+            ),
+      ]);
+
+      const payload: UpdateProductPayload =
+        {
+          name_en:
+            data.name_en,
+
+          name_fa:
+            data.name_fa,
+
+          brand_id:
+            data.brand_id,
+
+          image:
+            imageUrl,
+
+          brochure:
+            brochureUrl,
+        };
+
+      console.log(
+        "UPDATE PRODUCT PAYLOAD =>",
+        payload,
+      );
+
+      await updateProduct(
+        productId,
+        payload,
+      );
+
+      toast.success(
+        t(
+          "toast.updateSuccess",
+        ),
+      );
+
+      router.push(
+        `/${locale}/products`,
+      );
+    } catch (error) {
+      console.error(
+        "UPDATE PRODUCT ERROR =>",
+        error,
+      );
+
+      setImageUploadProgress(0);
+      setBrochureUploadProgress(0);
+
+      setIsImageFinalizing(false);
+      setIsBrochureFinalizing(false);
+
+      toast.error(
+        t("toast.error"),
+      );
+    }
+  };
+
+  const isFinalizing =
+    isImageFinalizing ||
+    isBrochureFinalizing;
+
+  if (loading) {
+    return (
+      <div className="border-border-secondary bg-secondary-bg flex min-h-[650px] items-center justify-center border">
+        <div className="flex items-center gap-3">
+          <LoaderCircle
+            className="text-custom-primary size-5 animate-spin"
+            strokeWidth={
+              1.8
+            }
+          />
+
+          <span className="text-muted-foreground text-sm">
+            {t("loading")}
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={
+        handleSubmit(
+          onSubmit,
+        )
+      }
       className="border-border-secondary bg-secondary-bg grid min-h-[650px] grid-cols-[0.36fr_1fr] overflow-hidden border"
     >
-      {/* Information */}
       <div className="border-border-secondary relative flex flex-col justify-between border-e p-7">
         <div>
           <div className="border-border-secondary flex size-11 items-center justify-center border">
             <PackageSearch
               className="text-custom-primary size-5"
-              strokeWidth={1.6}
+              strokeWidth={
+                1.6
+              }
             />
           </div>
 
           <div className="mt-5">
             <h2 className="text-foreground mt-3 text-xl font-semibold">
-              {t("header.title")}
+              {t(
+                "header.title",
+              )}
             </h2>
 
             <p className="text-muted-foreground mt-3 max-w-[280px] text-sm leading-7">
-              {t("header.description")}
+              {t(
+                "header.description",
+              )}
             </p>
           </div>
         </div>
@@ -166,38 +556,55 @@ const EditProductForm = () => {
         </div>
       </div>
 
-      {/* Fields */}
       <div className="flex flex-col justify-between p-8">
         <div className="space-y-7">
-          {/* Names */}
           <div className="grid grid-cols-2 gap-6">
             <FormField
-              label={t("form.nameEn.label")}
-              placeholder={t("form.nameEn.placeholder")}
-              register={register("name_en")}
-              error={errors.name_en}
+              label={t(
+                "form.nameEn.label",
+              )}
+              placeholder={t(
+                "form.nameEn.placeholder",
+              )}
+              register={register(
+                "name_en",
+              )}
+              error={
+                errors.name_en
+              }
               as="input"
             />
 
             <FormField
-              label={t("form.nameFa.label")}
-              placeholder={t("form.nameFa.placeholder")}
-              register={register("name_fa")}
-              error={errors.name_fa}
+              label={t(
+                "form.nameFa.label",
+              )}
+              placeholder={t(
+                "form.nameFa.placeholder",
+              )}
+              register={register(
+                "name_fa",
+              )}
+              error={
+                errors.name_fa
+              }
               as="input"
             />
           </div>
 
-          {/* Brand */}
           <Controller
             control={control}
             name="brand_id"
             render={({ field }) => (
-              <BrandSelect field={field} error={errors.brand_id} />
+              <BrandSelect
+                field={field}
+                error={
+                  errors.brand_id
+                }
+              />
             )}
           />
 
-          {/* Optional Files */}
           <div className="grid grid-cols-2 gap-6">
             <Controller
               control={control}
@@ -206,16 +613,33 @@ const EditProductForm = () => {
                 <ProductImageUploadField
                   value={field.value}
                   onChange={(file) => {
-                    field.onChange(file);
+                    field.onChange(
+                      file,
+                    );
 
-                    setImageUploadProgress(0);
+                    setImageUploadProgress(
+                      0,
+                    );
 
-                    setIsImageFinalizing(false);
+                    setIsImageFinalizing(
+                      false,
+                    );
                   }}
-                  error={errors.image?.message as string | undefined}
-                  progress={imageUploadProgress}
-                  isUploading={isSubmitting}
-                  isFinalizing={isImageFinalizing}
+                  error={
+                    errors.image
+                      ?.message as
+                      | string
+                      | undefined
+                  }
+                  progress={
+                    imageUploadProgress
+                  }
+                  isUploading={
+                    isSubmitting
+                  }
+                  isFinalizing={
+                    isImageFinalizing
+                  }
                 />
               )}
             />
@@ -225,32 +649,51 @@ const EditProductForm = () => {
               name="brochure"
               render={({ field }) => (
                 <ProductBrochureUploadField
-                  value={field.value}
+                  value={
+                    field.value
+                  }
                   onChange={(file) => {
-                    field.onChange(file);
+                    field.onChange(
+                      file,
+                    );
 
-                    setBrochureUploadProgress(0);
+                    setBrochureUploadProgress(
+                      0,
+                    );
 
-                    setIsBrochureFinalizing(false);
+                    setIsBrochureFinalizing(
+                      false,
+                    );
                   }}
-                  error={errors.brochure?.message as string | undefined}
-                  progress={brochureUploadProgress}
-                  isUploading={isSubmitting}
-                  isFinalizing={isBrochureFinalizing}
+                  error={
+                    errors.brochure
+                      ?.message as
+                      | string
+                      | undefined
+                  }
+                  progress={
+                    brochureUploadProgress
+                  }
+                  isUploading={
+                    isSubmitting
+                  }
+                  isFinalizing={
+                    isBrochureFinalizing
+                  }
                 />
               )}
             />
           </div>
 
-          {/* Help */}
           <div className="border-border-secondary bg-background border px-5 py-4">
             <p className="text-muted-foreground text-sm leading-6">
-              {t("form.filesHint")}
+              {t(
+                "form.filesHint",
+              )}
             </p>
           </div>
         </div>
 
-        {/* Submit */}
         <div className="border-border-secondary mt-10 flex justify-end border-t pt-6">
           <button
             type="submit"
@@ -258,14 +701,25 @@ const EditProductForm = () => {
             className="bg-custom-primary text-primary-foreground flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting && (
-              <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
+              <LoaderCircle
+                className="size-4 animate-spin"
+                strokeWidth={
+                  1.8
+                }
+              />
             )}
 
             {isFinalizing
-              ? t("form.finalizing")
+              ? t(
+                  "form.finalizing",
+                )
               : isSubmitting
-                ? t("form.submitting")
-                : t("form.submit")}
+                ? t(
+                    "form.submitting",
+                  )
+                : t(
+                    "form.submit",
+                  )}
           </button>
         </div>
       </div>
