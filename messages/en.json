@@ -81,8 +81,45 @@
   "Dashboard": {
     "header": {
       "title": "Dashboard",
-      "description": "Monitor and manage your website content, requests, and recent activity."
-    }
+      "description": "Overview of the main content and activity across the management panel."
+    },
+
+    "cards": {
+      "brands": {
+        "title": "Brands",
+        "description": "View and manage product brands."
+      },
+
+      "products": {
+        "title": "Products",
+        "description": "View and manage available products."
+      },
+
+      "videos": {
+        "title": "Videos",
+        "description": "View and manage video content."
+      },
+
+      "news": {
+        "title": "News",
+        "description": "View and manage published news content."
+      },
+
+      "requests": {
+        "title": "Contact Requests",
+        "description": "View submitted contact and consultation requests."
+      }
+    },
+
+    "quickActions": {
+      "title": "Quick Access",
+      "brand": "Add Brand",
+      "product": "Add Product",
+      "video": "Add Video",
+      "news": "Add News"
+    },
+
+    "loading": "Loading dashboard..."
   },
 
   "ClientRequests": {
