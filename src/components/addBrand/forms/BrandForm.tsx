@@ -93,10 +93,10 @@ const BrandForm = () => {
     resolver: zodResolver(schema),
 
     defaultValues: {
-      name_en: "",
-      name_fa: "",
-      description_en: "",
-      description_fa: "",
+      name_en: "korloy",
+      name_fa: "کورلوی",
+      description_en: "description ... ",
+      description_fa: "توضیح ...",
       image: undefined,
       catalog: undefined,
     },

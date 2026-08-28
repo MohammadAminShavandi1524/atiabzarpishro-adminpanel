@@ -655,79 +655,6 @@
     }
   },
 
-  "news": {
-    "header": {
-      "title": "News",
-      "description": "Manage news posts and categories from one place."
-    },
-    "tabs": {
-      "categories": "Categories",
-      "news": "News"
-    },
-    "categories": {
-      "table": {
-        "id": "ID",
-        "name": "Name",
-        "language": "Language",
-        "actions": "Actions"
-      }
-    },
-    "newsTable": {
-      "searchPlaceholder": "Search news title...",
-      "newestFirst": "Newest First",
-      "oldestFirst": "Oldest First",
-      "table": {
-        "id": "ID",
-        "title": "Title",
-        "category": "Category",
-        "tags": "Tags",
-        "date": "Date",
-        "actions": "Actions"
-      },
-      "empty": {
-        "title": "No news found",
-        "description": "Try another search keyword."
-      }
-    },
-    "deleteModal": {
-      "deleteNews": "Delete News",
-      "deleteCategory": "Delete Category",
-      "description": "Are you sure you want to delete \"{name}\"?"
-    },
-    "toast": {
-      "deleteSuccess": "Deleted successfully.",
-      "deleteError": "Failed to delete.",
-      "rootNewsDeleteSuccess": "Root news deleted successfully.",
-      "rootNewsDeleteError": "Failed to delete root news.",
-      "parentNewsDeleteSuccess": "Parent news deleted successfully.",
-      "parentNewsDeleteError": "Failed to delete parent news.",
-      "childNewsDeleteSuccess": "Child news deleted successfully.",
-      "childNewsDeleteError": "Failed to delete child news.",
-      "newsPublishedSuccess": "News published successfully.",
-      "newsUnpublishedSuccess": "News unpublished successfully.",
-      "newsPublishError": "Failed to change news publish status."
-    },
-    "actions": {
-      "edit": "Edit",
-      "delete": "Delete",
-      "more": "More",
-      "publish": "Publish",
-      "unpublish": "Unpublish",
-      "downloadImage": "Download Image"
-    },
-    "hierarchy": {
-      "published": "Published",
-      "draft": "Draft",
-      "category": "Category",
-      "id": "ID",
-      "imageAttached": "Image attached",
-      "noChildNews": "No child news available.",
-      "rootNews": "Root News",
-      "parentNews": "Parent News",
-      "childNews": "Child News"
-    }
-  },
-
   "editRootNews": {
     "header": {
       "title": "Edit Root News",
@@ -860,6 +787,79 @@
     }
   },
 
+  "news": {
+    "header": {
+      "title": "News",
+      "description": "Manage news posts and categories from one place."
+    },
+    "tabs": {
+      "categories": "Categories",
+      "news": "News"
+    },
+    "categories": {
+      "table": {
+        "id": "ID",
+        "name": "Name",
+        "language": "Language",
+        "actions": "Actions"
+      }
+    },
+    "newsTable": {
+      "searchPlaceholder": "Search news title...",
+      "newestFirst": "Newest First",
+      "oldestFirst": "Oldest First",
+      "table": {
+        "id": "ID",
+        "title": "Title",
+        "category": "Category",
+        "tags": "Tags",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "empty": {
+        "title": "No news found",
+        "description": "Try another search keyword."
+      }
+    },
+    "deleteModal": {
+      "deleteNews": "Delete News",
+      "deleteCategory": "Delete Category",
+      "description": "Are you sure you want to delete \"{name}\"?"
+    },
+    "toast": {
+      "deleteSuccess": "Deleted successfully.",
+      "deleteError": "Failed to delete.",
+      "rootNewsDeleteSuccess": "Root news deleted successfully.",
+      "rootNewsDeleteError": "Failed to delete root news.",
+      "parentNewsDeleteSuccess": "Parent news deleted successfully.",
+      "parentNewsDeleteError": "Failed to delete parent news.",
+      "childNewsDeleteSuccess": "Child news deleted successfully.",
+      "childNewsDeleteError": "Failed to delete child news.",
+      "newsPublishedSuccess": "News published successfully.",
+      "newsUnpublishedSuccess": "News unpublished successfully.",
+      "newsPublishError": "Failed to change news publish status."
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "more": "More",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "downloadImage": "Download Image"
+    },
+    "hierarchy": {
+      "published": "Published",
+      "draft": "Draft",
+      "category": "Category",
+      "id": "ID",
+      "imageAttached": "Image attached",
+      "noChildNews": "No child news available.",
+      "rootNews": "Root News",
+      "parentNews": "Parent News",
+      "childNews": "Child News"
+    }
+  },
+
   "addNews": {
     "header": {
       "category": {
@@ -978,6 +978,85 @@
     "languages": {
       "fa": "Persian",
       "en": "English"
+    }
+  },
+
+  "addCatalogue": {
+    "header": {
+      "title": "Add Catalogue",
+      "description": "Create and publish a new product catalogue."
+    },
+
+    "formHeader": {
+      "title": "Catalogue Information",
+      "description": "Enter the catalogue information, select its brand and choose how the PDF should be provided."
+    },
+
+    "form": {
+      "brand": {
+        "label": "Brand",
+        "placeholder": "Select a brand",
+        "loading": "Loading brands..."
+      },
+
+      "nameEn": {
+        "label": "English Name",
+        "placeholder": "Enter the English catalogue name"
+      },
+
+      "nameFa": {
+        "label": "Persian Name",
+        "placeholder": "Enter the Persian catalogue name"
+      },
+
+      "descriptionEn": {
+        "label": "English Description",
+        "placeholder": "Enter the English catalogue description"
+      },
+
+      "descriptionFa": {
+        "label": "Persian Description",
+        "placeholder": "Enter the Persian catalogue description"
+      },
+
+      "source": {
+        "label": "Catalogue Source",
+        "upload": "Upload PDF",
+        "url": "External URL"
+      },
+
+      "externalUrl": {
+        "label": "Catalogue URL",
+        "placeholder": "https://example.com/catalogue.pdf"
+      },
+
+      "submit": "Create Catalogue",
+      "submitting": "Creating...",
+      "finalizing": "Finalizing..."
+    },
+
+    "validation": {
+      "brandRequired": "Please select a brand.",
+
+      "nameEnRequired": "English name is required.",
+      "nameFaRequired": "Persian name is required.",
+
+      "descriptionEnRequired": "English description is required.",
+      "descriptionFaRequired": "Persian description is required.",
+
+      "imageRequired": "Catalogue cover image is required.",
+      "imageInvalid": "Please select a valid image file.",
+
+      "pdfRequired": "Catalogue PDF is required.",
+      "pdfInvalid": "Please select a valid PDF file.",
+
+      "urlRequired": "Catalogue URL is required.",
+      "urlInvalid": "Please enter a valid URL."
+    },
+
+    "toast": {
+      "createSuccess": "Catalogue created successfully.",
+      "error": "An error occurred while creating the catalogue."
     }
   }
 }

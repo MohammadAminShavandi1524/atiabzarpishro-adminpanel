@@ -729,6 +729,127 @@
     }
   },
 
+  "addNews": {
+    "header": {
+      "category": {
+        "title": "افزودن دسته‌بندی",
+        "description": "یک دسته‌بندی جدید برای سازمان‌دهی اخبار ایجاد کنید."
+      },
+      "rootNews": {
+        "title": "افزودن خبر اصلی",
+        "description": "یک خبر اصلی به‌عنوان بالاترین سطح ساختار اخبار ایجاد کنید."
+      },
+      "parentNews": {
+        "title": "افزودن خبر والد",
+        "description": "یک خبر والد برای مدیریت و سازمان‌دهی اخبار مرتبط ایجاد کنید."
+      },
+      "news": {
+        "title": "افزودن خبر",
+        "description": "یک خبر جدید ایجاد کرده و آن را به یکی از خبرهای والد موجود اختصاص دهید."
+      }
+    },
+    "tabs": {
+      "category": "دسته‌بندی",
+      "rootNews": "خبر اصلی",
+      "parentNews": "خبر والد",
+      "news": "خبر"
+    },
+    "submitButton": {
+      "category": "ذخیره دسته‌بندی",
+      "rootNews": "ذخیره خبر اصلی",
+      "parentNews": "ذخیره خبر والد",
+      "news": "ذخیره خبر"
+    },
+    "forms": {
+      "category": {
+        "validation": {
+          "required": "عنوان دسته‌بندی الزامی است.",
+          "max": "عنوان دسته‌بندی نمی‌تواند بیشتر از ۳۰ کاراکتر باشد.",
+          "language": "لطفاً یک زبان انتخاب کنید."
+        },
+        "label": "دسته‌بندی",
+        "placeholder": "مثلاً فناوری",
+        "selectCategory": "انتخاب دسته‌بندی"
+      },
+      "rootNews": {
+        "title": "عنوان",
+        "titlePlaceholder": "عنوان خبر اصلی را وارد کنید",
+        "validation": {
+          "required": "وارد کردن عنوان الزامی است.",
+          "max": "عنوان باید حداکثر ۲۵۵ کاراکتر باشد."
+        }
+      },
+      "parentNews": {
+        "category": "دسته‌بندی",
+        "tags": "برچسب‌ها",
+        "tagsPlaceholder": "انتخاب برچسب‌ها",
+        "createTag": "ایجاد برچسب جدید",
+        "tagNamePlaceholder": "نام برچسب...",
+        "cancel": "انصراف",
+        "save": "ذخیره",
+        "title": "عنوان",
+        "titlePlaceholder": "عنوان خبر والد را وارد کنید",
+        "featuredImage": "آدرس تصویر شاخص",
+        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "description": "توضیحات",
+        "descriptionPlaceholder": "توضیح کوتاهی برای این خبر والد بنویسید",
+        "language": "زبان",
+        "languagePlaceholder": "انتخاب زبان",
+        "rootNews": "خبر اصلی",
+        "rootNewsPlaceholder": "خبر اصلی را انتخاب کنید",
+        "loadingRootNews": "در حال بارگذاری...",
+        "validation": {
+          "rootNewsRequired": "لطفاً یک خبر اصلی انتخاب کنید.",
+          "categoryRequired": "لطفاً یک دسته‌بندی انتخاب کنید.",
+          "titleRequired": "وارد کردن عنوان الزامی است.",
+          "descriptionRequired": "وارد کردن توضیحات الزامی است.",
+          "imageInvalid": "لطفاً یک آدرس معتبر برای تصویر وارد کنید.",
+          "languageRequired": "لطفاً یک زبان انتخاب کنید.",
+          "tagsRequired": "لطفاً حداقل یک برچسب انتخاب کنید."
+        }
+      },
+      "news": {
+        "title": "عنوان",
+        "titlePlaceholder": "عنوان خبر را وارد کنید",
+        "featuredImage": "آدرس تصویر شاخص",
+        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "description": "توضیحات",
+        "descriptionPlaceholder": "توضیح کوتاهی برای این خبر بنویسید",
+        "parentNews": "خبر والد",
+        "parentNewsPlaceholder": "خبر والد را انتخاب کنید",
+        "loadingParentNews": "در حال بارگذاری خبرهای والد...",
+        "validation": {
+          "parentNewsRequired": "لطفاً یک خبر والد انتخاب کنید.",
+          "titleRequired": "وارد کردن عنوان الزامی است.",
+          "descriptionRequired": "وارد کردن توضیحات الزامی است.",
+          "imageInvalid": "لطفاً یک آدرس معتبر برای تصویر وارد کنید."
+        }
+      }
+    },
+    "toast": {
+      "category": {
+        "success": "دسته‌بندی با موفقیت ایجاد شد.",
+        "error": "ایجاد دسته‌بندی با خطا مواجه شد."
+      },
+      "rootNews": {
+        "success": "خبر اصلی با موفقیت ایجاد شد.",
+        "error": "ایجاد خبر اصلی با خطا مواجه شد."
+      },
+      "parentNews": {
+        "success": "خبر والد با موفقیت ایجاد شد.",
+        "error": "ایجاد خبر والد با خطا مواجه شد."
+      },
+      "news": {
+        "success": "خبر با موفقیت ایجاد شد.",
+        "error": "ایجاد خبر با خطا مواجه شد."
+      }
+    },
+    "languages": {
+      "fa": "فارسی",
+      "en": "انگلیسی"
+    }
+  },
+
   "editRootNews": {
     "header": {
       "title": "ویرایش خبر اصلی",
@@ -861,124 +982,82 @@
     }
   },
 
-  "addNews": {
+  "addCatalogue": {
     "header": {
-      "category": {
-        "title": "افزودن دسته‌بندی",
-        "description": "یک دسته‌بندی جدید برای سازمان‌دهی اخبار ایجاد کنید."
-      },
-      "rootNews": {
-        "title": "افزودن خبر اصلی",
-        "description": "یک خبر اصلی به‌عنوان بالاترین سطح ساختار اخبار ایجاد کنید."
-      },
-      "parentNews": {
-        "title": "افزودن خبر والد",
-        "description": "یک خبر والد برای مدیریت و سازمان‌دهی اخبار مرتبط ایجاد کنید."
-      },
-      "news": {
-        "title": "افزودن خبر",
-        "description": "یک خبر جدید ایجاد کرده و آن را به یکی از خبرهای والد موجود اختصاص دهید."
-      }
+      "title": "افزودن کاتالوگ",
+      "description": "ایجاد و ثبت کاتالوگ جدید محصولات."
     },
-    "tabs": {
-      "category": "دسته‌بندی",
-      "rootNews": "خبر اصلی",
-      "parentNews": "خبر والد",
-      "news": "خبر"
+
+    "formHeader": {
+      "title": "اطلاعات کاتالوگ",
+      "description": "اطلاعات کاتالوگ و برند مربوطه را وارد کرده و نحوه ارائه فایل PDF را انتخاب کنید."
     },
-    "submitButton": {
-      "category": "ذخیره دسته‌بندی",
-      "rootNews": "ذخیره خبر اصلی",
-      "parentNews": "ذخیره خبر والد",
-      "news": "ذخیره خبر"
+
+    "form": {
+      "brand": {
+        "label": "برند",
+        "placeholder": "برند را انتخاب کنید",
+        "loading": "در حال دریافت برندها..."
+      },
+
+      "nameEn": {
+        "label": "نام انگلیسی",
+        "placeholder": "نام انگلیسی کاتالوگ را وارد کنید"
+      },
+
+      "nameFa": {
+        "label": "نام فارسی",
+        "placeholder": "نام فارسی کاتالوگ را وارد کنید"
+      },
+
+      "descriptionEn": {
+        "label": "توضیحات انگلیسی",
+        "placeholder": "توضیحات انگلیسی کاتالوگ را وارد کنید"
+      },
+
+      "descriptionFa": {
+        "label": "توضیحات فارسی",
+        "placeholder": "توضیحات فارسی کاتالوگ را وارد کنید"
+      },
+
+      "source": {
+        "label": "منبع کاتالوگ",
+        "upload": "آپلود PDF",
+        "url": "لینک خارجی"
+      },
+
+      "externalUrl": {
+        "label": "لینک کاتالوگ",
+        "placeholder": "https://example.com/catalogue.pdf"
+      },
+
+      "submit": "ایجاد کاتالوگ",
+      "submitting": "در حال ایجاد...",
+      "finalizing": "در حال نهایی‌سازی..."
     },
-    "forms": {
-      "category": {
-        "validation": {
-          "required": "عنوان دسته‌بندی الزامی است.",
-          "max": "عنوان دسته‌بندی نمی‌تواند بیشتر از ۳۰ کاراکتر باشد.",
-          "language": "لطفاً یک زبان انتخاب کنید."
-        },
-        "label": "دسته‌بندی",
-        "placeholder": "مثلاً فناوری",
-        "selectCategory": "انتخاب دسته‌بندی"
-      },
-      "rootNews": {
-        "title": "عنوان",
-        "titlePlaceholder": "عنوان خبر اصلی را وارد کنید",
-        "validation": {
-          "required": "وارد کردن عنوان الزامی است.",
-          "max": "عنوان باید حداکثر ۲۵۵ کاراکتر باشد."
-        }
-      },
-      "parentNews": {
-        "category": "دسته‌بندی",
-        "tags": "برچسب‌ها",
-        "tagsPlaceholder": "انتخاب برچسب‌ها",
-        "createTag": "ایجاد برچسب جدید",
-        "tagNamePlaceholder": "نام برچسب...",
-        "cancel": "انصراف",
-        "save": "ذخیره",
-        "title": "عنوان",
-        "titlePlaceholder": "عنوان خبر والد را وارد کنید",
-        "featuredImage": "آدرس تصویر شاخص",
-        "featuredImagePlaceholder": "https://example.com/image.jpg",
-        "description": "توضیحات",
-        "descriptionPlaceholder": "توضیح کوتاهی برای این خبر والد بنویسید",
-        "language": "زبان",
-        "languagePlaceholder": "انتخاب زبان",
-        "rootNews": "خبر اصلی",
-        "rootNewsPlaceholder": "خبر اصلی را انتخاب کنید",
-        "loadingRootNews": "در حال بارگذاری...",
-        "validation": {
-          "rootNewsRequired": "لطفاً یک خبر اصلی انتخاب کنید.",
-          "categoryRequired": "لطفاً یک دسته‌بندی انتخاب کنید.",
-          "titleRequired": "وارد کردن عنوان الزامی است.",
-          "descriptionRequired": "وارد کردن توضیحات الزامی است.",
-          "imageInvalid": "لطفاً یک آدرس معتبر برای تصویر وارد کنید.",
-          "languageRequired": "لطفاً یک زبان انتخاب کنید.",
-          "tagsRequired": "لطفاً حداقل یک برچسب انتخاب کنید."
-        }
-      },
-      "news": {
-        "title": "عنوان",
-        "titlePlaceholder": "عنوان خبر را وارد کنید",
-        "featuredImage": "آدرس تصویر شاخص",
-        "featuredImagePlaceholder": "https://example.com/image.jpg",
-        "description": "توضیحات",
-        "descriptionPlaceholder": "توضیح کوتاهی برای این خبر بنویسید",
-        "parentNews": "خبر والد",
-        "parentNewsPlaceholder": "خبر والد را انتخاب کنید",
-        "loadingParentNews": "در حال بارگذاری خبرهای والد...",
-        "validation": {
-          "parentNewsRequired": "لطفاً یک خبر والد انتخاب کنید.",
-          "titleRequired": "وارد کردن عنوان الزامی است.",
-          "descriptionRequired": "وارد کردن توضیحات الزامی است.",
-          "imageInvalid": "لطفاً یک آدرس معتبر برای تصویر وارد کنید."
-        }
-      }
+
+    "validation": {
+      "brandRequired": "انتخاب برند الزامی است.",
+
+      "nameEnRequired": "نام انگلیسی الزامی است.",
+      "nameFaRequired": "نام فارسی الزامی است.",
+
+      "descriptionEnRequired": "توضیحات انگلیسی الزامی است.",
+      "descriptionFaRequired": "توضیحات فارسی الزامی است.",
+
+      "imageRequired": "تصویر جلد کاتالوگ الزامی است.",
+      "imageInvalid": "یک فایل تصویر معتبر انتخاب کنید.",
+
+      "pdfRequired": "فایل PDF کاتالوگ الزامی است.",
+      "pdfInvalid": "یک فایل PDF معتبر انتخاب کنید.",
+
+      "urlRequired": "لینک کاتالوگ الزامی است.",
+      "urlInvalid": "یک لینک معتبر وارد کنید."
     },
+
     "toast": {
-      "category": {
-        "success": "دسته‌بندی با موفقیت ایجاد شد.",
-        "error": "ایجاد دسته‌بندی با خطا مواجه شد."
-      },
-      "rootNews": {
-        "success": "خبر اصلی با موفقیت ایجاد شد.",
-        "error": "ایجاد خبر اصلی با خطا مواجه شد."
-      },
-      "parentNews": {
-        "success": "خبر والد با موفقیت ایجاد شد.",
-        "error": "ایجاد خبر والد با خطا مواجه شد."
-      },
-      "news": {
-        "success": "خبر با موفقیت ایجاد شد.",
-        "error": "ایجاد خبر با خطا مواجه شد."
-      }
-    },
-    "languages": {
-      "fa": "فارسی",
-      "en": "انگلیسی"
+      "createSuccess": "کاتالوگ با موفقیت ایجاد شد.",
+      "error": "خطایی هنگام ایجاد کاتالوگ رخ داد."
     }
   }
 }

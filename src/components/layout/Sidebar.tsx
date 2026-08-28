@@ -215,7 +215,7 @@ const Sidebar = () => {
           </div>
 
           {/* Catalogues */}
-          {/* <div className="sidebar-section">
+          <div className="sidebar-section">
             <SideBarItemHeader label={t("cataloguesSection")} />
 
             <SidebarItem
@@ -231,7 +231,7 @@ const Sidebar = () => {
               icon={BookPlus}
               active={pathname.startsWith(`/${locale}/add-catalogue`)}
             />
-          </div> */}
+          </div>
 
           {/* Brochures */}
           {/* <div className="sidebar-section">
