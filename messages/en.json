@@ -20,7 +20,10 @@
     "overview": "Overview",
     "dashboard": "Dashboard",
 
-    "brandsSection": "BRANDS",
+    "requests": "Requests",
+    "clientRequests": "Client Requests",
+
+    "brandsSection": "Brands",
     "brands": "Brands",
     "addBrand": "Add Brand",
 
@@ -32,20 +35,17 @@
     "videoClips": "Video Clips",
     "addVideoClip": "Add Video Clip",
 
-    "requests": "Requests",
-    "clientRequests": "Client Requests",
-
     "cataloguesSection": "Catalogues",
     "catalogues": "Catalogues",
     "addCatalogue": "Add Catalogue",
 
-    "brochuresSection": "Brochures",
-    "brochures": "Brochures",
-    "addBrochure": "Add Brochure",
-
     "newsSection": "News",
     "news": "News",
-    "addNews": "Add News"
+    "addNews": "Add News",
+
+    "techNewsSection": "Tech News",
+    "techNews": "Tech News",
+    "addTechNews": "Add Tech News"
   },
 
   "Login": {
@@ -1227,6 +1227,88 @@
     "toast": {
       "createSuccess": "Catalogue created successfully.",
       "error": "An error occurred while creating the catalogue."
+    }
+  },
+
+  "addTechNews": {
+    "header": {
+      "title": "Add Tech News",
+      "description": "Create a new technical publication and provide its document through an uploaded PDF or external URL."
+    },
+
+    "formHeader": {
+      "title": "Tech News Information",
+      "description": "Enter the technical publication information, upload its cover image and select how the document should be provided."
+    },
+
+    "form": {
+      "nameEn": {
+        "label": "English Name",
+        "placeholder": "Enter the English name"
+      },
+
+      "nameFa": {
+        "label": "Persian Name",
+        "placeholder": "Enter the Persian name"
+      },
+
+      "descriptionEn": {
+        "label": "English Description",
+        "placeholder": "Enter the English description"
+      },
+
+      "descriptionFa": {
+        "label": "Persian Description",
+        "placeholder": "Enter the Persian description"
+      },
+
+      "image": {
+        "label": "Cover Image",
+        "placeholder": "Select a cover image"
+      },
+
+      "source": {
+        "label": "Document Source",
+        "upload": "Upload PDF",
+        "url": "External URL"
+      },
+
+      "pdf": {
+        "label": "PDF File",
+        "placeholder": "Select a PDF file"
+      },
+
+      "externalUrl": {
+        "label": "Document URL",
+        "placeholder": "https://example.com/document.pdf"
+      },
+
+      "uploading": "Uploading...",
+      "finalizing": "Finalizing upload...",
+      "submitting": "Creating Tech News...",
+      "submit": "Create Tech News"
+    },
+
+    "validation": {
+      "nameEnRequired": "Please enter the English name.",
+      "nameFaRequired": "Please enter the Persian name.",
+
+      "descriptionEnRequired": "Please enter the English description.",
+      "descriptionFaRequired": "Please enter the Persian description.",
+
+      "imageRequired": "Please select a cover image.",
+      "imageInvalid": "Please select a valid image file.",
+
+      "pdfRequired": "Please select a PDF file.",
+      "pdfInvalid": "Please select a valid PDF file.",
+
+      "urlRequired": "Please enter the document URL.",
+      "urlInvalid": "Please enter a valid URL."
+    },
+
+    "toast": {
+      "createSuccess": "Tech News created successfully.",
+      "error": "Failed to create Tech News. Please try again."
     }
   }
 }

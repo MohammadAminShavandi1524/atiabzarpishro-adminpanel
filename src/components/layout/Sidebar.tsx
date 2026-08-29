@@ -10,13 +10,13 @@ import {
   ClipboardList,
   BookOpen,
   BookPlus,
-  FileText,
-  FilePlus2,
   Newspaper,
   FilePenLine,
   Plus,
   Tags,
   BadgePlus,
+  Cpu,
+  FilePlus2,
 } from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
@@ -35,20 +35,26 @@ gsap.registerPlugin(useGSAP);
 
 const Sidebar = () => {
   const t = useTranslations("Sidebar");
+
   const locale = useLocale();
+
   const pathname = usePathname();
 
   const sidebarRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
-      if (!sidebarRef.current) return;
+      if (!sidebarRef.current) {
+        return;
+      }
 
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
 
-      if (reduceMotion) return;
+      if (reduceMotion) {
+        return;
+      }
 
       const timeline = gsap.timeline({
         defaults: {
@@ -104,7 +110,9 @@ const Sidebar = () => {
     },
   );
 
-  if (pathname === `/${locale}/login`) return null;
+  if (pathname === `/${locale}/login`) {
+    return null;
+  }
 
   return (
     <aside
@@ -233,26 +241,7 @@ const Sidebar = () => {
             />
           </div>
 
-          {/* Brochures */}
-          {/* <div className="sidebar-section">
-            <SideBarItemHeader label={t("brochuresSection")} />
-
-            <SidebarItem
-              href={`/${locale}/brochures`}
-              title={t("brochures")}
-              icon={FileText}
-              active={pathname.startsWith(`/${locale}/brochures`)}
-            />
-
-            <SidebarItem
-              href={`/${locale}/add-brochure`}
-              title={t("addBrochure")}
-              icon={FilePlus2}
-              active={pathname.startsWith(`/${locale}/add-brochure`)}
-            />
-          </div> */}
-
-          {/* news */}
+          {/* News */}
           <div className="sidebar-section">
             <SideBarItemHeader label={t("newsSection")} />
 
@@ -268,6 +257,25 @@ const Sidebar = () => {
               title={t("addNews")}
               icon={FilePenLine}
               active={pathname.startsWith(`/${locale}/add-news`)}
+            />
+          </div>
+
+          {/* Tech News */}
+          <div className="sidebar-section">
+            <SideBarItemHeader label={t("techNewsSection")} />
+
+            <SidebarItem
+              href={`/${locale}/technews`}
+              title={t("techNews")}
+              icon={Cpu}
+              active={pathname.startsWith(`/${locale}/technews`)}
+            />
+
+            <SidebarItem
+              href={`/${locale}/add-technews`}
+              title={t("addTechNews")}
+              icon={FilePlus2}
+              active={pathname.startsWith(`/${locale}/add-technews`)}
             />
           </div>
         </nav>
