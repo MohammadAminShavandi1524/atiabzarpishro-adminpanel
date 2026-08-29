@@ -1230,6 +1230,57 @@
     }
   },
 
+  "TechNews": {
+    "header": {
+      "title": "Tech News",
+      "description": "Manage technical publications, cover images, documents and external sources."
+    },
+
+    "filters": {
+      "searchPlaceholder": "Search Tech News...",
+      "newestFirst": "Newest first",
+      "oldestFirst": "Oldest first"
+    },
+
+    "table": {
+      "id": "ID",
+      "nameEn": "English Name",
+      "nameFa": "Persian Name",
+      "image": "Cover",
+      "descriptionEn": "English Description",
+      "descriptionFa": "Persian Description",
+      "source": "Source",
+      "date": "Created",
+      "actions": "Actions"
+    },
+
+    "source": {
+      "upload": "Uploaded PDF",
+      "url": "External URL"
+    },
+
+    "actions": {
+      "viewImage": "View Cover",
+      "preview": "Preview",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+
+    "loading": "Loading Tech News...",
+
+    "empty": {
+      "title": "No Tech News found",
+      "description": "There are no technical publications matching your current search."
+    },
+
+    "toast": {
+      "delete": {
+        "success": "Tech News deleted successfully.",
+        "error": "Failed to delete Tech News."
+      }
+    }
+  },
+
   "addTechNews": {
     "header": {
       "title": "Add Tech News",

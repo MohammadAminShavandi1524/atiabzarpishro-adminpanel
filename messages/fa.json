@@ -1231,6 +1231,57 @@
     }
   },
 
+  "TechNews": {
+    "header": {
+      "title": "اخبار فنی",
+      "description": "مدیریت محتوای فنی، تصاویر جلد، فایل‌ها و لینک‌های خارجی."
+    },
+
+    "filters": {
+      "searchPlaceholder": "جستجو در اخبار فنی...",
+      "newestFirst": "جدیدترین",
+      "oldestFirst": "قدیمی‌ترین"
+    },
+
+    "table": {
+      "id": "شناسه",
+      "nameEn": "نام انگلیسی",
+      "nameFa": "نام فارسی",
+      "image": "جلد",
+      "descriptionEn": "توضیحات انگلیسی",
+      "descriptionFa": "توضیحات فارسی",
+      "source": "منبع",
+      "date": "تاریخ ایجاد",
+      "actions": "عملیات"
+    },
+
+    "source": {
+      "upload": "PDF آپلود شده",
+      "url": "لینک خارجی"
+    },
+
+    "actions": {
+      "viewImage": "مشاهده جلد",
+      "preview": "مشاهده",
+      "edit": "ویرایش",
+      "delete": "حذف"
+    },
+
+    "loading": "در حال دریافت اخبار فنی...",
+
+    "empty": {
+      "title": "خبر فنی پیدا نشد",
+      "description": "هیچ محتوای فنی مطابق با جستجوی فعلی پیدا نشد."
+    },
+
+    "toast": {
+      "delete": {
+        "success": "خبر فنی با موفقیت حذف شد.",
+        "error": "حذف خبر فنی با خطا مواجه شد."
+      }
+    }
+  },
+
   "addTechNews": {
     "header": {
       "title": "افزودن خبر فنی",
