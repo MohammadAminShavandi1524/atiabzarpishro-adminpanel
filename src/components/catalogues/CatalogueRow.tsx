@@ -135,9 +135,7 @@ export default function CatalogueRow({
         <div>
           <span
             className={
-              catalogue.object_storage
-                ? "bg-custom-primary/10 text-custom-primary inline-flex px-2.5 py-1 text-xs font-medium"
-                : "bg-card-secondary text-muted-foreground inline-flex px-2.5 py-1 text-xs font-medium"
+              "bg-custom-primary/10 text-custom-primary inline-flex px-2.5 py-1 text-xs font-medium"
             }
           >
             {catalogue.object_storage ? t("source.upload") : t("source.url")}

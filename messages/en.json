@@ -1039,6 +1039,96 @@
     }
   },
 
+  "editCatalogue": {
+    "header": {
+      "title": "Edit Catalogue",
+      "description": "Update catalogue information, brand, cover image or PDF source."
+    },
+
+    "formHeader": {
+      "title": "Catalogue Information",
+      "description": "Update the catalogue details and replace its files or source when required."
+    },
+
+    "form": {
+      "nameEn": {
+        "label": "English Name",
+        "placeholder": "Enter the English catalogue name"
+      },
+
+      "nameFa": {
+        "label": "Persian Name",
+        "placeholder": "Enter the Persian catalogue name"
+      },
+
+      "descriptionEn": {
+        "label": "English Description",
+        "placeholder": "Enter the English catalogue description"
+      },
+
+      "descriptionFa": {
+        "label": "Persian Description",
+        "placeholder": "Enter the Persian catalogue description"
+      },
+
+      "currentImage": "Current Cover",
+
+      "imageHint": "Selecting a new cover image is optional. Leave it empty to keep the current image.",
+
+      "source": {
+        "label": "Catalogue Source",
+        "upload": "Upload PDF",
+        "url": "External URL"
+      },
+
+      "externalUrl": {
+        "label": "Catalogue URL",
+        "placeholder": "https://example.com/catalogue.pdf"
+      },
+
+      "pdfHint": "The current PDF will remain unchanged if you do not select a new file.",
+
+      "uploading": "Uploading...",
+      "finalizing": "Finalizing upload...",
+      "submitting": "Updating Catalogue...",
+      "submit": "Update Catalogue"
+    },
+
+    "current": {
+      "source": "Current Source",
+      "uploaded": "Uploaded PDF",
+      "external": "External URL",
+      "open": "Open Current Catalogue"
+    },
+
+    "validation": {
+      "brandRequired": "Please select a brand.",
+
+      "nameEnRequired": "English name is required.",
+      "nameFaRequired": "Persian name is required.",
+
+      "descriptionEnRequired": "English description is required.",
+      "descriptionFaRequired": "Persian description is required.",
+
+      "imageInvalid": "Please select a valid image file.",
+
+      "pdfInvalid": "Please select a valid PDF file.",
+
+      "pdfRequiredOnSourceChange": "Please select a PDF file when changing the source to uploaded PDF.",
+
+      "urlRequired": "Catalogue URL is required.",
+      "urlInvalid": "Please enter a valid URL."
+    },
+
+    "loading": "Loading catalogue information...",
+
+    "toast": {
+      "fetchError": "Failed to load catalogue information.",
+      "updateSuccess": "Catalogue updated successfully.",
+      "error": "Failed to update the catalogue. Please try again."
+    }
+  },
+
   "addCatalogue": {
     "header": {
       "title": "Add Catalogue",
