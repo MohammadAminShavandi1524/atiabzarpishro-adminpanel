@@ -393,7 +393,7 @@
   "editProduct": {
     "header": {
       "title": "Edit Product",
-      "description": "Update the product information, assigned brand or optionally replace its image and brochure."
+      "description": "Update the product information, assigned brand, descriptions or optionally replace its image."
     },
 
     "form": {
@@ -407,13 +407,23 @@
         "placeholder": "Enter the product name in Persian"
       },
 
+      "descriptionEn": {
+        "label": "Description (English)",
+        "placeholder": "Enter the product description in English"
+      },
+
+      "descriptionFa": {
+        "label": "Description (Persian)",
+        "placeholder": "Enter the product description in Persian"
+      },
+
       "brand": {
         "label": "Brand",
         "placeholder": "Select a brand",
         "loading": "Loading brands..."
       },
 
-      "filesHint": "Image and brochure are optional. Leave them empty to keep the current files.",
+      "imageHint": "Selecting a new image is optional. Leave it empty to keep the current product image.",
 
       "uploading": "Uploading...",
       "finalizing": "Finalizing upload...",
@@ -424,9 +434,13 @@
     "validation": {
       "nameEnRequired": "Please enter the product name in English.",
       "nameFaRequired": "Please enter the product name in Persian.",
+
+      "descriptionEnRequired": "Please enter the product description in English.",
+      "descriptionFaRequired": "Please enter the product description in Persian.",
+
       "brandRequired": "Please select a brand.",
-      "imageInvalid": "Please select a valid image file.",
-      "brochureInvalid": "The product brochure must be a PDF file."
+
+      "imageInvalid": "Please select a valid image file."
     },
 
     "loading": "Loading product information...",

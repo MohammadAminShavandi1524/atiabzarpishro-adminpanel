@@ -4,8 +4,12 @@ export interface ProductDetails {
   name_en: string;
   name_fa: string;
 
+  description_en: string;
+  description_fa: string;
+
   brand: {
     id: number;
+
     name_en: string;
     name_fa: string;
 
@@ -13,13 +17,13 @@ export interface ProductDetails {
     description_fa: string;
 
     image: string;
-    catalog: string;
+
+    url: string;
 
     created: string;
   };
 
   image: string;
-  brochure: string;
 
   created: string;
 }
@@ -27,15 +31,24 @@ export interface ProductDetails {
 export const getProduct = async (
   productId: string,
 ): Promise<ProductDetails> => {
-  const response = await fetch(`/api/product/get/${productId}`, {
-    method: "GET",
-    cache: "no-store",
-  });
+  const response = await fetch(
+    `/api/product/get/${productId}`,
+    {
+      method: "GET",
+      cache: "no-store",
+    },
+  );
 
   if (!response.ok) {
-    const error = await response.json().catch(() => null);
+    const error = await response
+      .json()
+      .catch(() => null);
 
-    throw new Error(error?.error ?? "Failed to get product");
+    throw new Error(
+      error?.error ??
+        error?.detail ??
+        "Failed to get product",
+    );
   }
 
   return response.json();
