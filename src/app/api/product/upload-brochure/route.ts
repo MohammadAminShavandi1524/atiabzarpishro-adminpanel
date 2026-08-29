@@ -55,7 +55,7 @@ export async function POST(req: Request) {
         Key: key,
         Body: buffer,
         ContentType: "application/pdf",
-           ACL: "public-read",
+        ACL: "public-read",
       }),
     );
 

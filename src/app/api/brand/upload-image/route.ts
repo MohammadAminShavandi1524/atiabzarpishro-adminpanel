@@ -57,13 +57,9 @@ export async function POST(req: Request) {
     await s3.send(
       new PutObjectCommand({
         Bucket: process.env.ARVAN_BUCKET!,
-
         Key: key,
-
         Body: buffer,
-
         ContentType: file.type,
-
         ACL: "public-read",
       }),
     );

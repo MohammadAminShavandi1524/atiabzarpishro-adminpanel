@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 
-import {
-  PutObjectCommand,
-  S3Client,
-} from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({
   region: process.env.ARVAN_REGION!,
@@ -58,14 +55,11 @@ export async function POST(req: Request) {
     await s3.send(
       new PutObjectCommand({
         Bucket: process.env.ARVAN_BUCKET!,
-
         Key: objectKey,
-
         Body: buffer,
-
         ContentType: "application/pdf",
-
         ContentDisposition: "inline",
+        ACL: "public-read",
       }),
     );
 

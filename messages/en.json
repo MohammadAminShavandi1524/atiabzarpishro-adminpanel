@@ -988,6 +988,57 @@
     }
   },
 
+  "Catalogues": {
+    "header": {
+      "title": "Catalogues",
+      "description": "Manage product catalogues, brands, cover images and catalogue files."
+    },
+
+    "filters": {
+      "searchPlaceholder": "Search catalogues...",
+      "newestFirst": "Newest first",
+      "oldestFirst": "Oldest first"
+    },
+
+    "table": {
+      "id": "ID",
+      "name": "Catalogue",
+      "brand": "Brand",
+      "image": "Cover",
+      "descriptionEn": "English Description",
+      "descriptionFa": "Persian Description",
+      "source": "Source",
+      "date": "Created",
+      "actions": "Actions"
+    },
+
+    "source": {
+      "upload": "Uploaded",
+      "url": "External URL"
+    },
+
+    "actions": {
+      "viewImage": "View Cover",
+      "preview": "Preview",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+
+    "loading": "Loading catalogues...",
+
+    "empty": {
+      "title": "No catalogues found",
+      "description": "There are no catalogues matching your current search."
+    },
+
+    "toast": {
+      "delete": {
+        "success": "Catalogue deleted successfully.",
+        "error": "Failed to delete catalogue."
+      }
+    }
+  },
+
   "addCatalogue": {
     "header": {
       "title": "Add Catalogue",
@@ -1032,14 +1083,20 @@
         "url": "External URL"
       },
 
+      "pdf": {
+        "label": "Catalogue PDF",
+        "placeholder": "Select or drop a PDF file"
+      },
+
       "externalUrl": {
         "label": "Catalogue URL",
         "placeholder": "https://example.com/catalogue.pdf"
       },
 
+      "uploading": "Uploading...",
       "submit": "Create Catalogue",
-      "submitting": "Creating...",
-      "finalizing": "Finalizing..."
+      "submitting": "Creating Catalogue...",
+      "finalizing": "Finalizing upload..."
     },
 
     "validation": {

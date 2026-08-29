@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { z } from "zod";
-
 import { useLocale, useTranslations } from "next-intl";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,14 +17,19 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCustomToast } from "@/components/ui/custom-toast";
 
 import BrandImageUploadField from "@/components/addBrand/BrandImageUploadField";
-import BrandCatalogUploadField from "@/components/addBrand/BrandCatalogUploadField";
 
 import BrandSelect from "../BrandSelect";
 
-import type {
-  CreateCataloguePayload,
-  UploadResponse,
-} from "../catalogue.types";
+import CataloguePdfUploadField from "../CataloguePdfUploadField";
+
+import type { CreateCataloguePayload } from "../catalogue.types";
+
+import {
+  createCatalogueSchema,
+  type CatalogueFormValues,
+} from "./catalogue.schema";
+
+import { uploadCatalogueFile } from "./catalogue-upload";
 
 const CatalogueForm = () => {
   const t = useTranslations("addCatalogue");
@@ -43,111 +46,17 @@ const CatalogueForm = () => {
 
   const [isPdfFinalizing, setIsPdfFinalizing] = useState(false);
 
-  const schema = z
-    .object({
-      brand_id: z.number().min(1, t("validation.brandRequired")),
-
-      name_en: z.string().trim().min(1, t("validation.nameEnRequired")),
-
-      name_fa: z.string().trim().min(1, t("validation.nameFaRequired")),
-
-      description_en: z
-        .string()
-        .trim()
-        .min(1, t("validation.descriptionEnRequired")),
-
-      description_fa: z
-        .string()
-        .trim()
-        .min(1, t("validation.descriptionFaRequired")),
-
-      image: z
-        .custom<File>((value) => value instanceof File, {
-          message: t("validation.imageRequired"),
-        })
-        .refine(
-          (file) => file instanceof File && file.type.startsWith("image/"),
-          {
-            message: t("validation.imageInvalid"),
-          },
-        ),
-
-      source: z.enum(["upload", "url"]),
-
-      pdf: z.any().optional(),
-
-      external_url: z.string().optional(),
-    })
-    .superRefine((data, ctx) => {
-      if (data.source === "upload") {
-        if (!(data.pdf instanceof File)) {
-          ctx.addIssue({
-            code: "custom",
-            path: ["pdf"],
-            message: t("validation.pdfRequired"),
-          });
-
-          return;
-        }
-
-        if (data.pdf.type !== "application/pdf") {
-          ctx.addIssue({
-            code: "custom",
-            path: ["pdf"],
-            message: t("validation.pdfInvalid"),
-          });
-        }
-      }
-
-      if (data.source === "url") {
-        const url = data.external_url?.trim() ?? "";
-
-        if (!url) {
-          ctx.addIssue({
-            code: "custom",
-            path: ["external_url"],
-            message: t("validation.urlRequired"),
-          });
-
-          return;
-        }
-
-        try {
-          const parsedUrl = new URL(url);
-
-          if (
-            parsedUrl.protocol !== "http:" &&
-            parsedUrl.protocol !== "https:"
-          ) {
-            throw new Error();
-          }
-        } catch {
-          ctx.addIssue({
-            code: "custom",
-            path: ["external_url"],
-            message: t("validation.urlInvalid"),
-          });
-        }
-      }
-    });
-
-  type FormValues = z.infer<typeof schema>;
+  const schema = createCatalogueSchema(t);
 
   const {
     register,
-
     control,
-
     handleSubmit,
-
     reset,
-
     setValue,
-
     clearErrors,
-
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({
+  } = useForm<CatalogueFormValues>({
     resolver: zodResolver(schema),
 
     defaultValues: {
@@ -174,95 +83,6 @@ const CatalogueForm = () => {
     name: "source",
   });
 
-  const uploadFile = ({
-    file,
-    url,
-    onProgress,
-    onFinalizing,
-  }: {
-    file: File;
-
-    url: string;
-
-    onProgress: (value: number) => void;
-
-    onFinalizing: (value: boolean) => void;
-  }): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData();
-
-      formData.append("file", file);
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.open("POST", url);
-
-      xhr.upload.onloadstart = () => {
-        onProgress(0);
-
-        onFinalizing(false);
-      };
-
-      xhr.upload.onprogress = (event) => {
-        if (!event.lengthComputable) {
-          return;
-        }
-
-        const rawProgress = Math.round((event.loaded / event.total) * 100);
-
-        onProgress(Math.min(rawProgress, 95));
-      };
-
-      xhr.upload.onload = () => {
-        onProgress(95);
-
-        onFinalizing(true);
-      };
-
-      xhr.onload = () => {
-        if (xhr.status < 200 || xhr.status >= 300) {
-          onFinalizing(false);
-
-          reject(new Error("Upload failed"));
-
-          return;
-        }
-
-        try {
-          const response: UploadResponse = JSON.parse(xhr.responseText);
-
-          if (!response.url) {
-            throw new Error("URL not returned");
-          }
-
-          onProgress(100);
-
-          onFinalizing(false);
-
-          resolve(response.url);
-        } catch {
-          onFinalizing(false);
-
-          reject(new Error("Invalid upload response"));
-        }
-      };
-
-      xhr.onerror = () => {
-        onFinalizing(false);
-
-        reject(new Error("Upload failed"));
-      };
-
-      xhr.onabort = () => {
-        onFinalizing(false);
-
-        reject(new Error("Upload aborted"));
-      };
-
-      xhr.send(formData);
-    });
-  };
-
   const selectUploadSource = () => {
     setValue("source", "upload");
 
@@ -283,20 +103,24 @@ const CatalogueForm = () => {
     clearErrors("pdf");
   };
 
-  const onSubmit = async (data: FormValues) => {
+  const resetUploadStates = () => {
+    setImageUploadProgress(0);
+
+    setPdfUploadProgress(0);
+
+    setIsImageFinalizing(false);
+
+    setIsPdfFinalizing(false);
+  };
+
+  const onSubmit = async (data: CatalogueFormValues) => {
     try {
-      setImageUploadProgress(0);
-
-      setPdfUploadProgress(0);
-
-      setIsImageFinalizing(false);
-
-      setIsPdfFinalizing(false);
+      resetUploadStates();
 
       /*
-       * Cover Upload
+       * Cover Image
        */
-      const imageUrl = await uploadFile({
+      const imageUrl = await uploadCatalogueFile({
         file: data.image,
 
         url: "/api/catalogue/upload-image",
@@ -314,7 +138,7 @@ const CatalogueForm = () => {
       let objectStorage = false;
 
       if (data.source === "upload") {
-        catalogueUrl = await uploadFile({
+        catalogueUrl = await uploadCatalogueFile({
           file: data.pdf as File,
 
           url: "/api/catalogue/upload-pdf",
@@ -325,16 +149,14 @@ const CatalogueForm = () => {
         });
 
         objectStorage = true;
-      }
-
-      if (data.source === "url") {
+      } else {
         catalogueUrl = data.external_url?.trim() ?? "";
 
         objectStorage = false;
       }
 
       /*
-       * Payload
+       * Create Catalogue
        */
       const payload: CreateCataloguePayload = {
         brand_id: data.brand_id,
@@ -403,21 +225,9 @@ const CatalogueForm = () => {
         external_url: "",
       });
 
-      setImageUploadProgress(0);
-
-      setPdfUploadProgress(0);
-
-      setIsImageFinalizing(false);
-
-      setIsPdfFinalizing(false);
+      resetUploadStates();
     } catch (error) {
-      setImageUploadProgress(0);
-
-      setPdfUploadProgress(0);
-
-      setIsImageFinalizing(false);
-
-      setIsPdfFinalizing(false);
+      resetUploadStates();
 
       console.error("CREATE CATALOGUE ERROR =>", error);
 
@@ -509,7 +319,7 @@ const CatalogueForm = () => {
               />
             </div>
 
-            {/* Cover */}
+            {/* Cover Image */}
             <Controller
               control={control}
               name="image"
@@ -531,7 +341,7 @@ const CatalogueForm = () => {
               )}
             />
 
-            {/* Source */}
+            {/* Catalogue Source */}
             <div>
               <label className="text-foreground mb-3 block text-sm font-medium">
                 {t("form.source.label")}
@@ -574,7 +384,7 @@ const CatalogueForm = () => {
                 control={control}
                 name="pdf"
                 render={({ field }) => (
-                  <BrandCatalogUploadField
+                  <CataloguePdfUploadField
                     value={field.value}
                     onChange={(file) => {
                       field.onChange(file);
