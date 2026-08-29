@@ -440,7 +440,7 @@
   "addProduct": {
     "header": {
       "title": "Add Product",
-      "description": "Create a new product, assign it to a brand and upload its image and brochure."
+      "description": "Create a new product, assign it to a brand and enter its information and image."
     },
 
     "form": {
@@ -454,6 +454,16 @@
         "placeholder": "Enter the product name in Persian"
       },
 
+      "descriptionEn": {
+        "label": "Description (English)",
+        "placeholder": "Enter the product description in English"
+      },
+
+      "descriptionFa": {
+        "label": "Description (Persian)",
+        "placeholder": "Enter the product description in Persian"
+      },
+
       "brand": {
         "label": "Brand",
         "placeholder": "Select a brand",
@@ -463,11 +473,6 @@
       "image": {
         "label": "Product Image",
         "placeholder": "Select a product image"
-      },
-
-      "brochure": {
-        "label": "Product Brochure",
-        "placeholder": "Select the product brochure"
       },
 
       "uploading": "Uploading...",
@@ -480,13 +485,13 @@
       "nameEnRequired": "Please enter the product name in English.",
       "nameFaRequired": "Please enter the product name in Persian.",
 
+      "descriptionEnRequired": "Please enter the product description in English.",
+      "descriptionFaRequired": "Please enter the product description in Persian.",
+
       "brandRequired": "Please select a brand.",
 
       "imageRequired": "Please select a product image.",
-      "imageInvalid": "Please select a valid image file.",
-
-      "brochureRequired": "Please select a product brochure.",
-      "brochureInvalid": "The product brochure must be a PDF file."
+      "imageInvalid": "Please select a valid image file."
     },
 
     "toast": {
@@ -638,10 +643,6 @@
       "submit": "Create Video",
       "submitting": "Uploading...",
       "finalizing": "Finalizing...",
-      "uploaded": "Uploaded",
-
-      "submit": "Create Video",
-      "submitting": "Uploading...",
       "uploaded": "Uploaded"
     },
 

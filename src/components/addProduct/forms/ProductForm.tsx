@@ -13,12 +13,11 @@ import { Controller, useForm } from "react-hook-form";
 import { LoaderCircle, PackagePlus } from "lucide-react";
 
 import { FormField } from "@/components/FormField";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCustomToast } from "@/components/ui/custom-toast";
 
 import BrandSelect from "../BrandSelect";
-
 import ProductImageUploadField from "../ProductImageUploadField";
-import ProductBrochureUploadField from "../ProductBrochureUploadField";
 
 interface UploadResponse {
   success: boolean;
@@ -27,23 +26,40 @@ interface UploadResponse {
 
 export default function ProductForm() {
   const t = useTranslations("addProduct");
+
   const locale = useLocale();
+
   const toast = useCustomToast();
 
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
 
-  const [brochureUploadProgress, setBrochureUploadProgress] = useState(0);
-
   const [isImageFinalizing, setIsImageFinalizing] = useState(false);
 
-  const [isBrochureFinalizing, setIsBrochureFinalizing] = useState(false);
-
   const schema = z.object({
-    name_en: z.string().trim().min(1, t("validation.nameEnRequired")),
+    name_en: z
+      .string()
+      .trim()
+      .min(1, t("validation.nameEnRequired")),
 
-    name_fa: z.string().trim().min(1, t("validation.nameFaRequired")),
+    name_fa: z
+      .string()
+      .trim()
+      .min(1, t("validation.nameFaRequired")),
 
-    brand_id: z.number().int().positive(t("validation.brandRequired")),
+    description_en: z
+      .string()
+      .trim()
+      .min(1, t("validation.descriptionEnRequired")),
+
+    description_fa: z
+      .string()
+      .trim()
+      .min(1, t("validation.descriptionFaRequired")),
+
+    brand_id: z
+      .number()
+      .int()
+      .positive(t("validation.brandRequired")),
 
     image: z
       .custom<File>((value) => value instanceof File, {
@@ -55,17 +71,6 @@ export default function ProductForm() {
           message: t("validation.imageInvalid"),
         },
       ),
-
-    brochure: z
-      .custom<File>((value) => value instanceof File, {
-        message: t("validation.brochureRequired"),
-      })
-      .refine(
-        (file) => file instanceof File && file.type === "application/pdf",
-        {
-          message: t("validation.brochureInvalid"),
-        },
-      ),
   });
 
   type FormValues = z.infer<typeof schema>;
@@ -75,16 +80,24 @@ export default function ProductForm() {
     control,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+
+    formState: {
+      errors,
+      isSubmitting,
+    },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
 
     defaultValues: {
       name_en: "",
       name_fa: "",
+
+      description_en: "",
+      description_fa: "",
+
       brand_id: 0,
+
       image: undefined,
-      brochure: undefined,
     },
   });
 
@@ -95,6 +108,7 @@ export default function ProductForm() {
     onFinalizing,
   }: {
     file: File;
+
     url: string;
 
     onProgress: (value: number) => void;
@@ -112,6 +126,7 @@ export default function ProductForm() {
 
       xhr.upload.onloadstart = () => {
         onProgress(0);
+
         onFinalizing(false);
       };
 
@@ -120,13 +135,16 @@ export default function ProductForm() {
           return;
         }
 
-        const rawProgress = Math.round((event.loaded / event.total) * 100);
+        const rawProgress = Math.round(
+          (event.loaded / event.total) * 100,
+        );
 
         onProgress(Math.min(rawProgress, 95));
       };
 
       xhr.upload.onload = () => {
         onProgress(95);
+
         onFinalizing(true);
       };
 
@@ -147,6 +165,7 @@ export default function ProductForm() {
           }
 
           onProgress(100);
+
           onFinalizing(false);
 
           resolve(response.url);
@@ -177,47 +196,31 @@ export default function ProductForm() {
     try {
       setImageUploadProgress(0);
 
-      setBrochureUploadProgress(0);
-
       setIsImageFinalizing(false);
 
-      setIsBrochureFinalizing(false);
+      const imageUrl = await uploadFile({
+        file: data.image,
 
-      const [imageUrl, brochureUrl] = await Promise.all([
-        uploadFile({
-          file: data.image,
+        url: "/api/product/upload-image",
 
-          url: "/api/product/upload-image",
+        onProgress: setImageUploadProgress,
 
-          onProgress: setImageUploadProgress,
-
-          onFinalizing: setIsImageFinalizing,
-        }),
-
-        uploadFile({
-          file: data.brochure,
-
-          url: "/api/product/upload-brochure",
-
-          onProgress: setBrochureUploadProgress,
-
-          onFinalizing: setIsBrochureFinalizing,
-        }),
-      ]);
+        onFinalizing: setIsImageFinalizing,
+      });
 
       const payload = {
         name_en: data.name_en,
 
         name_fa: data.name_fa,
 
+        description_en: data.description_en,
+
+        description_fa: data.description_fa,
+
         brand_id: data.brand_id,
 
         image: imageUrl,
-
-        brochure: brochureUrl,
       };
-
-    
 
       const response = await fetch("/api/product/create", {
         method: "POST",
@@ -230,7 +233,16 @@ export default function ProductForm() {
       });
 
       if (!response.ok) {
-        throw new Error("Create product failed");
+        const error = await response.json().catch(() => null);
+
+        console.error("CREATE PRODUCT RESPONSE ERROR =>", error);
+
+        throw new Error(
+          error?.error?.detail ??
+            error?.error ??
+            error?.detail ??
+            "Create product failed",
+        );
       }
 
       toast.success(t("toast.createSuccess"));
@@ -238,28 +250,24 @@ export default function ProductForm() {
       reset({
         name_en: "",
         name_fa: "",
+
+        description_en: "",
+        description_fa: "",
+
         brand_id: 0,
+
         image: undefined,
-        brochure: undefined,
       });
 
       setImageUploadProgress(0);
 
-      setBrochureUploadProgress(0);
-
       setIsImageFinalizing(false);
-
-      setIsBrochureFinalizing(false);
     } catch (error) {
       console.error("CREATE PRODUCT ERROR =>", error);
 
       setImageUploadProgress(0);
 
-      setBrochureUploadProgress(0);
-
       setIsImageFinalizing(false);
-
-      setIsBrochureFinalizing(false);
 
       toast.error(t("toast.error"));
     }
@@ -301,38 +309,63 @@ export default function ProductForm() {
       </div>
 
       {/* Fields */}
-      <div className="flex flex-col justify-between p-8">
-        <div className="space-y-7">
-          {/* Names */}
-          <div className="grid grid-cols-2 gap-6">
-            <FormField
-              label={t("form.nameEn.label")}
-              placeholder={t("form.nameEn.placeholder")}
-              register={register("name_en")}
-              error={errors.name_en}
-              as="input"
+      <div className="relative min-h-0 p-8 pe-3">
+        <ScrollArea
+          dir={locale === "en" ? "ltr" : "rtl"}
+          className="h-[520px] w-full pe-5"
+        >
+          <div className="flex flex-col gap-y-7 ">
+            {/* Names */}
+            <div className="grid grid-cols-2 gap-6">
+              <FormField
+                label={t("form.nameEn.label")}
+                placeholder={t("form.nameEn.placeholder")}
+                register={register("name_en")}
+                error={errors.name_en}
+                as="input"
+              />
+
+              <FormField
+                label={t("form.nameFa.label")}
+                placeholder={t("form.nameFa.placeholder")}
+                register={register("name_fa")}
+                error={errors.name_fa}
+                as="input"
+              />
+            </div>
+
+            {/* Brand */}
+            <Controller
+              control={control}
+              name="brand_id"
+              render={({ field }) => (
+                <BrandSelect
+                  field={field}
+                  error={errors.brand_id}
+                />
+              )}
             />
 
-            <FormField
-              label={t("form.nameFa.label")}
-              placeholder={t("form.nameFa.placeholder")}
-              register={register("name_fa")}
-              error={errors.name_fa}
-              as="input"
-            />
-          </div>
+            {/* Descriptions */}
+            <div className="grid grid-cols-2 gap-6">
+              <FormField
+                label={t("form.descriptionEn.label")}
+                placeholder={t("form.descriptionEn.placeholder")}
+                register={register("description_en")}
+                error={errors.description_en}
+                as="textarea"
+              />
 
-          {/* Brand */}
-          <Controller
-            control={control}
-            name="brand_id"
-            render={({ field }) => (
-              <BrandSelect field={field} error={errors.brand_id} />
-            )}
-          />
+              <FormField
+                label={t("form.descriptionFa.label")}
+                placeholder={t("form.descriptionFa.placeholder")}
+                register={register("description_fa")}
+                error={errors.description_fa}
+                as="textarea"
+              />
+            </div>
 
-          {/* Files */}
-          <div className="grid grid-cols-2 gap-6">
+            {/* Image */}
             <Controller
               control={control}
               name="image"
@@ -353,42 +386,28 @@ export default function ProductForm() {
                 />
               )}
             />
-
-            <Controller
-              control={control}
-              name="brochure"
-              render={({ field }) => (
-                <ProductBrochureUploadField
-                  value={field.value}
-                  onChange={(file) => {
-                    field.onChange(file);
-
-                    setBrochureUploadProgress(0);
-
-                    setIsBrochureFinalizing(false);
-                  }}
-                  error={errors.brochure?.message as string | undefined}
-                  progress={brochureUploadProgress}
-                  isUploading={isSubmitting}
-                  isFinalizing={isBrochureFinalizing}
-                />
-              )}
-            />
           </div>
-        </div>
+        </ScrollArea>
 
         {/* Submit */}
-        <div className="border-border-secondary mt-10 flex justify-end border-t pt-6">
+        <div className="border-border-secondary bg-secondary-bg absolute inset-x-8 bottom-0 flex justify-end border-t py-6">
           <button
             type="submit"
             disabled={isSubmitting}
             className="bg-custom-primary text-primary-foreground flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting && (
-              <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
+              <LoaderCircle
+                className="size-4 animate-spin"
+                strokeWidth={1.8}
+              />
             )}
 
-            {isSubmitting ? t("form.submitting") : t("form.submit")}
+            {isImageFinalizing
+              ? t("form.finalizing")
+              : isSubmitting
+                ? t("form.submitting")
+                : t("form.submit")}
           </button>
         </div>
       </div>
