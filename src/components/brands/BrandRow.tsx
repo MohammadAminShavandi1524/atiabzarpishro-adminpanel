@@ -6,7 +6,7 @@ import type { Dispatch, SetStateAction } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Eye, FileText, Pencil, Trash2 } from "lucide-react";
+import { ExternalLink, Eye, Pencil, Trash2 } from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -27,7 +27,9 @@ interface BrandRowProps {
 
 export default function BrandRow({ brand, setBrands }: BrandRowProps) {
   const locale = useLocale();
+
   const router = useRouter();
+
   const toast = useCustomToast();
 
   const t = useTranslations("Brands");
@@ -52,8 +54,12 @@ export default function BrandRow({ brand, setBrands }: BrandRowProps) {
     window.open(brand.image, "_blank", "noopener,noreferrer");
   };
 
-  const handleViewCatalog = () => {
-    window.open(brand.catalog, "_blank", "noopener,noreferrer");
+  const handleVisitWebsite = () => {
+    if (!brand.url) {
+      return;
+    }
+
+    window.open(brand.url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -115,17 +121,18 @@ export default function BrandRow({ brand, setBrands }: BrandRowProps) {
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-2">
-          {/* View Catalog */}
+          {/* Website */}
           <CustomButton
             type="button"
             variant="soft"
             intent="secondary"
             size="sm"
-            onClick={handleViewCatalog}
-            leftSection={<FileText size={16} strokeWidth={1.8} />}
+            onClick={handleVisitWebsite}
+            disabled={!brand.url}
+            leftSection={<ExternalLink size={16} strokeWidth={1.8} />}
             className="h-9 px-3 text-sm"
           >
-            {t("actions.viewCatalog")}
+            {t("actions.website")}
           </CustomButton>
 
           {/* Edit */}

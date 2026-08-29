@@ -58,7 +58,8 @@ export default function BrandsPage() {
           brand.name_en.toLowerCase().includes(normalizedSearch) ||
           brand.name_fa.toLowerCase().includes(normalizedSearch) ||
           brand.description_en.toLowerCase().includes(normalizedSearch) ||
-          brand.description_fa.toLowerCase().includes(normalizedSearch)
+          brand.description_fa.toLowerCase().includes(normalizedSearch) ||
+          brand.url?.toLowerCase().includes(normalizedSearch)
         );
       })
       .sort((a, b) => {

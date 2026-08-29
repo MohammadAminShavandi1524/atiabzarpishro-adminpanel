@@ -8,7 +8,8 @@ export interface Brand {
   description_fa: string;
 
   image: string;
-  catalog: string;
+
+  url: string;
 
   created: string;
 }

@@ -12,18 +12,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Badge, LoaderCircle } from "lucide-react";
 
+import { useRouter } from "next/navigation";
+
 import { FormField } from "@/components/FormField";
+
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { useCustomToast } from "@/components/ui/custom-toast";
 
 import BrandImageUploadField from "@/components/addBrand/BrandImageUploadField";
 
-import BrandCatalogUploadField from "@/components/addBrand/BrandCatalogUploadField";
-
 import { getBrand } from "../get-brand.api";
 
 import { updateBrand, type UpdateBrandPayload } from "../update-brand.api";
-import { useRouter } from "next/navigation";
 
 interface EditBrandFormProps {
   brandId: string;
@@ -31,24 +32,24 @@ interface EditBrandFormProps {
 
 interface UploadResponse {
   success: boolean;
+
   url: string;
 }
 
 const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
   const t = useTranslations("editBrand");
+
   const router = useRouter();
+
   const locale = useLocale();
+
   const toast = useCustomToast();
 
   const [loading, setLoading] = useState(true);
 
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
 
-  const [catalogUploadProgress, setCatalogUploadProgress] = useState(0);
-
   const [isImageFinalizing, setIsImageFinalizing] = useState(false);
-
-  const [isCatalogFinalizing, setIsCatalogFinalizing] = useState(false);
 
   const schema = z.object({
     name_en: z
@@ -73,6 +74,12 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
       .trim()
       .min(1, t("validation.descriptionFaRequired")),
 
+    url: z
+      .string()
+      .trim()
+      .min(1, t("validation.urlRequired"))
+      .url(t("validation.urlInvalid")),
+
     image: z
       .custom<File | undefined>()
       .optional()
@@ -83,25 +90,17 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
           message: t("validation.imageInvalid"),
         },
       ),
-
-    catalog: z
-      .custom<File | undefined>()
-      .optional()
-      .refine(
-        (file) =>
-          !file || (file instanceof File && file.type === "application/pdf"),
-        {
-          message: t("validation.catalogInvalid"),
-        },
-      ),
   });
 
   type FormValues = z.infer<typeof schema>;
 
   const {
     register,
+
     control,
+
     handleSubmit,
+
     reset,
 
     formState: { errors, isSubmitting },
@@ -110,19 +109,19 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
 
     defaultValues: {
       name_en: "",
+
       name_fa: "",
 
       description_en: "",
+
       description_fa: "",
 
+      url: "",
+
       image: undefined,
-      catalog: undefined,
     },
   });
 
-  /*
-   * Get current brand
-   */
   useEffect(() => {
     const fetchBrand = async () => {
       try {
@@ -139,9 +138,9 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
 
           description_fa: brand.description_fa,
 
-          image: undefined,
+          url: brand.url ?? "",
 
-          catalog: undefined,
+          image: undefined,
         });
       } catch (error) {
         console.error("GET BRAND ERROR =>", error);
@@ -157,8 +156,11 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
 
   const uploadFile = ({
     file,
+
     url,
+
     onProgress,
+
     onFinalizing,
   }: {
     file: File;
@@ -247,41 +249,34 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
   const onSubmit = async (data: FormValues) => {
     try {
       setImageUploadProgress(0);
-      setCatalogUploadProgress(0);
 
       setIsImageFinalizing(false);
-      setIsCatalogFinalizing(false);
 
-      const [imageUrl, catalogUrl] = await Promise.all([
-        data.image
-          ? uploadFile({
-              file: data.image,
-              url: "/api/brand/upload-image",
-              onProgress: setImageUploadProgress,
-              onFinalizing: setIsImageFinalizing,
-            })
-          : Promise.resolve(null),
+      const imageUrl = data.image
+        ? await uploadFile({
+            file: data.image,
 
-        data.catalog
-          ? uploadFile({
-              file: data.catalog,
-              url: "/api/brand/upload-catalog",
-              onProgress: setCatalogUploadProgress,
-              onFinalizing: setIsCatalogFinalizing,
-            })
-          : Promise.resolve(null),
-      ]);
+            url: "/api/brand/upload-image",
+
+            onProgress: setImageUploadProgress,
+
+            onFinalizing: setIsImageFinalizing,
+          })
+        : null;
 
       const payload: UpdateBrandPayload = {
         name_en: data.name_en,
-        name_fa: data.name_fa,
-        description_en: data.description_en,
-        description_fa: data.description_fa,
-        image: imageUrl,
-        catalog: catalogUrl,
-      };
 
-   
+        name_fa: data.name_fa,
+
+        description_en: data.description_en,
+
+        description_fa: data.description_fa,
+
+        url: data.url,
+
+        image: imageUrl,
+      };
 
       await updateBrand(brandId, payload);
 
@@ -292,16 +287,12 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
       console.error("UPDATE BRAND ERROR =>", error);
 
       setImageUploadProgress(0);
-      setCatalogUploadProgress(0);
 
       setIsImageFinalizing(false);
-      setIsCatalogFinalizing(false);
 
       toast.error(t("toast.error"));
     }
   };
-
-  const isFinalizing = isImageFinalizing || isCatalogFinalizing;
 
   if (loading) {
     return (
@@ -351,48 +342,61 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
       </div>
 
       {/* Fields */}
-      <div className="flex flex-col justify-between p-8">
-        <div className="space-y-7">
-          {/* Names */}
-          <div className="grid grid-cols-2 gap-6">
+      <div className="relative min-h-0 p-8 pe-3">
+        <ScrollArea
+          dir={locale === "en" ? "ltr" : "rtl"}
+          className="h-[580px] w-full pe-5"
+          scrollBarClassName="me-0"
+        >
+          <div className="flex flex-col gap-y-7 pb-28">
+            {/* Names */}
+            <div className="grid grid-cols-2 gap-6">
+              <FormField
+                label={t("form.nameEn.label")}
+                placeholder={t("form.nameEn.placeholder")}
+                register={register("name_en")}
+                error={errors.name_en}
+                as="input"
+              />
+
+              <FormField
+                label={t("form.nameFa.label")}
+                placeholder={t("form.nameFa.placeholder")}
+                register={register("name_fa")}
+                error={errors.name_fa}
+                as="input"
+              />
+            </div>
+
+            {/* Descriptions */}
+            <div className="grid grid-cols-2 gap-6">
+              <FormField
+                label={t("form.descriptionEn.label")}
+                placeholder={t("form.descriptionEn.placeholder")}
+                register={register("description_en")}
+                error={errors.description_en}
+                as="textarea"
+              />
+
+              <FormField
+                label={t("form.descriptionFa.label")}
+                placeholder={t("form.descriptionFa.placeholder")}
+                register={register("description_fa")}
+                error={errors.description_fa}
+                as="textarea"
+              />
+            </div>
+
+            {/* Website */}
             <FormField
-              label={t("form.nameEn.label")}
-              placeholder={t("form.nameEn.placeholder")}
-              register={register("name_en")}
-              error={errors.name_en}
+              label={t("form.url.label")}
+              placeholder={t("form.url.placeholder")}
+              register={register("url")}
+              error={errors.url}
               as="input"
             />
 
-            <FormField
-              label={t("form.nameFa.label")}
-              placeholder={t("form.nameFa.placeholder")}
-              register={register("name_fa")}
-              error={errors.name_fa}
-              as="input"
-            />
-          </div>
-
-          {/* Descriptions */}
-          <div className="grid grid-cols-2 gap-6">
-            <FormField
-              label={t("form.descriptionEn.label")}
-              placeholder={t("form.descriptionEn.placeholder")}
-              register={register("description_en")}
-              error={errors.description_en}
-              as="textarea"
-            />
-
-            <FormField
-              label={t("form.descriptionFa.label")}
-              placeholder={t("form.descriptionFa.placeholder")}
-              register={register("description_fa")}
-              error={errors.description_fa}
-              as="textarea"
-            />
-          </div>
-
-          {/* Optional files */}
-          <div className="mb-2 grid grid-cols-2 gap-6">
+            {/* Optional Image */}
             <Controller
               control={control}
               name="image"
@@ -414,38 +418,17 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
               )}
             />
 
-            <Controller
-              control={control}
-              name="catalog"
-              render={({ field }) => (
-                <BrandCatalogUploadField
-                  value={field.value}
-                  onChange={(file) => {
-                    field.onChange(file);
-
-                    setCatalogUploadProgress(0);
-
-                    setIsCatalogFinalizing(false);
-                  }}
-                  error={errors.catalog?.message as string | undefined}
-                  progress={catalogUploadProgress}
-                  isUploading={isSubmitting}
-                  isFinalizing={isCatalogFinalizing}
-                />
-              )}
-            />
+            {/* Hint */}
+            <div className="border-border-secondary bg-background border px-5 py-4">
+              <p className="text-muted-foreground text-sm leading-6">
+                {t("form.imageHint")}
+              </p>
+            </div>
           </div>
-
-          {/* Hint */}
-          <div className="border-border-secondary bg-background border px-5 py-4">
-            <p className="text-muted-foreground text-sm leading-6">
-              {t("form.filesHint")}
-            </p>
-          </div>
-        </div>
+        </ScrollArea>
 
         {/* Submit */}
-        <div className="border-border-secondary mt-10 flex justify-end border-t pt-6">
+        <div className="border-border-secondary bg-secondary-bg absolute inset-x-8 bottom-0 flex justify-end border-t py-6">
           <button
             type="submit"
             disabled={isSubmitting}
@@ -455,7 +438,7 @@ const EditBrandForm = ({ brandId }: EditBrandFormProps) => {
               <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
             )}
 
-            {isFinalizing
+            {isImageFinalizing
               ? t("form.finalizing")
               : isSubmitting
                 ? t("form.submitting")

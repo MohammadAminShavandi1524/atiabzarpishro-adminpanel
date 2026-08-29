@@ -8,31 +8,22 @@ export interface BrandDetails {
   description_fa: string;
 
   image: string;
-  catalog: string;
+
+  url: string;
 
   created: string;
 }
 
-export const getBrand = async (
-  brandId: string,
-): Promise<BrandDetails> => {
-  const response = await fetch(
-    `/api/brand/get/${brandId}`,
-    {
-      method: "GET",
-      cache: "no-store",
-    },
-  );
+export const getBrand = async (brandId: string): Promise<BrandDetails> => {
+  const response = await fetch(`/api/brand/get/${brandId}`, {
+    method: "GET",
+    cache: "no-store",
+  });
 
   if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => null);
+    const error = await response.json().catch(() => null);
 
-    throw new Error(
-      error?.error ??
-        "Failed to get brand",
-    );
+    throw new Error(error?.error ?? "Failed to get brand");
   }
 
   return response.json();

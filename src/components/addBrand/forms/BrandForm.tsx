@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { z } from "zod";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -12,10 +12,10 @@ import { Controller, useForm } from "react-hook-form";
 import { BadgePlus, LoaderCircle } from "lucide-react";
 
 import { FormField } from "@/components/FormField";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCustomToast } from "@/components/ui/custom-toast";
 
 import BrandImageUploadField from "../BrandImageUploadField";
-import BrandCatalogUploadField from "../BrandCatalogUploadField";
 
 interface UploadResponse {
   success: boolean;
@@ -24,15 +24,13 @@ interface UploadResponse {
 
 const BrandForm = () => {
   const t = useTranslations("addBrand");
+  const locale = useLocale();
+
   const toast = useCustomToast();
 
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
 
-  const [catalogUploadProgress, setCatalogUploadProgress] = useState(0);
-
   const [isImageFinalizing, setIsImageFinalizing] = useState(false);
-
-  const [isCatalogFinalizing, setIsCatalogFinalizing] = useState(false);
 
   const schema = z.object({
     name_en: z
@@ -57,6 +55,13 @@ const BrandForm = () => {
       .trim()
       .min(1, t("validation.descriptionFaRequired")),
 
+    url: z
+      .string()
+      .trim()
+      .min(1, t("validation.urlRequired"))
+      .url(t("validation.urlInvalid"))
+      .max(500, t("validation.urlMax")),
+
     image: z
       .custom<File>((value) => value instanceof File, {
         message: t("validation.imageRequired"),
@@ -65,17 +70,6 @@ const BrandForm = () => {
         (file) => file instanceof File && file.type.startsWith("image/"),
         {
           message: t("validation.imageInvalid"),
-        },
-      ),
-
-    catalog: z
-      .custom<File>((value) => value instanceof File, {
-        message: t("validation.catalogRequired"),
-      })
-      .refine(
-        (file) => file instanceof File && file.type === "application/pdf",
-        {
-          message: t("validation.catalogInvalid"),
         },
       ),
   });
@@ -93,12 +87,15 @@ const BrandForm = () => {
     resolver: zodResolver(schema),
 
     defaultValues: {
-      name_en: "korloy",
-      name_fa: "کورلوی",
-      description_en: "description ... ",
-      description_fa: "توضیح ...",
+      name_en: "",
+      name_fa: "",
+
+      description_en: "",
+      description_fa: "",
+
+      url: "",
+
       image: undefined,
-      catalog: undefined,
     },
   });
 
@@ -126,6 +123,7 @@ const BrandForm = () => {
 
       xhr.upload.onloadstart = () => {
         onProgress(0);
+
         onFinalizing(false);
       };
 
@@ -141,6 +139,7 @@ const BrandForm = () => {
 
       xhr.upload.onload = () => {
         onProgress(95);
+
         onFinalizing(true);
       };
 
@@ -161,6 +160,7 @@ const BrandForm = () => {
           }
 
           onProgress(100);
+
           onFinalizing(false);
 
           resolve(response.url);
@@ -190,38 +190,24 @@ const BrandForm = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       setImageUploadProgress(0);
-      setCatalogUploadProgress(0);
 
       setIsImageFinalizing(false);
-      setIsCatalogFinalizing(false);
 
       /*
-       * Upload image + catalog
+       * Upload Image
        */
-      const [imageUrl, catalogUrl] = await Promise.all([
-        uploadFile({
-          file: data.image,
+      const imageUrl = await uploadFile({
+        file: data.image,
 
-          url: "/api/brand/upload-image",
+        url: "/api/brand/upload-image",
 
-          onProgress: setImageUploadProgress,
+        onProgress: setImageUploadProgress,
 
-          onFinalizing: setIsImageFinalizing,
-        }),
-
-        uploadFile({
-          file: data.catalog,
-
-          url: "/api/brand/upload-catalog",
-
-          onProgress: setCatalogUploadProgress,
-
-          onFinalizing: setIsCatalogFinalizing,
-        }),
-      ]);
+        onFinalizing: setIsImageFinalizing,
+      });
 
       /*
-       * Backend payload
+       * Backend Payload
        */
       const payload = {
         name_en: data.name_en,
@@ -234,12 +220,9 @@ const BrandForm = () => {
 
         image: imageUrl,
 
-        catalog: catalogUrl,
+        url: data.url,
       };
 
-     
-
-      
       const response = await fetch("/api/brand/create", {
         method: "POST",
 
@@ -269,49 +252,33 @@ const BrandForm = () => {
         throw new Error(errorMessage);
       }
 
-      const result = await response.json();
-
-    
-
-      /*
-       * Success
-       */
       toast.success(t("toast.createSuccess"));
 
-      /*
-       * Reset form
-       */
       reset({
         name_en: "",
         name_fa: "",
+
         description_en: "",
         description_fa: "",
+
+        url: "",
+
         image: undefined,
-        catalog: undefined,
       });
 
-      /*
-       * Reset upload states
-       */
       setImageUploadProgress(0);
-      setCatalogUploadProgress(0);
 
       setIsImageFinalizing(false);
-      setIsCatalogFinalizing(false);
     } catch (error) {
       setImageUploadProgress(0);
-      setCatalogUploadProgress(0);
 
       setIsImageFinalizing(false);
-      setIsCatalogFinalizing(false);
 
       console.error("CREATE BRAND ERROR =>", error);
 
       toast.error(t("toast.error"));
     }
   };
-
-  const isFinalizing = isImageFinalizing || isCatalogFinalizing;
 
   return (
     <form
@@ -349,48 +316,61 @@ const BrandForm = () => {
       </div>
 
       {/* Fields */}
-      <div className="flex flex-col justify-between p-8">
-        <div className="space-y-7">
-          {/* Names */}
-          <div className="grid grid-cols-2 gap-6">
+      <div className="relative min-h-0 p-8 pe-3">
+        <ScrollArea
+          dir={locale === "en" ? "ltr" : "rtl"}
+          className="h-[620px] w-full pe-5"
+          scrollBarClassName="me-0"
+        >
+          <div className="flex flex-col gap-y-7 pb-28">
+            {/* Names */}
+            <div className="grid grid-cols-2 gap-6">
+              <FormField
+                label={t("form.nameEn.label")}
+                placeholder={t("form.nameEn.placeholder")}
+                register={register("name_en")}
+                error={errors.name_en}
+                as="input"
+              />
+
+              <FormField
+                label={t("form.nameFa.label")}
+                placeholder={t("form.nameFa.placeholder")}
+                register={register("name_fa")}
+                error={errors.name_fa}
+                as="input"
+              />
+            </div>
+
+            {/* Descriptions */}
+            <div className="grid grid-cols-2 gap-6">
+              <FormField
+                label={t("form.descriptionEn.label")}
+                placeholder={t("form.descriptionEn.placeholder")}
+                register={register("description_en")}
+                error={errors.description_en}
+                as="textarea"
+              />
+
+              <FormField
+                label={t("form.descriptionFa.label")}
+                placeholder={t("form.descriptionFa.placeholder")}
+                register={register("description_fa")}
+                error={errors.description_fa}
+                as="textarea"
+              />
+            </div>
+
+            {/* Website URL */}
             <FormField
-              label={t("form.nameEn.label")}
-              placeholder={t("form.nameEn.placeholder")}
-              register={register("name_en")}
-              error={errors.name_en}
+              label={t("form.url.label")}
+              placeholder={t("form.url.placeholder")}
+              register={register("url")}
+              error={errors.url}
               as="input"
             />
 
-            <FormField
-              label={t("form.nameFa.label")}
-              placeholder={t("form.nameFa.placeholder")}
-              register={register("name_fa")}
-              error={errors.name_fa}
-              as="input"
-            />
-          </div>
-
-          {/* Descriptions */}
-          <div className="grid grid-cols-2 gap-6">
-            <FormField
-              label={t("form.descriptionEn.label")}
-              placeholder={t("form.descriptionEn.placeholder")}
-              register={register("description_en")}
-              error={errors.description_en}
-              as="textarea"
-            />
-
-            <FormField
-              label={t("form.descriptionFa.label")}
-              placeholder={t("form.descriptionFa.placeholder")}
-              register={register("description_fa")}
-              error={errors.description_fa}
-              as="textarea"
-            />
-          </div>
-
-          {/* Image + Catalog */}
-          <div className="grid grid-cols-2 gap-6">
+            {/* Image */}
             <Controller
               control={control}
               name="image"
@@ -411,32 +391,11 @@ const BrandForm = () => {
                 />
               )}
             />
-
-            <Controller
-              control={control}
-              name="catalog"
-              render={({ field }) => (
-                <BrandCatalogUploadField
-                  value={field.value}
-                  onChange={(file) => {
-                    field.onChange(file);
-
-                    setCatalogUploadProgress(0);
-
-                    setIsCatalogFinalizing(false);
-                  }}
-                  error={errors.catalog?.message as string | undefined}
-                  progress={catalogUploadProgress}
-                  isUploading={isSubmitting}
-                  isFinalizing={isCatalogFinalizing}
-                />
-              )}
-            />
           </div>
-        </div>
+        </ScrollArea>
 
         {/* Submit */}
-        <div className="border-border-secondary mt-10 flex justify-end border-t pt-6">
+        <div className="border-border-secondary bg-secondary-bg absolute inset-x-8 bottom-0 flex justify-end border-t py-6">
           <button
             type="submit"
             disabled={isSubmitting}
@@ -446,7 +405,7 @@ const BrandForm = () => {
               <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
             )}
 
-            {isFinalizing
+            {isImageFinalizing
               ? t("form.finalizing")
               : isSubmitting
                 ? t("form.submitting")

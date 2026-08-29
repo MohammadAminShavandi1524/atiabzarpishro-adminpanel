@@ -173,7 +173,7 @@
   "Brands": {
     "header": {
       "title": "Brands",
-      "description": "Manage product brands, descriptions, images and catalogs."
+      "description": "Manage product brands, descriptions, images and official website links."
     },
 
     "filters": {
@@ -194,7 +194,7 @@
 
     "actions": {
       "viewImage": "View Image",
-      "viewCatalog": "View Catalog",
+      "website": "Visit Website",
       "edit": "Edit",
       "delete": "Delete"
     },
@@ -217,7 +217,7 @@
   "editBrand": {
     "header": {
       "title": "Edit Brand",
-      "description": "Update the brand information or optionally replace its image and catalog."
+      "description": "Update the brand information, official website or optionally replace its image."
     },
 
     "form": {
@@ -241,7 +241,12 @@
         "placeholder": "Enter the brand description in Persian"
       },
 
-      "filesHint": "Image and catalog are optional. Leave them empty to keep the current files.",
+      "url": {
+        "label": "Brand Website",
+        "placeholder": "https://www.example.com"
+      },
+
+      "imageHint": "Selecting a new image is optional. Leave it empty to keep the current brand image.",
 
       "uploading": "Uploading...",
       "finalizing": "Finalizing upload...",
@@ -257,8 +262,10 @@
       "descriptionEnRequired": "Please enter the brand description in English.",
       "descriptionFaRequired": "Please enter the brand description in Persian.",
 
-      "imageInvalid": "Please select a valid image file.",
-      "catalogInvalid": "The brand catalog must be a PDF file."
+      "urlRequired": "Please enter the brand website URL.",
+      "urlInvalid": "Please enter a valid website URL.",
+
+      "imageInvalid": "Please select a valid image file."
     },
 
     "loading": "Loading brand information...",
@@ -273,7 +280,7 @@
   "addBrand": {
     "header": {
       "title": "Add Brand",
-      "description": "Create a new brand by entering its bilingual information, uploading a brand image and attaching the product catalog."
+      "description": "Create a new brand by entering its bilingual information, uploading a brand image and providing its official website."
     },
 
     "form": {
@@ -297,14 +304,14 @@
         "placeholder": "Enter the brand description in Persian"
       },
 
+      "url": {
+        "label": "Brand Website",
+        "placeholder": "https://www.example.com"
+      },
+
       "image": {
         "label": "Brand Image",
         "placeholder": "Select or drop a brand image"
-      },
-
-      "catalog": {
-        "label": "Brand Catalog",
-        "placeholder": "Select or drop the brand catalog"
       },
 
       "uploading": "Uploading...",
@@ -321,16 +328,16 @@
       "descriptionEnRequired": "Please enter the brand description in English.",
       "descriptionFaRequired": "Please enter the brand description in Persian.",
 
-      "imageRequired": "Please select a brand image.",
-      "imageInvalid": "Please select a valid image file.",
+      "urlRequired": "Please enter the brand website URL.",
+      "urlInvalid": "Please enter a valid website URL.",
+      "urlMax": "Website URL must be 500 characters or less.",
 
-      "catalogRequired": "Please select a brand catalog.",
-      "catalogInvalid": "The brand catalog must be a PDF file."
+      "imageRequired": "Please select a brand image.",
+      "imageInvalid": "Please select a valid image file."
     },
 
     "toast": {
       "imageSelected": "Brand image selected successfully.",
-      "catalogSelected": "Brand catalog selected successfully.",
       "createSuccess": "Brand created successfully.",
       "error": "Failed to create the brand. Please try again."
     }
