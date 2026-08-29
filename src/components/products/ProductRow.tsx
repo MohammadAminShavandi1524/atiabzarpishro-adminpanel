@@ -6,9 +6,9 @@ import { type Dispatch, type SetStateAction } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { useLocale, useTranslations } from "next-intl";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 
-import { Eye, FileText, Pencil, Trash2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { englishToPersianNumber, formatDate } from "@/lib/utils";
 
@@ -22,14 +22,17 @@ import { deleteProduct } from "./delete-product.api";
 
 interface ProductRowProps {
   product: Product;
+
   setProducts: Dispatch<SetStateAction<Product[]>>;
 }
 
 export default function ProductRow({ product, setProducts }: ProductRowProps) {
   const locale = useLocale();
+
   const t = useTranslations("Products");
 
   const router = useRouter();
+
   const toast = useCustomToast();
 
   const formattedDate = formatDate(product.created, locale);
@@ -52,16 +55,12 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
     window.open(product.image, "_blank", "noopener,noreferrer");
   };
 
-  const handleViewBrochure = () => {
-    window.open(product.brochure, "_blank", "noopener,noreferrer");
-  };
-
   return (
     <article className="group/product border-border bg-background hover:border-border-secondary hover:bg-card-secondary/40 relative border transition-[background-color,border-color] duration-300">
       {/* Hover Indicator */}
       <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/product:scale-y-100" />
 
-      <div className="grid min-h-[94px] grid-cols-[60px_1.05fr_1.05fr_100px_1fr_135px_360px] items-center gap-5 px-5 py-3">
+      <div className="grid min-h-[94px] grid-cols-[60px_1fr_1fr_100px_1fr_1.4fr_1.4fr_135px_220px] items-center gap-4 px-5 py-3">
         {/* ID */}
         <div className="text-muted-foreground text-sm">
           {locale === "fa"
@@ -86,7 +85,7 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
           </p>
         </div>
 
-        {/* Image Preview */}
+        {/* Image */}
         <button
           type="button"
           onClick={handleViewImage}
@@ -113,24 +112,28 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
           </p>
         </div>
 
+        {/* Description EN */}
+        <div className="min-w-0">
+          <p className="text-muted-foreground line-clamp-2 text-sm leading-6">
+            {product.description_en}
+          </p>
+        </div>
+
+        {/* Description FA */}
+        <div className="min-w-0">
+          <p
+            lang="fa"
+            className="text-muted-foreground line-clamp-2 text-sm leading-6"
+          >
+            {product.description_fa}
+          </p>
+        </div>
+
         {/* Date */}
         <div className="text-muted-foreground text-sm">{formattedDate}</div>
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-2">
-          {/* View Brochure */}
-          <CustomButton
-            type="button"
-            variant="soft"
-            intent="secondary"
-            size="sm"
-            onClick={handleViewBrochure}
-            leftSection={<FileText size={16} strokeWidth={1.8} />}
-            className="h-9 px-3 text-sm"
-          >
-            {t("actions.viewBrochure")}
-          </CustomButton>
-
           {/* Edit */}
           <CustomButton
             type="button"

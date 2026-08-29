@@ -346,7 +346,7 @@
   "Products": {
     "header": {
       "title": "Products",
-      "description": "Manage products, assigned brands, images and brochures."
+      "description": "Manage products, assigned brands, descriptions and images."
     },
 
     "filters": {
@@ -363,13 +363,14 @@
       "nameFa": "Persian Name",
       "image": "Image",
       "brand": "Brand",
+      "descriptionEn": "English Description",
+      "descriptionFa": "Persian Description",
       "date": "Created",
       "actions": "Actions"
     },
 
     "actions": {
       "viewImage": "View Image",
-      "viewBrochure": "View Brochure",
       "edit": "Edit",
       "delete": "Delete"
     },

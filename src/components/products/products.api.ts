@@ -1,11 +1,16 @@
 export interface ProductBrand {
   id: number;
+
   name_en: string;
   name_fa: string;
+
   description_en: string;
   description_fa: string;
+
   image: string;
-  catalog: string;
+
+  url: string;
+
   created: string;
 }
 
@@ -15,10 +20,12 @@ export interface Product {
   name_en: string;
   name_fa: string;
 
+  description_en: string;
+  description_fa: string;
+
   brand: ProductBrand;
 
   image: string;
-  brochure: string;
 
   created: string;
 }
@@ -30,7 +37,13 @@ export const getProducts = async (): Promise<Product[]> => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to get products");
+    const error = await response.json().catch(() => null);
+
+    throw new Error(
+      error?.error ??
+        error?.detail ??
+        "Failed to get products",
+    );
   }
 
   return response.json();
