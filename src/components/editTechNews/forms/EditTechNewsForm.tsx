@@ -1,14 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import Image from "next/image";
 
 import { useLocale, useTranslations } from "next-intl";
+
+import { useRouter } from "next/navigation";
 
 import { Controller, useForm, useWatch } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { FilePenLine, FileUp, Link2, LoaderCircle } from "lucide-react";
+import {
+  ExternalLink,
+  FilePenLine,
+  FileUp,
+  Link2,
+  LoaderCircle,
+} from "lucide-react";
 
 import { FormField } from "@/components/FormField";
 
@@ -16,25 +26,41 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { useCustomToast } from "@/components/ui/custom-toast";
 
-import TechNewsImageUploadField from "../TechNewsImageUploadField";
+import TechNewsImageUploadField from "@/components/addTechNews/TechNewsImageUploadField";
 
-import TechNewsPdfUploadField from "../TechNewsPdfUploadField";
+import TechNewsPdfUploadField from "@/components/addTechNews/TechNewsPdfUploadField";
 
-import type { CreateTechNewsPayload } from "../technews.types";
+import { uploadTechNewsFile } from "@/components/addTechNews/forms/technews-upload";
+
+import { getTechNews, type TechNewsDetails } from "../get-technews.api";
 
 import {
-  createTechNewsSchema,
-  type TechNewsFormValues,
-} from "./technews.schema";
+  updateTechNews,
+  type UpdateTechNewsPayload,
+} from "../update-technews.api";
 
-import { uploadTechNewsFile } from "./technews-upload";
+import {
+  editTechNewsSchema,
+  type EditTechNewsFormValues,
+} from "./edit-technews.schema";
 
-export default function TechNewsForm() {
-  const t = useTranslations("addTechNews");
+interface EditTechNewsFormProps {
+  newsId: string;
+}
+
+export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
+  const t = useTranslations("editTechNews");
 
   const locale = useLocale();
 
+  const router = useRouter();
+
   const toast = useCustomToast();
+
+  const [currentTechNews, setCurrentTechNews] =
+    useState<TechNewsDetails | null>(null);
+
+  const [loading, setLoading] = useState(true);
 
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
 
@@ -44,7 +70,10 @@ export default function TechNewsForm() {
 
   const [isPdfFinalizing, setIsPdfFinalizing] = useState(false);
 
-  const schema = createTechNewsSchema(t);
+  const schema = useMemo(
+    () => editTechNewsSchema(t, currentTechNews?.object_storage ?? true),
+    [t, currentTechNews?.object_storage],
+  );
 
   const {
     register,
@@ -55,7 +84,7 @@ export default function TechNewsForm() {
     clearErrors,
 
     formState: { errors, isSubmitting },
-  } = useForm<TechNewsFormValues>({
+  } = useForm<EditTechNewsFormValues>({
     resolver: zodResolver(schema),
 
     defaultValues: {
@@ -80,6 +109,50 @@ export default function TechNewsForm() {
     name: "source",
   });
 
+  /*
+   * GET current Tech News
+   */
+  useEffect(() => {
+    const fetchTechNews = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getTechNews(newsId);
+
+        setCurrentTechNews(data);
+
+        reset({
+          name_en: data.name_en,
+
+          name_fa: data.name_fa,
+
+          description_en: data.description_en,
+
+          description_fa: data.description_fa,
+
+          image: undefined,
+
+          source: data.object_storage ? "upload" : "url",
+
+          pdf: undefined,
+
+          external_url: data.object_storage ? "" : data.url,
+        });
+      } catch (error) {
+        console.error("GET TECH NEWS ERROR =>", error);
+
+        toast.error(t("toast.fetchError"));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTechNews();
+  }, [newsId, reset, t, toast]);
+
+  /*
+   * Source → Upload
+   */
   const selectUploadSource = () => {
     setValue("source", "upload");
 
@@ -88,10 +161,21 @@ export default function TechNewsForm() {
     clearErrors("external_url");
   };
 
+  /*
+   * Source → External URL
+   */
   const selectUrlSource = () => {
     setValue("source", "url");
 
     setValue("pdf", undefined);
+
+    /*
+     * اگر از اول URL خارجی بوده،
+     * URL فعلی را برمی‌گردانیم.
+     */
+    if (currentTechNews && !currentTechNews.object_storage) {
+      setValue("external_url", currentTechNews.url);
+    }
 
     setPdfUploadProgress(0);
 
@@ -110,43 +194,75 @@ export default function TechNewsForm() {
     setIsPdfFinalizing(false);
   };
 
-  const onSubmit = async (data: TechNewsFormValues) => {
+  /*
+   * Submit
+   */
+  const onSubmit = async (data: EditTechNewsFormValues) => {
+    if (!currentTechNews) {
+      return;
+    }
+
     try {
       resetUploadStates();
 
-      const imageUrl = await uploadTechNewsFile({
-        file: data.image,
+      /*
+       * IMAGE
+       *
+       * null یعنی تصویر فعلی حفظ شود.
+       */
+      let finalImage: string | null = null;
 
-        url: "/api/technews/upload-image",
+      if (data.image instanceof File) {
+        finalImage = await uploadTechNewsFile({
+          file: data.image,
 
-        onProgress: setImageUploadProgress,
+          url: "/api/technews/upload-image",
 
-        onFinalizing: setIsImageFinalizing,
-      });
+          onProgress: setImageUploadProgress,
 
-      let finalUrl = "";
-
-      let objectStorage = false;
-
-      if (data.source === "upload") {
-        finalUrl = await uploadTechNewsFile({
-          file: data.pdf as File,
-
-          url: "/api/technews/upload-pdf",
-
-          onProgress: setPdfUploadProgress,
-
-          onFinalizing: setIsPdfFinalizing,
+          onFinalizing: setIsImageFinalizing,
         });
-
-        objectStorage = true;
-      } else {
-        finalUrl = data.external_url?.trim() ?? "";
-
-        objectStorage = false;
       }
 
-      const payload: CreateTechNewsPayload = {
+      /*
+       * SOURCE
+       */
+      let finalUrl = currentTechNews.url;
+
+      let objectStorage = currentTechNews.object_storage;
+
+      /*
+       * Upload PDF
+       */
+      if (data.source === "upload") {
+        objectStorage = true;
+
+        /*
+         * PDF جدید انتخاب شده
+         */
+        if (data.pdf instanceof File) {
+          finalUrl = await uploadTechNewsFile({
+            file: data.pdf,
+
+            url: "/api/technews/upload-pdf",
+
+            onProgress: setPdfUploadProgress,
+
+            onFinalizing: setIsPdfFinalizing,
+          });
+        }
+      }
+
+      /*
+       * External URL
+       */
+      if (data.source === "url") {
+        objectStorage = false;
+
+        finalUrl = data.external_url?.trim() ?? currentTechNews.url;
+      }
+
+      const payload: UpdateTechNewsPayload = {
         name_en: data.name_en,
 
         name_fa: data.name_fa,
@@ -155,55 +271,20 @@ export default function TechNewsForm() {
 
         description_fa: data.description_fa,
 
-        image: imageUrl,
+        image: finalImage,
 
         object_storage: objectStorage,
 
         url: finalUrl,
       };
 
-      const response = await fetch("/api/technews/create", {
-        method: "POST",
+      await updateTechNews(newsId, payload);
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+      toast.success(t("toast.updateSuccess"));
 
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const error = await response.json().catch(() => null);
-
-        throw new Error(
-          error?.error?.detail ??
-            error?.error ??
-            error?.detail ??
-            "Create Tech News failed",
-        );
-      }
-
-      toast.success(t("toast.createSuccess"));
-
-      reset({
-        name_en: "",
-        name_fa: "",
-
-        description_en: "",
-        description_fa: "",
-
-        image: undefined,
-
-        source: "upload",
-
-        pdf: undefined,
-
-        external_url: "",
-      });
-
-      resetUploadStates();
+      router.push(`/${locale}/technews`);
     } catch (error) {
-      console.error("CREATE TECH NEWS ERROR =>", error);
+      console.error("UPDATE TECH NEWS ERROR =>", error);
 
       resetUploadStates();
 
@@ -212,6 +293,28 @@ export default function TechNewsForm() {
   };
 
   const isFinalizing = isImageFinalizing || isPdfFinalizing;
+
+  /*
+   * Loading
+   */
+  if (loading) {
+    return (
+      <div className="border-border-secondary bg-secondary-bg flex min-h-[700px] items-center justify-center border">
+        <div className="flex items-center gap-3">
+          <LoaderCircle
+            className="text-custom-primary size-5 animate-spin"
+            strokeWidth={1.8}
+          />
+
+          <span className="text-muted-foreground text-sm">{t("loading")}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentTechNews) {
+    return null;
+  }
 
   return (
     <form
@@ -238,6 +341,31 @@ export default function TechNewsForm() {
             </p>
           </div>
         </div>
+
+        {/* Current Source */}
+        <div className="border-border-secondary border-t pt-6">
+          <span className="text-muted-foreground text-xs">
+            {t("current.source")}
+          </span>
+
+          <p className="text-foreground mt-2 text-sm font-medium">
+            {currentTechNews.object_storage
+              ? t("current.uploaded")
+              : t("current.external")}
+          </p>
+
+          <button
+            type="button"
+            onClick={() =>
+              window.open(currentTechNews.url, "_blank", "noopener,noreferrer")
+            }
+            className="text-custom-primary mt-3 flex cursor-pointer items-center gap-2 text-sm"
+          >
+            <ExternalLink size={15} strokeWidth={1.7} />
+
+            {t("current.open")}
+          </button>
+        </div>
       </div>
 
       {/* Fields */}
@@ -247,7 +375,7 @@ export default function TechNewsForm() {
           className="h-[580px] w-full pe-5"
           scrollBarClassName="me-0"
         >
-          <div className="flex flex-col gap-y-7">
+          <div className="flex flex-col gap-y-7 pb-6">
             {/* Names */}
             <div className="grid grid-cols-2 gap-6">
               <FormField
@@ -286,7 +414,30 @@ export default function TechNewsForm() {
               />
             </div>
 
-            {/* Image */}
+            {/* Current Image */}
+            <div>
+              <label className="text-foreground mb-3 block text-sm font-medium">
+                {t("form.currentImage")}
+              </label>
+
+              <div className="border-border-secondary bg-background flex items-center gap-5 border p-4">
+                <div className="relative h-28 w-20 shrink-0 overflow-hidden">
+                  <Image
+                    src={currentTechNews.image}
+                    alt={currentTechNews.name_en}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </div>
+
+                <p className="text-muted-foreground max-w-[500px] text-sm leading-7">
+                  {t("form.imageHint")}
+                </p>
+              </div>
+            </div>
+
+            {/* New Image */}
             <Controller
               control={control}
               name="image"
@@ -347,26 +498,36 @@ export default function TechNewsForm() {
 
             {/* PDF */}
             {source === "upload" && (
-              <Controller
-                control={control}
-                name="pdf"
-                render={({ field }) => (
-                  <TechNewsPdfUploadField
-                    value={field.value}
-                    onChange={(file) => {
-                      field.onChange(file);
-
-                      setPdfUploadProgress(0);
-
-                      setIsPdfFinalizing(false);
-                    }}
-                    error={errors.pdf?.message as string | undefined}
-                    progress={pdfUploadProgress}
-                    isUploading={isSubmitting}
-                    isFinalizing={isPdfFinalizing}
-                  />
+              <>
+                {currentTechNews.object_storage && (
+                  <div className="border-border-secondary bg-background border px-5 py-4">
+                    <p className="text-muted-foreground text-sm leading-7">
+                      {t("form.pdfHint")}
+                    </p>
+                  </div>
                 )}
-              />
+
+                <Controller
+                  control={control}
+                  name="pdf"
+                  render={({ field }) => (
+                    <TechNewsPdfUploadField
+                      value={field.value}
+                      onChange={(file) => {
+                        field.onChange(file);
+
+                        setPdfUploadProgress(0);
+
+                        setIsPdfFinalizing(false);
+                      }}
+                      error={errors.pdf?.message as string | undefined}
+                      progress={pdfUploadProgress}
+                      isUploading={isSubmitting}
+                      isFinalizing={isPdfFinalizing}
+                    />
+                  )}
+                />
+              </>
             )}
 
             {/* External URL */}

@@ -1281,6 +1281,94 @@
     }
   },
 
+  "editTechNews": {
+    "header": {
+      "title": "Edit Tech News",
+      "description": "Update the technical publication information, cover image or document source."
+    },
+
+    "formHeader": {
+      "title": "Tech News Information",
+      "description": "Update the publication details and replace its cover image, PDF file or external source when required."
+    },
+
+    "form": {
+      "nameEn": {
+        "label": "English Name",
+        "placeholder": "Enter the English name"
+      },
+
+      "nameFa": {
+        "label": "Persian Name",
+        "placeholder": "Enter the Persian name"
+      },
+
+      "descriptionEn": {
+        "label": "English Description",
+        "placeholder": "Enter the English description"
+      },
+
+      "descriptionFa": {
+        "label": "Persian Description",
+        "placeholder": "Enter the Persian description"
+      },
+
+      "currentImage": "Current Cover",
+
+      "imageHint": "Selecting a new cover image is optional. Leave it empty to keep the current image.",
+
+      "source": {
+        "label": "Document Source",
+        "upload": "Upload PDF",
+        "url": "External URL"
+      },
+
+      "pdfHint": "The current PDF will remain unchanged if you do not select a new file.",
+
+      "externalUrl": {
+        "label": "Document URL",
+        "placeholder": "https://example.com/document.pdf"
+      },
+
+      "uploading": "Uploading...",
+      "finalizing": "Finalizing upload...",
+      "submitting": "Updating Tech News...",
+      "submit": "Update Tech News"
+    },
+
+    "current": {
+      "source": "Current Source",
+      "uploaded": "Uploaded PDF",
+      "external": "External URL",
+      "open": "Open Current Document"
+    },
+
+    "validation": {
+      "nameEnRequired": "Please enter the English name.",
+      "nameFaRequired": "Please enter the Persian name.",
+
+      "descriptionEnRequired": "Please enter the English description.",
+      "descriptionFaRequired": "Please enter the Persian description.",
+
+      "imageInvalid": "Please select a valid image file.",
+
+      "pdfInvalid": "Please select a valid PDF file.",
+
+      "pdfRequiredOnSourceChange": "Please select a PDF file when changing the source to an uploaded document.",
+
+      "urlRequired": "Please enter the document URL.",
+      "urlInvalid": "Please enter a valid URL."
+    },
+
+    "loading": "Loading Tech News information...",
+
+    "toast": {
+      "fetchError": "Failed to load Tech News information.",
+      "updateSuccess": "Tech News updated successfully.",
+      "error": "Failed to update Tech News. Please try again."
+    }
+  },
+
   "addTechNews": {
     "header": {
       "title": "Add Tech News",
