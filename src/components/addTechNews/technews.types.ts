@@ -3,10 +3,6 @@ export interface CreateTechNewsPayload {
 
   name_fa: string;
 
-  description_en: string;
-
-  description_fa: string;
-
   image: string;
 
   object_storage: boolean;

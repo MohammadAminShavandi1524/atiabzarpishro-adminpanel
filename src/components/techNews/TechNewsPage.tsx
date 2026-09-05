@@ -59,8 +59,6 @@ export default function TechNewsPage() {
         return (
           item.name_en?.toLowerCase().includes(normalizedSearch) ||
           item.name_fa?.toLowerCase().includes(normalizedSearch) ||
-          item.description_en?.toLowerCase().includes(normalizedSearch) ||
-          item.description_fa?.toLowerCase().includes(normalizedSearch) ||
           item.url?.toLowerCase().includes(normalizedSearch)
         );
       })
@@ -130,7 +128,7 @@ export default function TechNewsPage() {
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {/* Header */}
             <div className="border-border bg-card-secondary shrink-0 border-b ps-9 pe-11">
-              <div className="text-muted-foreground grid h-13 grid-cols-[60px_1fr_1fr_90px_1.45fr_1.45fr_115px_135px_300px] items-center gap-4 text-sm font-semibold">
+              <div className="text-muted-foreground grid h-13 grid-cols-[60px_1.2fr_1.2fr_90px_125px_135px_300px] items-center gap-4 text-sm font-semibold">
                 <div>{t("table.id")}</div>
 
                 <div>{t("table.nameEn")}</div>
@@ -138,10 +136,6 @@ export default function TechNewsPage() {
                 <div>{t("table.nameFa")}</div>
 
                 <div>{t("table.image")}</div>
-
-                <div>{t("table.descriptionEn")}</div>
-
-                <div>{t("table.descriptionFa")}</div>
 
                 <div>{t("table.source")}</div>
 

@@ -62,9 +62,6 @@ export default function TechNewsForm() {
       name_en: "",
       name_fa: "",
 
-      description_en: "",
-      description_fa: "",
-
       image: undefined,
 
       source: "upload",
@@ -151,10 +148,6 @@ export default function TechNewsForm() {
 
         name_fa: data.name_fa,
 
-        description_en: data.description_en,
-
-        description_fa: data.description_fa,
-
         image: imageUrl,
 
         object_storage: objectStorage,
@@ -188,9 +181,6 @@ export default function TechNewsForm() {
       reset({
         name_en: "",
         name_fa: "",
-
-        description_en: "",
-        description_fa: "",
 
         image: undefined,
 
@@ -264,25 +254,6 @@ export default function TechNewsForm() {
                 register={register("name_fa")}
                 error={errors.name_fa}
                 as="input"
-              />
-            </div>
-
-            {/* Descriptions */}
-            <div className="grid grid-cols-2 gap-6">
-              <FormField
-                label={t("form.descriptionEn.label")}
-                placeholder={t("form.descriptionEn.placeholder")}
-                register={register("description_en")}
-                error={errors.description_en}
-                as="textarea"
-              />
-
-              <FormField
-                label={t("form.descriptionFa.label")}
-                placeholder={t("form.descriptionFa.placeholder")}
-                register={register("description_fa")}
-                error={errors.description_fa}
-                as="textarea"
               />
             </div>
 

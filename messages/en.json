@@ -1219,8 +1219,6 @@
       "nameEn": "English Name",
       "nameFa": "Persian Name",
       "image": "Cover",
-      "descriptionEn": "English Description",
-      "descriptionFa": "Persian Description",
       "source": "Source",
       "date": "Created",
       "actions": "Actions"
@@ -1275,16 +1273,6 @@
         "placeholder": "Enter the Persian name"
       },
 
-      "descriptionEn": {
-        "label": "English Description",
-        "placeholder": "Enter the English description"
-      },
-
-      "descriptionFa": {
-        "label": "Persian Description",
-        "placeholder": "Enter the Persian description"
-      },
-
       "currentImage": "Current Cover",
 
       "imageHint": "Selecting a new cover image is optional. Leave it empty to keep the current image.",
@@ -1318,9 +1306,6 @@
     "validation": {
       "nameEnRequired": "Please enter the English name.",
       "nameFaRequired": "Please enter the Persian name.",
-
-      "descriptionEnRequired": "Please enter the English description.",
-      "descriptionFaRequired": "Please enter the Persian description.",
 
       "imageInvalid": "Please select a valid image file.",
 
@@ -1363,16 +1348,6 @@
         "placeholder": "Enter the Persian name"
       },
 
-      "descriptionEn": {
-        "label": "English Description",
-        "placeholder": "Enter the English description"
-      },
-
-      "descriptionFa": {
-        "label": "Persian Description",
-        "placeholder": "Enter the Persian description"
-      },
-
       "image": {
         "label": "Cover Image",
         "placeholder": "Select a cover image"
@@ -1403,9 +1378,6 @@
     "validation": {
       "nameEnRequired": "Please enter the English name.",
       "nameFaRequired": "Please enter the Persian name.",
-
-      "descriptionEnRequired": "Please enter the English description.",
-      "descriptionFaRequired": "Please enter the Persian description.",
 
       "imageRequired": "Please select a cover image.",
       "imageInvalid": "Please select a valid image file.",

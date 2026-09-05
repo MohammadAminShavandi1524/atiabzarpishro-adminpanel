@@ -68,7 +68,7 @@ export default function TechNewsRow({ item, setItems }: TechNewsRowProps) {
       {/* Hover Indicator */}
       <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/technews:scale-y-100" />
 
-      <div className="grid min-h-[94px] grid-cols-[60px_1fr_1fr_90px_1.45fr_1.45fr_115px_135px_300px] items-center gap-4 px-5 py-3">
+      <div className="grid min-h-[94px] grid-cols-[60px_1.2fr_1.2fr_90px_125px_135px_300px] items-center gap-4 px-5 py-3">
         {/* ID */}
         <div className="text-muted-foreground text-sm">
           {locale === "fa"
@@ -112,23 +112,6 @@ export default function TechNewsRow({ item, setItems }: TechNewsRowProps) {
             <Eye size={17} strokeWidth={1.8} className="text-foreground" />
           </span>
         </button>
-
-        {/* Description EN */}
-        <div className="min-w-0">
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-6">
-            {item.description_en}
-          </p>
-        </div>
-
-        {/* Description FA */}
-        <div className="min-w-0">
-          <p
-            lang="fa"
-            className="text-muted-foreground line-clamp-2 text-sm leading-6"
-          >
-            {item.description_fa}
-          </p>
-        </div>
 
         {/* Source */}
         <div>

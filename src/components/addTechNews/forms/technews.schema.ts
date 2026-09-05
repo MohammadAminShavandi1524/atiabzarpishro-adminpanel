@@ -9,16 +9,6 @@ export const createTechNewsSchema = (t: Translate) =>
 
       name_fa: z.string().trim().min(1, t("validation.nameFaRequired")),
 
-      description_en: z
-        .string()
-        .trim()
-        .min(1, t("validation.descriptionEnRequired")),
-
-      description_fa: z
-        .string()
-        .trim()
-        .min(1, t("validation.descriptionFaRequired")),
-
       image: z
         .custom<File>((value) => value instanceof File, {
           message: t("validation.imageRequired"),

@@ -91,9 +91,6 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
       name_en: "",
       name_fa: "",
 
-      description_en: "",
-      description_fa: "",
-
       image: undefined,
 
       source: "upload",
@@ -125,10 +122,6 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
           name_en: data.name_en,
 
           name_fa: data.name_fa,
-
-          description_en: data.description_en,
-
-          description_fa: data.description_fa,
 
           image: undefined,
 
@@ -170,8 +163,8 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
     setValue("pdf", undefined);
 
     /*
-     * اگر از اول URL خارجی بوده،
-     * URL فعلی را برمی‌گردانیم.
+     * اگر Source اصلی External URL بوده،
+     * URL فعلی را برگردان.
      */
     if (currentTechNews && !currentTechNews.object_storage) {
       setValue("external_url", currentTechNews.url);
@@ -208,7 +201,8 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
       /*
        * IMAGE
        *
-       * null یعنی تصویر فعلی حفظ شود.
+       * null یعنی تصویر جدیدی انتخاب نشده.
+       * Backend تصویر فعلی را نگه می‌دارد.
        */
       let finalImage: string | null = null;
 
@@ -227,7 +221,7 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
       /*
        * SOURCE
        */
-      let finalUrl = currentTechNews.url;
+      let finalUrl: string | null = currentTechNews.url;
 
       let objectStorage = currentTechNews.object_storage;
 
@@ -238,7 +232,7 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
         objectStorage = true;
 
         /*
-         * PDF جدید انتخاب شده
+         * اگر PDF جدید انتخاب شده، آپلود شود.
          */
         if (data.pdf instanceof File) {
           finalUrl = await uploadTechNewsFile({
@@ -250,6 +244,12 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
 
             onFinalizing: setIsPdfFinalizing,
           });
+        } else if (!currentTechNews.object_storage) {
+          /*
+           * این حالت توسط Zod نباید اجازه Submit بگیرد،
+           * ولی برای اطمینان اینجا هم نگه می‌داریم.
+           */
+          throw new Error("PDF is required when switching to upload source.");
         }
       }
 
@@ -259,17 +259,13 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
       if (data.source === "url") {
         objectStorage = false;
 
-        finalUrl = data.external_url?.trim() ?? currentTechNews.url;
+        finalUrl = data.external_url?.trim() ?? "";
       }
 
       const payload: UpdateTechNewsPayload = {
         name_en: data.name_en,
 
         name_fa: data.name_fa,
-
-        description_en: data.description_en,
-
-        description_fa: data.description_fa,
 
         image: finalImage,
 
@@ -392,25 +388,6 @@ export default function EditTechNewsForm({ newsId }: EditTechNewsFormProps) {
                 register={register("name_fa")}
                 error={errors.name_fa}
                 as="input"
-              />
-            </div>
-
-            {/* Descriptions */}
-            <div className="grid grid-cols-2 gap-6">
-              <FormField
-                label={t("form.descriptionEn.label")}
-                placeholder={t("form.descriptionEn.placeholder")}
-                register={register("description_en")}
-                error={errors.description_en}
-                as="textarea"
-              />
-
-              <FormField
-                label={t("form.descriptionFa.label")}
-                placeholder={t("form.descriptionFa.placeholder")}
-                register={register("description_fa")}
-                error={errors.description_fa}
-                as="textarea"
               />
             </div>
 
