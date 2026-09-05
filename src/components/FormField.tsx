@@ -47,12 +47,21 @@ export const FormField = (props: FormFieldProps) => {
   );
 
   return (
-    <div className={cn("flex flex-col gap-2.5", containerClassName)}>
-      <div className="flex items-center justify-between gap-3 px-0.5">
-        <label className="text-foreground text-sm font-medium">{label}</label>
+    <div
+      className={cn(
+        "flex flex-col gap-2.5",
+        "xl:gap-2",
+        "3xl:gap-2.5",
+        containerClassName,
+      )}
+    >
+      <div className="3xl:gap-3 flex items-center justify-between gap-3 px-0.5 xl:gap-2.5">
+        <label className="text-foreground text-sm font-medium xl:text-[13px] 2xl:text-sm">
+          {label}
+        </label>
 
         {error && (
-          <p className="text-destructive text-xs font-medium mt-1">
+          <p className="text-destructive 3xl:text-xs mt-1 text-xs font-medium xl:text-[11px]">
             {error.message}
           </p>
         )}
@@ -64,14 +73,17 @@ export const FormField = (props: FormFieldProps) => {
           {...register}
           className={cn(
             fieldClassName,
-            "min-h-32 resize-none px-4 py-3 text-[15px] leading-7",
+            `3xl:min-h-32 3xl:py-3 3xl:text-[15px] 3xl:leading-7 min-h-32 resize-none px-4 py-3 text-[15px] leading-7 xl:min-h-28 xl:px-3.5 xl:py-2.5 xl:text-[14px] xl:leading-6 2xl:min-h-30 2xl:px-4`,
           )}
         />
       ) : (
         <input
           {...(rest as InputHTMLAttributes<HTMLInputElement>)}
           {...register}
-          className={cn(fieldClassName, "h-12 px-4 text-[15px]")}
+          className={cn(
+            fieldClassName,
+            `3xl:h-12 3xl:text-[15px] h-12 px-4 text-[15px] xl:h-11 xl:px-3.5 xl:text-[14px] 2xl:h-11.5 2xl:px-4`,
+          )}
         />
       )}
     </div>

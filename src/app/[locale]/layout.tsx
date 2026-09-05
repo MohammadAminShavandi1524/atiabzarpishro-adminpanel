@@ -11,9 +11,12 @@ import {
   Space_Grotesk,
   Noto_Serif,
 } from "next/font/google";
+
+import { Metadata } from "next";
+
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { Metadata } from "next";
+
 import { ThemeProvider } from "@/components/theme/Providers";
 import AppToaster from "@/components/AppToaster";
 import Sidebar from "@/components/layout/Sidebar";
@@ -77,6 +80,7 @@ export default async function LocaleLayout({
   params,
 }: LayoutProps<"/[locale]">) {
   const { locale } = await params;
+
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
@@ -95,8 +99,7 @@ export default async function LocaleLayout({
           playfair.variable,
           space.variable,
           notoSerif.variable,
-
-          locale === "fa" ? "font-IRANYekanX" : space.className,
+          locale === "fa" ? "font-IRANYekanX" : "font-sans",
         )}
       >
         <NextIntlClientProvider>

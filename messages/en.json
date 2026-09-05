@@ -50,10 +50,10 @@
 
   "Login": {
     "brand": "ATI ABZAR PISHRO",
-    "panel": "Administration Panel",
+    "panel": "Management Panel",
 
     "title": "Sign in to your account",
-    "description": "Enter your account credentials to access the administration panel.",
+    "description": "Enter your account credentials to access the management panel.",
 
     "email": "Email",
     "emailPlaceholder": "Enter your email",

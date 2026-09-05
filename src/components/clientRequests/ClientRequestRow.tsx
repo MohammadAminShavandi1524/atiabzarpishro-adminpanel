@@ -91,60 +91,53 @@ export default function ClientRequestRow({
         onClick={() => setDetailsOpen(true)}
         className="group/request border-border bg-background hover:border-border-secondary hover:bg-card-secondary/40 relative cursor-pointer border transition-[background-color,border-color] duration-300"
       >
-        {/* Hover Indicator */}
         <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/request:scale-y-100" />
 
-        <div className="grid min-h-[76px] grid-cols-[60px_1.25fr_1.15fr_1.45fr_1.15fr_2fr_135px_110px] items-center gap-4 px-5 py-3">
-          {/* ID */}
+        <div className="3xl:min-h-[76px] 3xl:grid-cols-[60px_1.25fr_1.15fr_1.45fr_1.15fr_2fr_135px_110px] 3xl:gap-4 3xl:px-5 3xl:py-3 grid min-h-[76px] grid-cols-[60px_1.25fr_1.15fr_1.45fr_1.15fr_2fr_135px_110px] items-center gap-4 px-5 py-3 xl:min-h-[66px] xl:grid-cols-[46px_1.15fr_1fr_1.25fr_1fr_1.55fr_110px_86px] xl:gap-2.5 xl:px-3 xl:py-2.5 2xl:min-h-[71px] 2xl:grid-cols-[52px_1.2fr_1.05fr_1.35fr_1.05fr_1.75fr_120px_96px] 2xl:gap-3 2xl:px-4">
           <div
             dir={locale === "fa" ? "rtl" : "ltr"}
-            className="text-muted-foreground font-mono text-sm"
+            className="text-muted-foreground 3xl:text-sm font-mono text-sm xl:text-[12px] 2xl:text-[13px]"
           >
             {locale === "fa"
               ? `${englishToPersianNumber(String(request.id))}#`
               : `#${request.id}`}
           </div>
 
-          {/* Full Name */}
           <div className="min-w-0">
-            <p className="text-foreground truncate text-[15px] font-medium">
+            <p className="text-foreground 3xl:text-[15px] truncate text-[15px] font-medium xl:text-[13px] 2xl:text-[14px]">
               {request.full_name}
             </p>
           </div>
 
-          {/* Phone */}
-          <div className="text-muted-foreground min-w-0 truncate text-sm">
+          <div className="text-muted-foreground 3xl:text-sm min-w-0 truncate text-sm xl:text-[12px] 2xl:text-[13px]">
             {request.phone_number}
           </div>
 
-          {/* Email */}
           <div className="min-w-0" onClick={(event) => event.stopPropagation()}>
             <a
               href={`mailto:${request.email}`}
-              className="text-muted-foreground hover:text-custom-primary block truncate text-sm transition-colors duration-300"
+              className="text-muted-foreground hover:text-custom-primary 3xl:text-sm block truncate text-sm transition-colors duration-300 xl:text-[12px] 2xl:text-[13px]"
             >
               {request.email}
             </a>
           </div>
 
-          {/* Company */}
           <div className="min-w-0">
-            <p className="text-foreground truncate text-sm">
+            <p className="text-foreground 3xl:text-sm truncate text-sm xl:text-[12px] 2xl:text-[13px]">
               {request.company}
             </p>
           </div>
 
-          {/* Message */}
-          <div className="min-w-0 pe-3">
-            <p className="text-muted-foreground line-clamp-2 text-sm leading-6">
+          <div className="3xl:pe-3 min-w-0 pe-3 xl:pe-1 2xl:pe-2">
+            <p className="text-muted-foreground 3xl:text-sm 3xl:leading-6 line-clamp-2 text-sm leading-6 xl:text-[12px] xl:leading-5 2xl:text-[13px]">
               {request.message}
             </p>
           </div>
 
-          {/* Date */}
-          <div className="text-muted-foreground text-sm">{formattedDate}</div>
+          <div className="text-muted-foreground 3xl:text-sm text-sm xl:text-[12px] 2xl:text-[13px]">
+            {formattedDate}
+          </div>
 
-          {/* Actions */}
           <div
             className="flex justify-center"
             onClick={(event) => event.stopPropagation()}
@@ -157,8 +150,13 @@ export default function ClientRequestRow({
               variant="soft"
               duration={800}
               onComplete={handleDelete}
-              leftSection={<Trash2 size={16} strokeWidth={1.8} />}
-              className="h-9 px-3 text-sm"
+              leftSection={
+                <Trash2
+                  strokeWidth={1.8}
+                  className="3xl:size-4 size-4 xl:size-3.5"
+                />
+              }
+              className="3xl:h-9 3xl:px-3 3xl:text-sm h-9 px-3 text-sm xl:h-8 xl:px-2.5 xl:text-[12px] 2xl:text-[13px]"
             >
               {t("actions.delete")}
             </CustomHoldButton>

@@ -13,9 +13,9 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 
 import DashboardStatCard from "./DashboardStatCard";
+import DashboardQuickActions from "./DashboardQuickActions";
 
 import { getDashboardStats, type DashboardStats } from "./dashboard.api";
-import DashboardQuickActions from "./DashboardQuickActions";
 
 const DashboardPage = () => {
   const t = useTranslations("Dashboard");
@@ -88,7 +88,15 @@ const DashboardPage = () => {
 
   if (loading) {
     return (
-      <div className="border-border bg-card flex min-h-[420px] items-center justify-center border">
+      <div
+        className="
+          border-border bg-card
+          flex min-h-[420px] items-center justify-center border
+          xl:min-h-[360px]
+          2xl:min-h-[390px]
+          3xl:min-h-[420px]
+        "
+      >
         <div className="flex items-center gap-3">
           <span className="border-custom-primary size-5 animate-spin rounded-full border-2 border-t-transparent" />
 
@@ -101,7 +109,13 @@ const DashboardPage = () => {
   return (
     <>
       <section>
-        <div className="space-y-3">
+        <div
+          className="
+            space-y-3
+            xl:space-y-2.5
+            3xl:space-y-3
+          "
+        >
           {items.map((item) => (
             <DashboardStatCard
               key={item.key}

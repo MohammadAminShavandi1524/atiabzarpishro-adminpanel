@@ -45,20 +45,19 @@ const DashboardQuickActions = () => {
   ];
 
   return (
-    <section className="mt-8">
-      <div className="mb-4 flex items-center gap-3">
+    <section className="3xl:mt-8 mt-8 xl:mt-6 2xl:mt-7">
+      <div className="3xl:mb-4 3xl:gap-3 mb-4 flex items-center gap-3 xl:mb-3 xl:gap-2.5">
         <CirclePlus
-          size={18}
           strokeWidth={1.7}
-          className="text-custom-primary"
+          className="text-custom-primary 3xl:size-[18px] size-[18px] xl:size-4"
         />
 
-        <h2 className="text-foreground text-base font-semibold">
+        <h2 className="text-foreground 3xl:text-base text-base font-semibold xl:text-[15px]">
           {t("quickActions.title")}
         </h2>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
+      <div className="3xl:gap-3 grid grid-cols-4 gap-3 xl:gap-2.5">
         {items.map((item) => {
           const Icon = item.icon;
 
@@ -66,22 +65,20 @@ const DashboardQuickActions = () => {
             <Link
               key={item.key}
               href={item.href}
-              className="group/action border-border bg-background hover:border-custom-primary/40 hover:bg-card-secondary/40 flex min-h-[82px] items-center gap-4 border px-5 transition-[background-color,border-color] duration-300"
+              className="group/action border-border bg-background hover:border-custom-primary/40 hover:bg-card-secondary/40 3xl:min-h-[82px] 3xl:gap-4 3xl:px-5 flex min-h-[82px] items-center gap-4 border px-5 transition-[background-color,border-color] duration-300 xl:min-h-[72px] xl:gap-3 xl:px-4 2xl:min-h-[76px]"
             >
               <Icon
-                size={21}
                 strokeWidth={1.7}
-                className="text-custom-primary shrink-0"
+                className="text-custom-primary 3xl:size-[21px] size-[21px] shrink-0 xl:size-5"
               />
 
-              <span className="text-foreground text-sm font-medium">
+              <span className="text-foreground text-sm font-medium xl:text-[13px] 2xl:text-sm">
                 {item.title}
               </span>
 
               <CirclePlus
-                size={17}
                 strokeWidth={1.6}
-                className="text-muted-foreground group-hover/action:text-custom-primary ms-auto transition-colors duration-300"
+                className="text-muted-foreground group-hover/action:text-custom-primary 3xl:size-[17px] ms-auto size-[17px] shrink-0 transition-colors duration-300 xl:size-4"
               />
             </Link>
           );

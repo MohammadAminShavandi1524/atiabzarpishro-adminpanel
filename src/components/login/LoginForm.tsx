@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
+
 import { useLocale, useTranslations } from "next-intl";
 
 import { LogIn } from "lucide-react";
@@ -12,6 +13,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 import { CustomButton } from "@/components/ui/custom-button";
+
 import { FormField } from "../FormField";
 
 import { createLoginSchema, type LoginFormValues } from "./login.schema";
@@ -212,18 +214,18 @@ export default function LoginForm() {
     <div
       ref={containerRef}
       dir={isRTL ? "rtl" : "ltr"}
-      className="relative z-10 w-full max-w-[460px]"
+      className="3xl:max-w-[460px] relative z-10 w-full max-w-[460px] xl:max-w-[410px] 2xl:max-w-[435px]"
     >
-      <div className="login-card border-border bg-card border p-8">
+      <div className="login-card border-border bg-card 3xl:p-8 border p-8 xl:p-6 2xl:p-7">
         {/* Brand */}
-        <div className="login-brand relative mb-7 pb-5">
+        <div className="login-brand 3xl:mb-7 3xl:pb-5 relative mb-7 pb-5 xl:mb-6 xl:pb-4 2xl:mb-6.5">
           <div className="flex items-center gap-2.5">
             <div className="flex min-w-0 flex-col">
-              <div className="text-foreground text-[20px] leading-none font-semibold">
+              <div className="text-foreground 3xl:text-[20px] text-[20px] leading-none font-semibold xl:text-[18px] 2xl:text-[19px]">
                 {t("brand")}
               </div>
 
-              <div className="text-muted-foreground mt-1.5 text-[16px]">
+              <div className="text-muted-foreground 3xl:mt-1.5 3xl:text-[16px] mt-1.5 text-[16px] xl:mt-1 xl:text-[14px] 2xl:text-[15px]">
                 {t("panel")}
               </div>
             </div>
@@ -236,7 +238,7 @@ export default function LoginForm() {
         <form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
-          className="space-y-5"
+          className="3xl:space-y-5 space-y-5 xl:space-y-4 2xl:space-y-4.5"
         >
           <div className="login-field">
             <FormField
@@ -246,7 +248,6 @@ export default function LoginForm() {
               placeholder={t("emailPlaceholder")}
               register={register("email")}
               error={errors.email}
-              containerClassName="[&_input]:h-[50px] [&_input]:text-[15px] [&_label]:text-[15px]"
             />
           </div>
 
@@ -258,28 +259,24 @@ export default function LoginForm() {
               placeholder={t("passwordPlaceholder")}
               register={register("password")}
               error={errors.password}
-              containerClassName="[&_input]:h-[50px] [&_input]:text-[15px] [&_label]:text-[15px]"
             />
           </div>
 
           {/* Server Error */}
-          <div
-            ref={errorRef}
-            className="h-0 overflow-hidden opacity-0"
-          >
+          <div ref={errorRef} className="h-0 overflow-hidden opacity-0">
             {errors.root?.message && (
               <div
                 role="alert"
-                className="border-destructive/30 bg-destructive/5 border px-4 py-3"
+                className="border-destructive/30 bg-destructive/5 3xl:px-4 3xl:py-3 border px-4 py-3 xl:px-3.5 xl:py-2.5"
               >
-                <p className="text-destructive text-sm">
+                <p className="text-destructive 3xl:text-sm text-sm xl:text-[13px]">
                   {errors.root.message}
                 </p>
               </div>
             )}
           </div>
 
-          <div className="login-submit mt-8">
+          <div className="login-submit 3xl:mt-8 mt-8 xl:mt-6 2xl:mt-7">
             <CustomButton
               type="submit"
               intent="primary"
@@ -288,11 +285,11 @@ export default function LoginForm() {
               loading={isSubmitting}
               leftSection={
                 <LogIn
-                  size={19}
                   strokeWidth={1.8}
+                  className="3xl:size-[19px] size-[19px] xl:size-[17px]"
                 />
               }
-              className="h-[50px] w-full text-[15px]"
+              className="3xl:h-[50px] 3xl:text-[15px] h-[50px] w-full text-[15px] xl:h-[46px] xl:text-[14px] 2xl:h-[48px]"
             >
               {t("submit")}
             </CustomButton>
@@ -300,8 +297,8 @@ export default function LoginForm() {
         </form>
 
         {/* Security Note */}
-        <div className="login-footer border-border mt-7 border-t pt-5">
-          <p className="text-muted-foreground text-center text-xs leading-5">
+        <div className="login-footer border-border 3xl:mt-7 3xl:pt-5 mt-7 border-t pt-5 xl:mt-6 xl:pt-4">
+          <p className="text-muted-foreground 3xl:text-xs 3xl:leading-5 text-center text-xs leading-5 xl:text-[11px] xl:leading-[18px]">
             {t("restricted")}
           </p>
         </div>

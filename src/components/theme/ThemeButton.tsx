@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { Moon, Sun } from "lucide-react";
+
 import { useTheme } from "next-themes";
 
 import { cn } from "@/lib/utils";
 
 export function ThemeButton() {
   const { theme, setTheme } = useTheme();
+
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -39,18 +42,22 @@ export function ThemeButton() {
         "dark:shadow-[0_2px_12px_rgba(0,0,0,0.15)]",
         "dark:hover:bg-secondary",
         "dark:hover:shadow-[0_4px_20px_rgba(244,154,52,0.08)]",
+
+        "xl:size-11",
+        "2xl:size-12",
+        "3xl:size-13",
       )}
     >
       <span className="relative flex items-center justify-center">
         {isDark ? (
           <Sun
             strokeWidth={1.7}
-            className="size-6 transition-[color,stroke-width] duration-300"
+            className="3xl:size-6 size-6 transition-[color,stroke-width] duration-300 xl:size-5"
           />
         ) : (
           <Moon
             strokeWidth={1.7}
-            className="size-6 transition-[color,stroke-width] duration-300"
+            className="3xl:size-6 size-6 transition-[color,stroke-width] duration-300 xl:size-5"
           />
         )}
       </span>

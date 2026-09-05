@@ -1,11 +1,9 @@
 import { use } from "react";
 
 import { Locale, useTranslations } from "next-intl";
-
 import { setRequestLocale } from "next-intl/server";
 
 import HeaderLayout from "@/components/layout/HeaderLayout";
-
 import DashboardPage from "@/components/dashboard/DashboardPage";
 
 export default function IndexPage({ params }: PageProps<"/[locale]">) {
@@ -22,7 +20,7 @@ export default function IndexPage({ params }: PageProps<"/[locale]">) {
         descrption={t("header.description")}
       />
 
-      <div className="flex flex-1 flex-col px-8 py-6">
+      <div className="3xl:px-8 3xl:py-6 flex flex-1 flex-col px-8 py-6 xl:px-5 xl:py-5 2xl:px-6">
         <DashboardPage />
       </div>
     </div>

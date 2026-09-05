@@ -131,21 +131,23 @@ const HeaderLayout = ({ title, descrption, className }: HeaderLayoutProps) => {
     <div
       ref={headerRef}
       className={cn(
-        "border-b-border-secondary flex shrink-0 justify-between border-b px-8 py-6",
+        `border-b-border-secondary 3xl:px-8 3xl:py-6 flex shrink-0 items-center justify-between border-b px-8 py-6 xl:px-5 xl:py-5 2xl:px-6`,
         className,
       )}
     >
       {/* Page Info */}
-      <div>
-        <h1 className="header-title mb-2 text-[26px] font-semibold">{title}</h1>
+      <div className="min-w-0 pe-6">
+        <h1 className="header-title 3xl:text-[26px] mb-2 text-[26px] font-semibold xl:text-[22px] 2xl:text-[24px]">
+          {title}
+        </h1>
 
-        <p className="header-description text-muted-foreground text-lg">
+        <p className="header-description text-muted-foreground 3xl:text-lg text-lg xl:text-base 2xl:text-[17px]">
           {descrption}
         </p>
       </div>
 
       {/* Controls */}
-      <div className="flex items-center gap-x-2 pe-4">
+      <div className="3xl:pe-4 flex shrink-0 items-center gap-x-2 pe-4 xl:gap-x-1.5 xl:pe-0 2xl:gap-x-2">
         <div className="header-control">
           <ThemeButton />
         </div>
@@ -160,10 +162,10 @@ const HeaderLayout = ({ title, descrption, className }: HeaderLayoutProps) => {
             variant="solid"
             size="lg"
             leftSection={
-              <LogOut className="size-5 transition-transform duration-300 group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5" />
+              <LogOut className="3xl:size-5 size-5 transition-transform duration-300 group-hover:-translate-x-0.5 xl:size-4.5 rtl:group-hover:translate-x-0.5" />
             }
             onClick={handleLogout}
-            className="group h-13"
+            className="group 3xl:h-13 3xl:px-5 3xl:text-[15px] h-13 xl:h-11 xl:px-4 xl:text-sm 2xl:h-12"
           >
             {locale === "en" ? "Log out" : "خروج"}
           </CustomButton>

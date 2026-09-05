@@ -1,10 +1,15 @@
 "use client";
 
 import { useTransition } from "react";
+
 import { useParams } from "next/navigation";
+
 import { usePathname, useRouter } from "@/i18n/navigation";
+
 import { Locale, useLocale } from "next-intl";
-import { ArrowLeftRight, Earth, MoveRight } from "lucide-react";
+
+import { ArrowLeftRight, Earth } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -13,9 +18,12 @@ type Props = {
 
 export default function LanguageSwitcher({ defaultLocale }: Props) {
   const router = useRouter();
+
   const [isPending, startTransition] = useTransition();
+
   const pathname = usePathname();
   const params = useParams();
+
   const locale = useLocale();
 
   const nextLocale = defaultLocale === "fa" ? "en" : "fa";
@@ -54,14 +62,18 @@ export default function LanguageSwitcher({ defaultLocale }: Props) {
         "dark:shadow-[0_2px_12px_rgba(0,0,0,0.15)]",
         "dark:hover:bg-secondary",
         "dark:hover:shadow-[0_4px_20px_rgba(244,154,52,0.08)]",
+
+        "xl:h-11 xl:gap-x-1 xl:ps-2 xl:pe-3",
+        "2xl:h-12 2xl:gap-x-1.5 2xl:ps-2.5",
+        "3xl:h-13 3xl:pe-4",
+
         isPending && "pointer-events-none opacity-50",
       )}
     >
       {/* Globe */}
       <span
         className={cn(
-          "relative flex items-center justify-center p-1",
-          "overflow-hidden",
+          "relative flex items-center justify-center overflow-hidden p-1",
           "bg-background",
           "border-border border",
           "transition-all duration-300",
@@ -76,33 +88,41 @@ export default function LanguageSwitcher({ defaultLocale }: Props) {
             "text-muted-foreground",
             "transition-all duration-500",
             "group-hover:text-accent",
+
+            "xl:size-5",
+            "3xl:size-[22px]",
           )}
         />
       </span>
 
       {/* Language */}
-      <span className="mt-px flex items-center gap-x-1.5">
-        {/* Current */}
+      <span className="3xl:gap-x-1.5 mt-px flex items-center gap-x-1.5 xl:gap-x-1">
         <span
           className={cn(
             "text-base font-semibold tracking-wide",
             "text-foreground",
             "transition-colors duration-300",
+
+            "xl:text-sm",
+            "2xl:text-[15px]",
+            "3xl:text-base",
           )}
         >
           {currentLanguage}
         </span>
 
-        {/* Divider */}
         <span className="bg-border-secondary/60 mb-0.5 h-3.5 w-px" />
 
-        {/* Target */}
         <span
           className={cn(
             "text-base font-medium",
             "text-muted-foreground",
             "transition-colors duration-300",
             "group-hover:text-accent",
+
+            "xl:text-sm",
+            "2xl:text-[15px]",
+            "3xl:text-base",
           )}
         >
           {targetLanguage}
@@ -116,6 +136,10 @@ export default function LanguageSwitcher({ defaultLocale }: Props) {
           "text-muted-foreground",
           "transition-all duration-300",
           "group-hover:text-accent",
+
+          "xl:ms-0.5",
+          "3xl:ms-1",
+
           locale === "fa" && "mb-0.5",
         )}
       >
@@ -125,6 +149,9 @@ export default function LanguageSwitcher({ defaultLocale }: Props) {
             "size-[20px]",
             "transition-all duration-500 ease-out",
             "group-hover:scale-x-110",
+
+            "xl:size-[18px]",
+            "3xl:size-[20px]",
           )}
         />
       </span>

@@ -37,7 +37,6 @@ const Sidebar = () => {
   const t = useTranslations("Sidebar");
 
   const locale = useLocale();
-
   const pathname = usePathname();
 
   const sidebarRef = useRef<HTMLElement>(null);
@@ -117,17 +116,19 @@ const Sidebar = () => {
   return (
     <aside
       ref={sidebarRef}
-      className="border-e-border-secondary flex h-screen w-75 flex-col border-e pb-4"
+      className="border-e-border-secondary 3xl:w-75 flex h-screen w-75 shrink-0 flex-col border-e pb-4 xl:w-64 2xl:w-68"
     >
       {/* Header */}
-      <div className="sidebar-brand mb-4 shrink-0 px-5">
-        <div className="border-b-border-secondary flex w-full items-center gap-x-2.25 border-b ps-1 pt-4 pb-4">
+      <div className="sidebar-brand 3xl:px-5 mb-4 shrink-0 px-5 xl:px-3.5 2xl:px-4">
+        <div className="border-b-border-secondary 3xl:gap-x-2.25 flex w-full items-center gap-x-2.25 border-b ps-1 pt-4 pb-4 xl:gap-x-2 xl:pt-3.5 xl:pb-3.5 2xl:pt-4 2xl:pb-4">
           <Logo />
 
-          <div className="flex flex-col">
-            <div className="text-xl font-medium">{t("logoTitle")}</div>
+          <div className="flex min-w-0 flex-col">
+            <div className="3xl:text-lg truncate text-lg font-medium xl:text-[16px] 2xl:text-[17px]">
+              {t("logoTitle")}
+            </div>
 
-            <div className="text-muted-foreground text-sm">
+            <div className="text-muted-foreground 3xl:text-sm truncate text-sm xl:text-[12px] 2xl:text-[13px]">
               {t("logoSubtitle")}
             </div>
           </div>
@@ -140,7 +141,7 @@ const Sidebar = () => {
         className="min-h-0 flex-1"
         scrollBarClassName="me-1.5"
       >
-        <nav className="flex flex-col gap-y-3.5 px-5">
+        <nav className="3xl:gap-y-3.5 3xl:px-5 flex flex-col gap-y-3.5 px-5 xl:gap-y-2.5 xl:px-3.5 2xl:gap-y-3 2xl:px-4">
           {/* Overview */}
           <div className="sidebar-section">
             <SideBarItemHeader label={t("overview")} />
