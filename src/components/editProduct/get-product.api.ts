@@ -4,8 +4,8 @@ export interface ProductDetails {
   name_en: string;
   name_fa: string;
 
-  description_en: string;
-  description_fa: string;
+  description_en: string | null;
+  description_fa: string | null;
 
   brand: {
     id: number;

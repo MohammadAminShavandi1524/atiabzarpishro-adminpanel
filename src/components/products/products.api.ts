@@ -20,12 +20,14 @@ export interface Product {
   name_en: string;
   name_fa: string;
 
-  description_en: string;
-  description_fa: string;
+  description_en: string | null;
+  description_fa: string | null;
 
   brand: ProductBrand;
 
   image: string;
+
+  index: number;
 
   created: string;
 }
@@ -39,11 +41,7 @@ export const getProducts = async (): Promise<Product[]> => {
   if (!response.ok) {
     const error = await response.json().catch(() => null);
 
-    throw new Error(
-      error?.error ??
-        error?.detail ??
-        "Failed to get products",
-    );
+    throw new Error(error?.error ?? error?.detail ?? "Failed to get products");
   }
 
   return response.json();

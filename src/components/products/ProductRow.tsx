@@ -6,7 +6,7 @@ import { type Dispatch, type SetStateAction } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Eye, Pencil, Trash2 } from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -20,13 +20,21 @@ import type { Product } from "./products.api";
 
 import { deleteProduct } from "./delete-product.api";
 
+import { increaseProductIndex, reduceProductIndex } from "./product-index.api";
+
 interface ProductRowProps {
   product: Product;
 
   setProducts: Dispatch<SetStateAction<Product[]>>;
+
+  refreshProducts: () => Promise<void>;
 }
 
-export default function ProductRow({ product, setProducts }: ProductRowProps) {
+export default function ProductRow({
+  product,
+  setProducts,
+  refreshProducts,
+}: ProductRowProps) {
   const locale = useLocale();
 
   const t = useTranslations("Products");
@@ -51,6 +59,42 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
     }
   };
 
+  const handleIncreaseIndex = async () => {
+    const result = await increaseProductIndex(product.id);
+
+    if (!result.success) {
+      if (result.message === "Category is at the last index") {
+        toast.error(t("toast.order.lastIndex"));
+
+        return;
+      }
+
+      toast.error(t("toast.order.error"));
+
+      return;
+    }
+
+    await refreshProducts();
+  };
+
+  const handleReduceIndex = async () => {
+    const result = await reduceProductIndex(product.id);
+
+    if (!result.success) {
+      if (result.message === "Category is at the first index") {
+        toast.error(t("toast.order.firstIndex"));
+
+        return;
+      }
+
+      toast.error(t("toast.order.error"));
+
+      return;
+    }
+
+    await refreshProducts();
+  };
+
   const handleViewImage = () => {
     window.open(product.image, "_blank", "noopener,noreferrer");
   };
@@ -60,7 +104,7 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
       {/* Hover Indicator */}
       <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/product:scale-y-100" />
 
-      <div className="grid min-h-[94px] grid-cols-[60px_1fr_1fr_100px_1fr_1.4fr_1.4fr_135px_220px] items-center gap-4 px-5 py-3">
+      <div className="grid min-h-[94px] grid-cols-[60px_1fr_1fr_100px_1fr_1.4fr_1.4fr_135px_260px] items-center gap-4 px-5 py-3">
         {/* ID */}
         <div className="text-muted-foreground text-sm">
           {locale === "fa"
@@ -134,6 +178,26 @@ export default function ProductRow({ product, setProducts }: ProductRowProps) {
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-2">
+          <div className="flex items-center">
+            <button
+              type="button"
+              onClick={handleReduceIndex}
+              aria-label={t("actions.moveUp")}
+              className="border-border-secondary text-muted-foreground hover:border-custom-primary/40 hover:text-custom-primary flex size-9 cursor-pointer items-center justify-center border transition-colors"
+            >
+              <ChevronUp size={17} strokeWidth={1.8} />
+            </button>
+
+            <button
+              type="button"
+              onClick={handleIncreaseIndex}
+              aria-label={t("actions.moveDown")}
+              className="border-border-secondary text-muted-foreground hover:border-custom-primary/40 hover:text-custom-primary flex size-9 cursor-pointer items-center justify-center border border-s-0 transition-colors"
+            >
+              <ChevronDown size={17} strokeWidth={1.8} />
+            </button>
+          </div>
+
           {/* Edit */}
           <CustomButton
             type="button"

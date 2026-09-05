@@ -61,15 +61,9 @@ const EditProductForm = ({ productId }: EditProductFormProps) => {
 
     name_fa: z.string().trim().min(1, t("validation.nameFaRequired")),
 
-    description_en: z
-      .string()
-      .trim()
-      .min(1, t("validation.descriptionEnRequired")),
+    description_en: z.string().trim(),
 
-    description_fa: z
-      .string()
-      .trim()
-      .min(1, t("validation.descriptionFaRequired")),
+    description_fa: z.string().trim(),
 
     brand_id: z.number().int().positive(t("validation.brandRequired")),
 
@@ -124,9 +118,9 @@ const EditProductForm = ({ productId }: EditProductFormProps) => {
 
           name_fa: product.name_fa,
 
-          description_en: product.description_en,
+          description_en: product.description_en ?? "",
 
-          description_fa: product.description_fa,
+          description_fa: product.description_fa ?? "",
 
           brand_id: product.brand.id,
 
@@ -256,9 +250,9 @@ const EditProductForm = ({ productId }: EditProductFormProps) => {
 
         name_fa: data.name_fa,
 
-        description_en: data.description_en,
+        description_en: data.description_en || null,
 
-        description_fa: data.description_fa,
+        description_fa: data.description_fa || null,
 
         brand_id: data.brand_id,
 

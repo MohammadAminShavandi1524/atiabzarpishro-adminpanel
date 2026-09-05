@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { z } from "zod";
-
 import { useLocale, useTranslations } from "next-intl";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +16,13 @@ import { useCustomToast } from "@/components/ui/custom-toast";
 
 import BrandSelect from "../BrandSelect";
 import ProductImageUploadField from "../ProductImageUploadField";
+
+import {
+  createProductSchema,
+  type ProductFormValues,
+} from "./product-form.schema";
+
+import type { CreateProductPayload } from "./create-product.types";
 
 interface UploadResponse {
   success: boolean;
@@ -35,45 +40,7 @@ export default function ProductForm() {
 
   const [isImageFinalizing, setIsImageFinalizing] = useState(false);
 
-  const schema = z.object({
-    name_en: z
-      .string()
-      .trim()
-      .min(1, t("validation.nameEnRequired")),
-
-    name_fa: z
-      .string()
-      .trim()
-      .min(1, t("validation.nameFaRequired")),
-
-    description_en: z
-      .string()
-      .trim()
-      .min(1, t("validation.descriptionEnRequired")),
-
-    description_fa: z
-      .string()
-      .trim()
-      .min(1, t("validation.descriptionFaRequired")),
-
-    brand_id: z
-      .number()
-      .int()
-      .positive(t("validation.brandRequired")),
-
-    image: z
-      .custom<File>((value) => value instanceof File, {
-        message: t("validation.imageRequired"),
-      })
-      .refine(
-        (file) => file instanceof File && file.type.startsWith("image/"),
-        {
-          message: t("validation.imageInvalid"),
-        },
-      ),
-  });
-
-  type FormValues = z.infer<typeof schema>;
+  const schema = createProductSchema(t);
 
   const {
     register,
@@ -81,11 +48,8 @@ export default function ProductForm() {
     handleSubmit,
     reset,
 
-    formState: {
-      errors,
-      isSubmitting,
-    },
-  } = useForm<FormValues>({
+    formState: { errors, isSubmitting },
+  } = useForm<ProductFormValues>({
     resolver: zodResolver(schema),
 
     defaultValues: {
@@ -135,9 +99,7 @@ export default function ProductForm() {
           return;
         }
 
-        const rawProgress = Math.round(
-          (event.loaded / event.total) * 100,
-        );
+        const rawProgress = Math.round((event.loaded / event.total) * 100);
 
         onProgress(Math.min(rawProgress, 95));
       };
@@ -192,7 +154,7 @@ export default function ProductForm() {
     });
   };
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (data: ProductFormValues) => {
     try {
       setImageUploadProgress(0);
 
@@ -208,14 +170,14 @@ export default function ProductForm() {
         onFinalizing: setIsImageFinalizing,
       });
 
-      const payload = {
+      const payload: CreateProductPayload = {
         name_en: data.name_en,
 
         name_fa: data.name_fa,
 
-        description_en: data.description_en,
+        description_en: data.description_en || null,
 
-        description_fa: data.description_fa,
+        description_fa: data.description_fa || null,
 
         brand_id: data.brand_id,
 
@@ -314,7 +276,7 @@ export default function ProductForm() {
           dir={locale === "en" ? "ltr" : "rtl"}
           className="h-[520px] w-full pe-5"
         >
-          <div className="flex flex-col gap-y-7 ">
+          <div className="flex flex-col gap-y-7">
             {/* Names */}
             <div className="grid grid-cols-2 gap-6">
               <FormField
@@ -339,10 +301,7 @@ export default function ProductForm() {
               control={control}
               name="brand_id"
               render={({ field }) => (
-                <BrandSelect
-                  field={field}
-                  error={errors.brand_id}
-                />
+                <BrandSelect field={field} error={errors.brand_id} />
               )}
             />
 
@@ -397,10 +356,7 @@ export default function ProductForm() {
             className="bg-custom-primary text-primary-foreground flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting && (
-              <LoaderCircle
-                className="size-4 animate-spin"
-                strokeWidth={1.8}
-              />
+              <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
             )}
 
             {isImageFinalizing

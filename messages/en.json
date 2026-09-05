@@ -357,9 +357,7 @@
     "filters": {
       "searchPlaceholder": "Search products...",
       "brand": "Brand",
-      "allBrands": "All Brands",
-      "newestFirst": "Newest first",
-      "oldestFirst": "Oldest first"
+      "allBrands": "All Brands"
     },
 
     "table": {
@@ -377,7 +375,9 @@
     "actions": {
       "viewImage": "View Image",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "moveUp": "Move up",
+      "moveDown": "Move down"
     },
 
     "loading": "Loading products...",
@@ -391,6 +391,12 @@
       "delete": {
         "success": "Product deleted successfully.",
         "error": "Failed to delete product."
+      },
+
+      "order": {
+        "firstIndex": "This product is already at the first position.",
+        "lastIndex": "This product is already at the last position.",
+        "error": "Failed to update product order."
       }
     }
   },
@@ -413,12 +419,12 @@
       },
 
       "descriptionEn": {
-        "label": "Description (English)",
+        "label": "Description (English) — Optional",
         "placeholder": "Enter the product description in English"
       },
 
       "descriptionFa": {
-        "label": "Description (Persian)",
+        "label": "Description (Persian) — Optional",
         "placeholder": "Enter the product description in Persian"
       },
 
@@ -439,9 +445,6 @@
     "validation": {
       "nameEnRequired": "Please enter the product name in English.",
       "nameFaRequired": "Please enter the product name in Persian.",
-
-      "descriptionEnRequired": "Please enter the product description in English.",
-      "descriptionFaRequired": "Please enter the product description in Persian.",
 
       "brandRequired": "Please select a brand.",
 
@@ -475,12 +478,12 @@
       },
 
       "descriptionEn": {
-        "label": "Description (English)",
+        "label": "Description (English) — Optional",
         "placeholder": "Enter the product description in English"
       },
 
       "descriptionFa": {
-        "label": "Description (Persian)",
+        "label": "Description (Persian) — Optional",
         "placeholder": "Enter the product description in Persian"
       },
 
@@ -504,9 +507,6 @@
     "validation": {
       "nameEnRequired": "Please enter the product name in English.",
       "nameFaRequired": "Please enter the product name in Persian.",
-
-      "descriptionEnRequired": "Please enter the product description in English.",
-      "descriptionFaRequired": "Please enter the product description in Persian.",
 
       "brandRequired": "Please select a brand.",
 
