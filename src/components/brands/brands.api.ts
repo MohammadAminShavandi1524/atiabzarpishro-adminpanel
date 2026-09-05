@@ -2,14 +2,18 @@ export interface Brand {
   id: number;
 
   name_en: string;
+
   name_fa: string;
 
   description_en: string;
+
   description_fa: string;
 
   image: string;
 
   url: string;
+
+  index: number;
 
   created: string;
 }
@@ -17,6 +21,7 @@ export interface Brand {
 export const getBrands = async (): Promise<Brand[]> => {
   const response = await fetch("/api/brand/get", {
     method: "GET",
+
     cache: "no-store",
   });
 

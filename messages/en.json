@@ -177,9 +177,7 @@
     },
 
     "filters": {
-      "searchPlaceholder": "Search brands...",
-      "newestFirst": "Newest first",
-      "oldestFirst": "Oldest first"
+      "searchPlaceholder": "Search brands..."
     },
 
     "table": {
@@ -196,7 +194,9 @@
       "viewImage": "View Image",
       "website": "Visit Website",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "moveUp": "Move up",
+      "moveDown": "Move down"
     },
 
     "loading": "Loading brands...",
@@ -210,6 +210,11 @@
       "delete": {
         "success": "Brand deleted successfully.",
         "error": "Failed to delete brand."
+      },
+      "order": {
+        "firstIndex": "This brand is already at the first position.",
+        "lastIndex": "This brand is already at the last position.",
+        "error": "Failed to update brand order."
       }
     }
   },

@@ -6,7 +6,14 @@ import type { Dispatch, SetStateAction } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { ExternalLink, Eye, Pencil, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+  Eye,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -17,15 +24,24 @@ import { CustomButton, CustomHoldButton } from "@/components/ui/custom-button";
 import { useCustomToast } from "../ui/custom-toast";
 
 import type { Brand } from "./brands.api";
+
 import { deleteBrand } from "./delete-brand.api";
+
+import { increaseBrandIndex, reduceBrandIndex } from "./brand-index.api";
 
 interface BrandRowProps {
   brand: Brand;
 
   setBrands: Dispatch<SetStateAction<Brand[]>>;
+
+  refreshBrands: () => Promise<void>;
 }
 
-export default function BrandRow({ brand, setBrands }: BrandRowProps) {
+export default function BrandRow({
+  brand,
+  setBrands,
+  refreshBrands,
+}: BrandRowProps) {
   const locale = useLocale();
 
   const router = useRouter();
@@ -50,6 +66,48 @@ export default function BrandRow({ brand, setBrands }: BrandRowProps) {
     }
   };
 
+  const handleIncreaseIndex = async () => {
+    try {
+      await increaseBrandIndex(brand.id);
+
+      await refreshBrands();
+    } catch (error) {
+      console.error("INCREASE BRAND INDEX ERROR:", error);
+
+      if (
+        error instanceof Error &&
+        error.message === "Brand is at the last index"
+      ) {
+        toast.error(t("toast.order.lastIndex"));
+
+        return;
+      }
+
+      toast.error(t("toast.order.error"));
+    }
+  };
+
+  const handleReduceIndex = async () => {
+    try {
+      await reduceBrandIndex(brand.id);
+
+      await refreshBrands();
+    } catch (error) {
+      console.error("REDUCE BRAND INDEX ERROR:", error);
+
+      if (
+        error instanceof Error &&
+        error.message === "Brand is at the first index"
+      ) {
+        toast.error(t("toast.order.firstIndex"));
+
+        return;
+      }
+
+      toast.error(t("toast.order.error"));
+    }
+  };
+
   const handleViewImage = () => {
     window.open(brand.image, "_blank", "noopener,noreferrer");
   };
@@ -67,7 +125,7 @@ export default function BrandRow({ brand, setBrands }: BrandRowProps) {
       {/* Hover Indicator */}
       <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/brand:scale-y-100" />
 
-      <div className="grid min-h-[94px] grid-cols-[60px_1fr_110px_1.55fr_1.55fr_135px_310px] items-center gap-5 px-5 py-3">
+      <div className="grid min-h-[94px] grid-cols-[60px_1fr_110px_1.55fr_1.55fr_135px_400px] items-center gap-5 px-5 py-3">
         {/* ID */}
         <div className="text-muted-foreground text-sm">
           {locale === "fa"
@@ -121,6 +179,26 @@ export default function BrandRow({ brand, setBrands }: BrandRowProps) {
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-2">
+          <div className="flex items-center">
+            <button
+              type="button"
+              onClick={handleReduceIndex}
+              aria-label={t("actions.moveUp")}
+              className="border-border-secondary text-muted-foreground hover:border-custom-primary/40 hover:text-custom-primary flex size-9 cursor-pointer items-center justify-center border transition-colors"
+            >
+              <ChevronUp size={17} strokeWidth={1.8} />
+            </button>
+
+            <button
+              type="button"
+              onClick={handleIncreaseIndex}
+              aria-label={t("actions.moveDown")}
+              className="border-border-secondary text-muted-foreground hover:border-custom-primary/40 hover:text-custom-primary flex size-9 cursor-pointer items-center justify-center border border-s-0 transition-colors"
+            >
+              <ChevronDown size={17} strokeWidth={1.8} />
+            </button>
+          </div>
+
           {/* Website */}
           <CustomButton
             type="button"
