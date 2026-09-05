@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useLocale, useTranslations } from "next-intl";
 
 import { Search } from "lucide-react";
+
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 import HeaderLayout from "@/components/layout/HeaderLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -13,10 +16,14 @@ import { type Brand, getBrands } from "./brands.api";
 
 import BrandRow from "./BrandRow";
 
+gsap.registerPlugin(useGSAP);
+
 export default function BrandsPage() {
   const t = useTranslations("Brands");
 
   const locale = useLocale();
+
+  const pageRef = useRef<HTMLDivElement>(null);
 
   const [brands, setBrands] = useState<Brand[]>([]);
 
@@ -65,17 +72,79 @@ export default function BrandsPage() {
       .sort((a, b) => a.index - b.index);
   }, [brands, search]);
 
+  useGSAP(
+    () => {
+      if (!pageRef.current) return;
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (reduceMotion) return;
+
+      const timeline = gsap.timeline({
+        defaults: {
+          ease: "power3.out",
+        },
+      });
+
+      timeline.fromTo(
+        ".brands-panel",
+        {
+          opacity: 0,
+          y: 18,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.55,
+        },
+      );
+
+      timeline.fromTo(
+        ".brands-toolbar",
+        {
+          opacity: 0,
+          y: 10,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+        },
+        "-=0.25",
+      );
+
+      timeline.fromTo(
+        ".brands-header",
+        {
+          opacity: 0,
+          y: 8,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+        },
+        "-=0.2",
+      );
+    },
+    {
+      scope: pageRef,
+    },
+  );
+
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div ref={pageRef} className="flex min-h-0 flex-1 flex-col">
       <HeaderLayout
         title={t("header.title")}
         descrption={t("header.description")}
       />
 
       <div className="flex min-h-0 flex-1 flex-col px-8 py-6">
-        <section className="border-border bg-card flex min-h-0 flex-1 flex-col overflow-hidden border">
+        <section className="brands-panel border-border bg-card flex min-h-0 flex-1 flex-col overflow-hidden border">
           {/* Toolbar */}
-          <div className="border-border flex shrink-0 items-center justify-between gap-5 border-b p-5">
+          <div className="brands-toolbar border-border flex shrink-0 items-center justify-between gap-5 border-b p-5">
             <div className="relative w-full max-w-[520px]">
               <Search
                 size={19}
@@ -97,7 +166,7 @@ export default function BrandsPage() {
           {/* Table */}
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {/* Header */}
-            <div className="border-border bg-card-secondary shrink-0 border-b ps-9 pe-11">
+            <div className="brands-header border-border bg-card-secondary shrink-0 border-b ps-9 pe-11">
               <div className="text-muted-foreground grid h-13 grid-cols-[70px_1fr_110px_1.55fr_1.55fr_250px] items-center gap-5 text-sm font-semibold">
                 <div>{t("table.index")}</div>
 
@@ -113,7 +182,6 @@ export default function BrandsPage() {
               </div>
             </div>
 
-            {/* Content */}
             {loading ? (
               <div className="flex flex-1 items-center justify-center">
                 <div className="flex items-center gap-3">
@@ -131,12 +199,13 @@ export default function BrandsPage() {
                 scrollBarClassName="me-1.75"
               >
                 <div className="space-y-2.5 p-4 pe-6">
-                  {filteredBrands.map((brand) => (
+                  {filteredBrands.map((brand, index) => (
                     <BrandRow
                       key={brand.id}
                       brand={brand}
                       setBrands={setBrands}
                       refreshBrands={fetchBrands}
+                      animationIndex={index}
                     />
                   ))}
                 </div>

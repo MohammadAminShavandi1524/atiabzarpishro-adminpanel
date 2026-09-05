@@ -2,13 +2,16 @@
 
 import Image from "next/image";
 
-import type { Dispatch, SetStateAction } from "react";
+import { useRef, type Dispatch, type SetStateAction } from "react";
 
 import { useRouter } from "next/navigation";
 
 import { ChevronDown, ChevronUp, Eye, Pencil, Trash2 } from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
+
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 import { englishToPersianNumber } from "@/lib/utils";
 
@@ -22,18 +25,23 @@ import { deleteBrand } from "./delete-brand.api";
 
 import { increaseBrandIndex, reduceBrandIndex } from "./brand-index.api";
 
+gsap.registerPlugin(useGSAP);
+
 interface BrandRowProps {
   brand: Brand;
 
   setBrands: Dispatch<SetStateAction<Brand[]>>;
 
   refreshBrands: () => Promise<void>;
+
+  animationIndex?: number;
 }
 
 export default function BrandRow({
   brand,
   setBrands,
   refreshBrands,
+  animationIndex = 0,
 }: BrandRowProps) {
   const locale = useLocale();
 
@@ -42,6 +50,8 @@ export default function BrandRow({
   const toast = useCustomToast();
 
   const t = useTranslations("Brands");
+
+  const rowRef = useRef<HTMLElement>(null);
 
   const handleDelete = async () => {
     try {
@@ -85,8 +95,42 @@ export default function BrandRow({
     window.open(brand.image, "_blank", "noopener,noreferrer");
   };
 
+  useGSAP(
+    () => {
+      if (!rowRef.current) return;
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (reduceMotion) return;
+
+      gsap.fromTo(
+        rowRef.current,
+        {
+          opacity: 0,
+          y: 14,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+          delay: Math.min(animationIndex, 8) * 0.05,
+          ease: "power3.out",
+        },
+      );
+    },
+    {
+      scope: rowRef,
+    },
+  );
+
   return (
-    <article className="group/brand border-border bg-background hover:border-border-secondary hover:bg-card-secondary/40 relative border transition-[background-color,border-color] duration-300">
+    <article
+      ref={rowRef}
+      className="group/brand border-border bg-background hover:border-border-secondary hover:bg-card-secondary/40 relative border transition-[background-color,border-color] duration-300"
+    >
+      {/* Hover Indicator */}
       <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/brand:scale-y-100" />
 
       <div className="grid min-h-[94px] grid-cols-[70px_1fr_110px_1.55fr_1.55fr_250px] items-center gap-5 px-5 py-3">
