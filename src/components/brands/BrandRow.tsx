@@ -6,18 +6,11 @@ import type { Dispatch, SetStateAction } from "react";
 
 import { useRouter } from "next/navigation";
 
-import {
-  ChevronDown,
-  ChevronUp,
-  ExternalLink,
-  Eye,
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, Eye, Pencil, Trash2 } from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
 
-import { englishToPersianNumber, formatDate } from "@/lib/utils";
+import { englishToPersianNumber } from "@/lib/utils";
 
 import { CustomButton, CustomHoldButton } from "@/components/ui/custom-button";
 
@@ -50,8 +43,6 @@ export default function BrandRow({
 
   const t = useTranslations("Brands");
 
-  const formattedDate = formatDate(brand.created, locale);
-
   const handleDelete = async () => {
     try {
       await deleteBrand(brand.id);
@@ -74,15 +65,6 @@ export default function BrandRow({
     } catch (error) {
       console.error("INCREASE BRAND INDEX ERROR:", error);
 
-      if (
-        error instanceof Error &&
-        error.message === "Brand is at the last index"
-      ) {
-        toast.error(t("toast.order.lastIndex"));
-
-        return;
-      }
-
       toast.error(t("toast.order.error"));
     }
   };
@@ -95,15 +77,6 @@ export default function BrandRow({
     } catch (error) {
       console.error("REDUCE BRAND INDEX ERROR:", error);
 
-      if (
-        error instanceof Error &&
-        error.message === "Brand is at the first index"
-      ) {
-        toast.error(t("toast.order.firstIndex"));
-
-        return;
-      }
-
       toast.error(t("toast.order.error"));
     }
   };
@@ -112,25 +85,16 @@ export default function BrandRow({
     window.open(brand.image, "_blank", "noopener,noreferrer");
   };
 
-  const handleVisitWebsite = () => {
-    if (!brand.url) {
-      return;
-    }
-
-    window.open(brand.url, "_blank", "noopener,noreferrer");
-  };
-
   return (
     <article className="group/brand border-border bg-background hover:border-border-secondary hover:bg-card-secondary/40 relative border transition-[background-color,border-color] duration-300">
-      {/* Hover Indicator */}
       <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/brand:scale-y-100" />
 
-      <div className="grid min-h-[94px] grid-cols-[60px_1fr_110px_1.55fr_1.55fr_135px_400px] items-center gap-5 px-5 py-3">
-        {/* ID */}
-        <div className="text-muted-foreground text-sm">
+      <div className="grid min-h-[94px] grid-cols-[70px_1fr_110px_1.55fr_1.55fr_250px] items-center gap-5 px-5 py-3">
+        {/* Index */}
+        <div className="text-muted-foreground text-sm font-medium">
           {locale === "fa"
-            ? `${englishToPersianNumber(String(brand.id))}#`
-            : `#${brand.id}`}
+            ? englishToPersianNumber(String(brand.index))
+            : brand.index}
         </div>
 
         {/* Name */}
@@ -162,23 +126,20 @@ export default function BrandRow({
 
         {/* Description EN */}
         <div className="min-w-0">
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-6">
+          <p className="text-muted-foreground line-clamp-3 text-sm leading-6">
             {brand.description_en}
           </p>
         </div>
 
         {/* Description FA */}
         <div className="min-w-0">
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-6">
+          <p className="text-muted-foreground line-clamp-3 text-sm leading-6">
             {brand.description_fa}
           </p>
         </div>
 
-        {/* Date */}
-        <div className="text-muted-foreground text-sm">{formattedDate}</div>
-
         {/* Actions */}
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-end gap-1.5">
           <div className="flex items-center">
             <button
               type="button"
@@ -199,21 +160,6 @@ export default function BrandRow({
             </button>
           </div>
 
-          {/* Website */}
-          <CustomButton
-            type="button"
-            variant="soft"
-            intent="secondary"
-            size="sm"
-            onClick={handleVisitWebsite}
-            disabled={!brand.url}
-            leftSection={<ExternalLink size={16} strokeWidth={1.8} />}
-            className="h-9 px-3 text-sm"
-          >
-            {t("actions.website")}
-          </CustomButton>
-
-          {/* Edit */}
           <CustomButton
             type="button"
             variant="soft"
@@ -223,12 +169,11 @@ export default function BrandRow({
               router.push(`/${locale}/brands/${brand.id}/edit`);
             }}
             leftSection={<Pencil size={16} strokeWidth={1.8} />}
-            className="h-9 px-3 text-sm"
+            className="h-9 px-2.5 text-sm"
           >
             {t("actions.edit")}
           </CustomButton>
 
-          {/* Delete */}
           <CustomHoldButton
             type="button"
             intent="destructive"
@@ -236,7 +181,7 @@ export default function BrandRow({
             duration={800}
             onComplete={handleDelete}
             leftSection={<Trash2 size={16} strokeWidth={1.8} />}
-            className="h-9 px-3 text-sm"
+            className="h-9 px-2.5 text-sm"
           >
             {t("actions.delete")}
           </CustomHoldButton>

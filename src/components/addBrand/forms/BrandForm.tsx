@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { z } from "zod";
 
@@ -11,11 +11,16 @@ import { Controller, useForm } from "react-hook-form";
 
 import { BadgePlus, LoaderCircle } from "lucide-react";
 
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
 import { FormField } from "@/components/FormField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCustomToast } from "@/components/ui/custom-toast";
 
 import BrandImageUploadField from "../BrandImageUploadField";
+
+gsap.registerPlugin(useGSAP);
 
 interface UploadResponse {
   success: boolean;
@@ -28,8 +33,9 @@ const BrandForm = () => {
 
   const toast = useCustomToast();
 
-  const [imageUploadProgress, setImageUploadProgress] = useState(0);
+  const formRef = useRef<HTMLFormElement>(null);
 
+  const [imageUploadProgress, setImageUploadProgress] = useState(0);
   const [isImageFinalizing, setIsImageFinalizing] = useState(false);
 
   const schema = z.object({
@@ -81,7 +87,6 @@ const BrandForm = () => {
     control,
     handleSubmit,
     reset,
-
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -89,15 +94,104 @@ const BrandForm = () => {
     defaultValues: {
       name_en: "",
       name_fa: "",
-
       description_en: "",
       description_fa: "",
-
       url: "",
-
       image: undefined,
     },
   });
+
+  useGSAP(
+    () => {
+      if (!formRef.current) return;
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (reduceMotion) return;
+
+      const timeline = gsap.timeline({
+        defaults: {
+          ease: "power3.out",
+        },
+      });
+
+      timeline.fromTo(
+        formRef.current,
+        {
+          opacity: 0,
+          y: 22,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+        },
+      );
+
+      timeline.fromTo(
+        ".brand-form-info",
+        {
+          opacity: 0,
+          x: locale === "fa" ? 18 : -18,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.55,
+        },
+        "-=0.35",
+      );
+
+      timeline.fromTo(
+        ".brand-form-heading",
+        {
+          opacity: 0,
+          y: 12,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+        },
+        "-=0.25",
+      );
+
+      timeline.fromTo(
+        ".brand-form-field",
+        {
+          opacity: 0,
+          y: 14,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+          stagger: 0.07,
+        },
+        "-=0.2",
+      );
+
+      timeline.fromTo(
+        ".brand-form-submit",
+        {
+          opacity: 0,
+          y: 10,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+        },
+        "-=0.15",
+      );
+    },
+    {
+      scope: formRef,
+      dependencies: [locale],
+    },
+  );
 
   const uploadFile = ({
     file,
@@ -107,9 +201,7 @@ const BrandForm = () => {
   }: {
     file: File;
     url: string;
-
     onProgress: (value: number) => void;
-
     onFinalizing: (value: boolean) => void;
   }): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -123,7 +215,6 @@ const BrandForm = () => {
 
       xhr.upload.onloadstart = () => {
         onProgress(0);
-
         onFinalizing(false);
       };
 
@@ -139,7 +230,6 @@ const BrandForm = () => {
 
       xhr.upload.onload = () => {
         onProgress(95);
-
         onFinalizing(true);
       };
 
@@ -160,7 +250,6 @@ const BrandForm = () => {
           }
 
           onProgress(100);
-
           onFinalizing(false);
 
           resolve(response.url);
@@ -190,36 +279,21 @@ const BrandForm = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       setImageUploadProgress(0);
-
       setIsImageFinalizing(false);
 
-      /*
-       * Upload Image
-       */
       const imageUrl = await uploadFile({
         file: data.image,
-
         url: "/api/brand/upload-image",
-
         onProgress: setImageUploadProgress,
-
         onFinalizing: setIsImageFinalizing,
       });
 
-      /*
-       * Backend Payload
-       */
       const payload = {
         name_en: data.name_en,
-
         name_fa: data.name_fa,
-
         description_en: data.description_en,
-
         description_fa: data.description_fa,
-
         image: imageUrl,
-
         url: data.url,
       };
 
@@ -257,21 +331,16 @@ const BrandForm = () => {
       reset({
         name_en: "",
         name_fa: "",
-
         description_en: "",
         description_fa: "",
-
         url: "",
-
         image: undefined,
       });
 
       setImageUploadProgress(0);
-
       setIsImageFinalizing(false);
     } catch (error) {
       setImageUploadProgress(0);
-
       setIsImageFinalizing(false);
 
       console.error("CREATE BRAND ERROR =>", error);
@@ -282,25 +351,26 @@ const BrandForm = () => {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit(onSubmit)}
-      className="border-border-secondary bg-secondary-bg grid min-h-[700px] grid-cols-[0.36fr_1fr] overflow-hidden border"
+      className="border-border-secondary bg-secondary-bg 3xl:min-h-[700px] 3xl:grid-cols-[0.36fr_1fr] grid min-h-[700px] grid-cols-[0.36fr_1fr] overflow-hidden border xl:min-h-[585px] xl:grid-cols-[0.32fr_1fr] 2xl:min-h-[625px] 2xl:grid-cols-[0.34fr_1fr]"
     >
       {/* Information */}
-      <div className="border-border-secondary relative flex flex-col justify-between border-e p-7">
+      <div className="brand-form-info border-border-secondary 3xl:p-7 relative flex flex-col justify-between border-e p-7 xl:p-5 2xl:p-6">
         <div>
-          <div className="border-border-secondary flex size-11 items-center justify-center border">
+          <div className="border-border-secondary 3xl:size-11 flex size-11 items-center justify-center border xl:size-10">
             <BadgePlus
-              className="text-custom-primary size-5"
+              className="text-custom-primary 3xl:size-5 size-5 xl:size-[18px]"
               strokeWidth={1.6}
             />
           </div>
 
-          <div className="mt-5">
-            <h2 className="text-foreground mt-3 text-xl font-semibold">
+          <div className="brand-form-heading 3xl:mt-5 mt-5 xl:mt-4">
+            <h2 className="text-foreground 3xl:mt-3 3xl:text-xl mt-3 text-xl font-semibold xl:mt-2 xl:text-[18px] 2xl:text-[19px]">
               {t("header.title")}
             </h2>
 
-            <p className="text-muted-foreground mt-3 max-w-[280px] text-sm leading-7">
+            <p className="text-muted-foreground 3xl:mt-3 3xl:max-w-[280px] 3xl:text-sm 3xl:leading-7 mt-3 max-w-[280px] text-sm leading-7 xl:mt-2.5 xl:max-w-[240px] xl:text-[13px] xl:leading-6 2xl:max-w-[260px]">
               {t("header.description")}
             </p>
           </div>
@@ -309,22 +379,22 @@ const BrandForm = () => {
         <div
           dir="ltr"
           lang="en"
-          className="text-muted-foreground/60 text-[10px] tracking-[0.12em]"
+          className="text-muted-foreground/60 3xl:text-[10px] 3xl:tracking-[0.12em] text-[10px] tracking-[0.12em] xl:text-[9px] xl:tracking-[0.1em]"
         >
           ATI / BRAND MANAGEMENT
         </div>
       </div>
 
       {/* Fields */}
-      <div className="relative min-h-0 p-8 pe-3">
+      <div className="3xl:p-8 3xl:pe-3 relative min-h-0 p-8 pe-3 xl:p-5 xl:pe-2.5 2xl:p-6 2xl:pe-3">
         <ScrollArea
           dir={locale === "en" ? "ltr" : "rtl"}
-          className="h-[620px] w-full pe-5"
+          className="3xl:h-[620px] 3xl:pe-5 h-[620px] w-full pe-5 xl:h-[535px] xl:pe-4 2xl:h-[570px] 2xl:pe-4.5"
           scrollBarClassName="me-0"
         >
-          <div className="flex flex-col gap-y-7 pb-28">
+          <div className="3xl:gap-y-7 3xl:pb-4 flex flex-col gap-y-7 pb-8 xl:gap-y-5 2xl:gap-y-6">
             {/* Names */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="brand-form-field 3xl:gap-6 grid grid-cols-2 gap-6 xl:gap-4 2xl:gap-5">
               <FormField
                 label={t("form.nameEn.label")}
                 placeholder={t("form.nameEn.placeholder")}
@@ -343,7 +413,7 @@ const BrandForm = () => {
             </div>
 
             {/* Descriptions */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="brand-form-field 3xl:gap-6 grid grid-cols-2 gap-6 xl:gap-4 2xl:gap-5">
               <FormField
                 label={t("form.descriptionEn.label")}
                 placeholder={t("form.descriptionEn.placeholder")}
@@ -362,47 +432,53 @@ const BrandForm = () => {
             </div>
 
             {/* Website URL */}
-            <FormField
-              label={t("form.url.label")}
-              placeholder={t("form.url.placeholder")}
-              register={register("url")}
-              error={errors.url}
-              as="input"
-            />
+            <div className="brand-form-field">
+              <FormField
+                label={t("form.url.label")}
+                placeholder={t("form.url.placeholder")}
+                register={register("url")}
+                error={errors.url}
+                as="input"
+              />
+            </div>
 
             {/* Image */}
-            <Controller
-              control={control}
-              name="image"
-              render={({ field }) => (
-                <BrandImageUploadField
-                  value={field.value}
-                  onChange={(file) => {
-                    field.onChange(file);
+            <div className="brand-form-field">
+              <Controller
+                control={control}
+                name="image"
+                render={({ field }) => (
+                  <BrandImageUploadField
+                    value={field.value}
+                    onChange={(file) => {
+                      field.onChange(file);
 
-                    setImageUploadProgress(0);
-
-                    setIsImageFinalizing(false);
-                  }}
-                  error={errors.image?.message as string | undefined}
-                  progress={imageUploadProgress}
-                  isUploading={isSubmitting}
-                  isFinalizing={isImageFinalizing}
-                />
-              )}
-            />
+                      setImageUploadProgress(0);
+                      setIsImageFinalizing(false);
+                    }}
+                    error={errors.image?.message as string | undefined}
+                    progress={imageUploadProgress}
+                    isUploading={isSubmitting}
+                    isFinalizing={isImageFinalizing}
+                  />
+                )}
+              />
+            </div>
           </div>
         </ScrollArea>
 
         {/* Submit */}
-        <div className="border-border-secondary bg-secondary-bg absolute inset-x-8 bottom-0 flex justify-end border-t py-6">
+        <div className="brand-form-submit border-border-secondary bg-secondary-bg 3xl:inset-x-8 3xl:py-6 absolute inset-x-8 bottom-0 flex justify-end border-t py-6 xl:inset-x-5 xl:py-4 2xl:inset-x-6 2xl:py-5">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-custom-primary text-primary-foreground flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
+            className="bg-custom-primary text-primary-foreground 3xl:min-w-[190px] 3xl:px-6 3xl:py-3 3xl:text-sm flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60 xl:min-w-[165px] xl:px-5 xl:py-2.5 xl:text-[13px] 2xl:min-w-[175px]"
           >
             {isSubmitting && (
-              <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
+              <LoaderCircle
+                className="3xl:size-4 size-4 animate-spin xl:size-[15px]"
+                strokeWidth={1.8}
+              />
             )}
 
             {isImageFinalizing

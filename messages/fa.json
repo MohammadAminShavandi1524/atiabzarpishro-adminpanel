@@ -182,18 +182,16 @@
     },
 
     "table": {
-      "id": "شناسه",
+      "index": "ردیف",
       "name": "نام برند",
       "image": "تصویر",
       "descriptionEn": "توضیحات انگلیسی",
       "descriptionFa": "توضیحات فارسی",
-      "date": "تاریخ ایجاد",
       "actions": "عملیات"
     },
 
     "actions": {
       "viewImage": "مشاهده تصویر",
-      "website": "مشاهده وب‌سایت",
       "edit": "ویرایش",
       "delete": "حذف",
       "moveUp": "انتقال به بالا",

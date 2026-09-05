@@ -59,8 +59,7 @@ export default function BrandsPage() {
           brand.name_en.toLowerCase().includes(normalizedSearch) ||
           brand.name_fa.toLowerCase().includes(normalizedSearch) ||
           brand.description_en.toLowerCase().includes(normalizedSearch) ||
-          brand.description_fa.toLowerCase().includes(normalizedSearch) ||
-          brand.url?.toLowerCase().includes(normalizedSearch)
+          brand.description_fa.toLowerCase().includes(normalizedSearch)
         );
       })
       .sort((a, b) => a.index - b.index);
@@ -77,7 +76,6 @@ export default function BrandsPage() {
         <section className="border-border bg-card flex min-h-0 flex-1 flex-col overflow-hidden border">
           {/* Toolbar */}
           <div className="border-border flex shrink-0 items-center justify-between gap-5 border-b p-5">
-            {/* Search */}
             <div className="relative w-full max-w-[520px]">
               <Search
                 size={19}
@@ -100,8 +98,8 @@ export default function BrandsPage() {
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {/* Header */}
             <div className="border-border bg-card-secondary shrink-0 border-b ps-9 pe-11">
-              <div className="text-muted-foreground grid h-13 grid-cols-[60px_1fr_110px_1.55fr_1.55fr_135px_400px] items-center gap-5 text-sm font-semibold">
-                <div>{t("table.id")}</div>
+              <div className="text-muted-foreground grid h-13 grid-cols-[70px_1fr_110px_1.55fr_1.55fr_250px] items-center gap-5 text-sm font-semibold">
+                <div>{t("table.index")}</div>
 
                 <div>{t("table.name")}</div>
 
@@ -110,8 +108,6 @@ export default function BrandsPage() {
                 <div>{t("table.descriptionEn")}</div>
 
                 <div>{t("table.descriptionFa")}</div>
-
-                <div>{t("table.date")}</div>
 
                 <div className="text-center">{t("table.actions")}</div>
               </div>

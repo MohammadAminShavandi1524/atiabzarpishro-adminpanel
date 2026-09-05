@@ -181,18 +181,16 @@
     },
 
     "table": {
-      "id": "ID",
+      "index": "Index",
       "name": "Brand Name",
       "image": "Image",
       "descriptionEn": "English Description",
       "descriptionFa": "Persian Description",
-      "date": "Created",
       "actions": "Actions"
     },
 
     "actions": {
       "viewImage": "View Image",
-      "website": "Visit Website",
       "edit": "Edit",
       "delete": "Delete",
       "moveUp": "Move up",
