@@ -4,9 +4,6 @@ export interface UpdateCataloguePayload {
   name_en: string;
   name_fa: string;
 
-  description_en: string;
-  description_fa: string;
-
   image: string | null;
 
   object_storage: boolean;

@@ -4,9 +4,6 @@ export interface CatalogueBrand {
   name_en: string;
   name_fa: string;
 
-  description_en: string;
-  description_fa: string;
-
   image: string;
   url: string;
 
@@ -20,9 +17,6 @@ export interface CatalogueDetails {
 
   name_en: string;
   name_fa: string;
-
-  description_en: string;
-  description_fa: string;
 
   image: string;
 

@@ -71,7 +71,7 @@ export default function CatalogueRow({
       {/* Hover Indicator */}
       <span className="bg-custom-primary absolute inset-y-0 start-0 w-[3px] scale-y-0 transition-transform duration-300 group-hover/catalogue:scale-y-100" />
 
-      <div className="grid min-h-[94px] grid-cols-[55px_1fr_1fr_90px_1.35fr_1.35fr_110px_125px_310px] items-center gap-4 px-5 py-3">
+      <div className="grid min-h-[94px] grid-cols-[55px_1.4fr_1.2fr_90px_120px_140px_310px] items-center gap-4 px-5 py-3">
         {/* ID */}
         <div className="text-muted-foreground text-sm">
           {locale === "fa"
@@ -85,7 +85,10 @@ export default function CatalogueRow({
             {locale === "fa" ? catalogue.name_fa : catalogue.name_en}
           </p>
 
-          <p lang="fa" className="text-muted-foreground mt-1 truncate text-xs">
+          <p
+            lang={locale === "fa" ? "en" : "fa"}
+            className="text-muted-foreground mt-1 truncate text-xs"
+          >
             {locale === "fa" ? catalogue.name_en : catalogue.name_fa}
           </p>
         </div>
@@ -93,7 +96,18 @@ export default function CatalogueRow({
         {/* Brand */}
         <div className="min-w-0">
           <p className="text-foreground truncate text-sm font-medium">
-            {catalogue.brand?.name_en}
+            {locale === "fa"
+              ? catalogue.brand?.name_fa
+              : catalogue.brand?.name_en}
+          </p>
+
+          <p
+            lang={locale === "fa" ? "en" : "fa"}
+            className="text-muted-foreground mt-1 truncate text-xs"
+          >
+            {locale === "fa"
+              ? catalogue.brand?.name_en
+              : catalogue.brand?.name_fa}
           </p>
         </div>
 
@@ -117,27 +131,9 @@ export default function CatalogueRow({
           </span>
         </button>
 
-        {/* Description EN */}
-        <div className="min-w-0">
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-6">
-            {catalogue.description_en}
-          </p>
-        </div>
-
-        {/* Description FA */}
-        <div className="min-w-0">
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-6">
-            {catalogue.description_fa}
-          </p>
-        </div>
-
         {/* Source */}
         <div>
-          <span
-            className={
-              "bg-custom-primary/10 text-custom-primary inline-flex px-2.5 py-1 text-xs font-medium"
-            }
-          >
+          <span className="bg-custom-primary/10 text-custom-primary inline-flex px-2.5 py-1 text-xs font-medium">
             {catalogue.object_storage ? t("source.upload") : t("source.url")}
           </span>
         </div>

@@ -88,16 +88,6 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
 
       name_fa: z.string().trim().min(1, t("validation.nameFaRequired")),
 
-      description_en: z
-        .string()
-        .trim()
-        .min(1, t("validation.descriptionEnRequired")),
-
-      description_fa: z
-        .string()
-        .trim()
-        .min(1, t("validation.descriptionFaRequired")),
-
       image: z
         .custom<File | undefined>()
         .optional()
@@ -119,20 +109,15 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
       /*
        * Upload Mode
        *
-       * Important:
-       * PDF is NOT always required on edit.
-       *
-       * If current catalogue was already uploaded
-       * and user keeps Upload mode,
-       * old PDF can remain.
+       * PDF is not always required on edit.
+       * If the current catalogue already uses
+       * object storage, the old PDF can remain.
        */
       if (data.source === "upload") {
         if (data.pdf && data.pdf.type !== "application/pdf") {
           ctx.addIssue({
             code: "custom",
-
             path: ["pdf"],
-
             message: t("validation.pdfInvalid"),
           });
         }
@@ -150,9 +135,7 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
         ) {
           ctx.addIssue({
             code: "custom",
-
             path: ["pdf"],
-
             message: t("validation.pdfRequiredOnSourceChange"),
           });
         }
@@ -167,9 +150,7 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
         if (!url) {
           ctx.addIssue({
             code: "custom",
-
             path: ["external_url"],
-
             message: t("validation.urlRequired"),
           });
 
@@ -188,9 +169,7 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
         } catch {
           ctx.addIssue({
             code: "custom",
-
             path: ["external_url"],
-
             message: t("validation.urlInvalid"),
           });
         }
@@ -204,17 +183,11 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
    */
   const {
     register,
-
     control,
-
     handleSubmit,
-
     reset,
-
     setValue,
-
     clearErrors,
-
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -224,9 +197,6 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
 
       name_en: "",
       name_fa: "",
-
-      description_en: "",
-      description_fa: "",
 
       image: undefined,
 
@@ -266,20 +236,12 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
 
           name_fa: catalogue.name_fa,
 
-          description_en: catalogue.description_en,
-
-          description_fa: catalogue.description_fa,
-
           image: undefined,
 
           source: initialSource,
 
           pdf: undefined,
 
-          /*
-           * Only fill URL input
-           * when source is external.
-           */
           external_url: catalogue.object_storage ? "" : catalogue.url,
         });
       } catch (error) {
@@ -416,10 +378,6 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
 
         name_fa: data.name_fa,
 
-        description_en: data.description_en,
-
-        description_fa: data.description_fa,
-
         image: newImageUrl,
 
         object_storage: objectStorage,
@@ -550,25 +508,6 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
                 register={register("name_fa")}
                 error={errors.name_fa}
                 as="input"
-              />
-            </div>
-
-            {/* Descriptions */}
-            <div className="grid grid-cols-2 gap-6">
-              <FormField
-                label={t("form.descriptionEn.label")}
-                placeholder={t("form.descriptionEn.placeholder")}
-                register={register("description_en")}
-                error={errors.description_en}
-                as="textarea"
-              />
-
-              <FormField
-                label={t("form.descriptionFa.label")}
-                placeholder={t("form.descriptionFa.placeholder")}
-                register={register("description_fa")}
-                error={errors.description_fa}
-                as="textarea"
               />
             </div>
 

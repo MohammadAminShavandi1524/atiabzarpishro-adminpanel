@@ -1021,8 +1021,6 @@
       "name": "Catalogue",
       "brand": "Brand",
       "image": "Cover",
-      "descriptionEn": "English Description",
-      "descriptionFa": "Persian Description",
       "source": "Source",
       "date": "Created",
       "actions": "Actions"
@@ -1058,12 +1056,12 @@
   "editCatalogue": {
     "header": {
       "title": "Edit Catalogue",
-      "description": "Update catalogue information, brand, cover image or PDF source."
+      "description": "Update the catalogue brand, name, cover image or PDF source."
     },
 
     "formHeader": {
       "title": "Catalogue Information",
-      "description": "Update the catalogue details and replace its files or source when required."
+      "description": "Update the catalogue information and replace its cover image, PDF file or source when required."
     },
 
     "form": {
@@ -1075,16 +1073,6 @@
       "nameFa": {
         "label": "Persian Name",
         "placeholder": "Enter the Persian catalogue name"
-      },
-
-      "descriptionEn": {
-        "label": "English Description",
-        "placeholder": "Enter the English catalogue description"
-      },
-
-      "descriptionFa": {
-        "label": "Persian Description",
-        "placeholder": "Enter the Persian catalogue description"
       },
 
       "currentImage": "Current Cover",
@@ -1122,9 +1110,6 @@
 
       "nameEnRequired": "English name is required.",
       "nameFaRequired": "Persian name is required.",
-
-      "descriptionEnRequired": "English description is required.",
-      "descriptionFaRequired": "Persian description is required.",
 
       "imageInvalid": "Please select a valid image file.",
 
@@ -1173,16 +1158,6 @@
         "placeholder": "Enter the Persian catalogue name"
       },
 
-      "descriptionEn": {
-        "label": "English Description",
-        "placeholder": "Enter the English catalogue description"
-      },
-
-      "descriptionFa": {
-        "label": "Persian Description",
-        "placeholder": "Enter the Persian catalogue description"
-      },
-
       "source": {
         "label": "Catalogue Source",
         "upload": "Upload PDF",
@@ -1210,9 +1185,6 @@
 
       "nameEnRequired": "English name is required.",
       "nameFaRequired": "Persian name is required.",
-
-      "descriptionEnRequired": "English description is required.",
-      "descriptionFaRequired": "Persian description is required.",
 
       "imageRequired": "Catalogue cover image is required.",
       "imageInvalid": "Please select a valid image file.",

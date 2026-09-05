@@ -24,7 +24,6 @@ export default function CataloguesPage() {
   const locale = useLocale();
 
   const [catalogues, setCatalogues] = useState<CatalogueItem[]>([]);
-  console.log("🚀 ~ CataloguesPage ~ catalogues:", catalogues)
 
   const [search, setSearch] = useState("");
 
@@ -60,8 +59,6 @@ export default function CataloguesPage() {
         return (
           catalogue.name_en?.toLowerCase().includes(normalizedSearch) ||
           catalogue.name_fa?.toLowerCase().includes(normalizedSearch) ||
-          catalogue.description_en?.toLowerCase().includes(normalizedSearch) ||
-          catalogue.description_fa?.toLowerCase().includes(normalizedSearch) ||
           catalogue.brand?.name_en?.toLowerCase().includes(normalizedSearch) ||
           catalogue.brand?.name_fa?.toLowerCase().includes(normalizedSearch) ||
           catalogue.url?.toLowerCase().includes(normalizedSearch)
@@ -133,7 +130,7 @@ export default function CataloguesPage() {
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {/* Header */}
             <div className="border-border bg-card-secondary shrink-0 border-b ps-9 pe-11">
-              <div className="text-muted-foreground grid h-13 grid-cols-[55px_1fr_1fr_90px_1.35fr_1.35fr_110px_125px_310px] items-center gap-4 text-sm font-semibold">
+              <div className="text-muted-foreground grid h-13 grid-cols-[55px_1.4fr_1.2fr_90px_120px_140px_310px] items-center gap-4 text-sm font-semibold">
                 <div>{t("table.id")}</div>
 
                 <div>{t("table.name")}</div>
@@ -141,10 +138,6 @@ export default function CataloguesPage() {
                 <div>{t("table.brand")}</div>
 
                 <div>{t("table.image")}</div>
-
-                <div>{t("table.descriptionEn")}</div>
-
-                <div>{t("table.descriptionFa")}</div>
 
                 <div>{t("table.source")}</div>
 

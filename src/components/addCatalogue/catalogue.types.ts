@@ -2,6 +2,7 @@ export interface Brand {
   id: number;
 
   name_en: string;
+
   name_fa: string;
 }
 
@@ -11,10 +12,8 @@ export interface CreateCataloguePayload {
   brand_id: number;
 
   name_en: string;
-  name_fa: string;
 
-  description_en: string;
-  description_fa: string;
+  name_fa: string;
 
   image: string;
 
@@ -25,5 +24,6 @@ export interface CreateCataloguePayload {
 
 export interface UploadResponse {
   success: boolean;
+
   url: string;
 }
