@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 
@@ -43,6 +43,8 @@ import {
   type UpdateCataloguePayload,
 } from "../update-catalogue.api";
 
+import { useEditCatalogueFormAnimation } from "./useEditCatalogueFormAnimation";
+
 interface EditCatalogueFormProps {
   catalogueId: string;
 }
@@ -57,6 +59,8 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
   const router = useRouter();
 
   const toast = useCustomToast();
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   /*
    * Current catalogue
@@ -211,6 +215,12 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
   const source = useWatch({
     control,
     name: "source",
+  });
+
+  useEditCatalogueFormAnimation({
+    formRef,
+    locale,
+    enabled: !loading && !!currentCatalogue,
   });
 
   /*
@@ -406,14 +416,16 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
    */
   if (loading) {
     return (
-      <div className="border-border-secondary bg-secondary-bg flex min-h-[700px] items-center justify-center border">
-        <div className="flex items-center gap-3">
+      <div className="border-border-secondary bg-secondary-bg flex min-h-0 flex-1 items-center justify-center border">
+        <div className="3xl:gap-3 flex items-center gap-3 xl:gap-2.5">
           <LoaderCircle
-            className="text-custom-primary size-5 animate-spin"
+            className="text-custom-primary 3xl:size-5 size-5 animate-spin xl:size-[18px]"
             strokeWidth={1.8}
           />
 
-          <span className="text-muted-foreground text-sm">{t("loading")}</span>
+          <span className="text-muted-foreground 3xl:text-sm text-sm xl:text-[13px]">
+            {t("loading")}
+          </span>
         </div>
       </div>
     );
@@ -425,37 +437,38 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit(onSubmit)}
-      className="border-border-secondary bg-secondary-bg grid min-h-[700px] grid-cols-[0.36fr_1fr] overflow-hidden border"
+      className="border-border-secondary bg-secondary-bg 3xl:grid-cols-[0.36fr_1fr] grid min-h-0 flex-1 grid-cols-[0.36fr_1fr] grid-rows-[minmax(0,1fr)] overflow-hidden border xl:grid-cols-[0.32fr_1fr] 2xl:grid-cols-[0.34fr_1fr]"
     >
       {/* Information */}
-      <div className="border-border-secondary relative flex flex-col justify-between border-e p-7">
+      <div className="edit-catalogue-form-info border-border-secondary 3xl:p-7 relative flex min-h-0 flex-col justify-between overflow-hidden border-e p-7 xl:p-5 2xl:p-6">
         <div>
-          <div className="border-border-secondary flex size-11 items-center justify-center border">
+          <div className="border-border-secondary 3xl:size-11 flex size-11 items-center justify-center border xl:size-10">
             <BookOpen
-              className="text-custom-primary size-5"
+              className="text-custom-primary 3xl:size-5 size-5 xl:size-[18px]"
               strokeWidth={1.6}
             />
           </div>
 
-          <div className="mt-5">
-            <h2 className="text-foreground text-xl font-semibold">
+          <div className="edit-catalogue-form-heading 3xl:mt-5 mt-5 xl:mt-4">
+            <h2 className="text-foreground 3xl:text-xl text-xl font-semibold xl:text-[18px] 2xl:text-[19px]">
               {t("formHeader.title")}
             </h2>
 
-            <p className="text-muted-foreground mt-3 max-w-[280px] text-sm leading-7">
+            <p className="text-muted-foreground 3xl:mt-3 3xl:max-w-[280px] 3xl:text-sm 3xl:leading-7 mt-3 max-w-[280px] text-sm leading-7 xl:mt-2.5 xl:max-w-[240px] xl:text-[13px] xl:leading-6 2xl:max-w-[260px]">
               {t("formHeader.description")}
             </p>
           </div>
         </div>
 
         {/* Current Source */}
-        <div className="border-border-secondary border-t pt-6">
-          <span className="text-muted-foreground text-xs">
+        <div className="edit-catalogue-form-current border-border-secondary 3xl:pt-6 border-t pt-6 xl:pt-4 2xl:pt-5">
+          <span className="text-muted-foreground 3xl:text-xs text-xs xl:text-[11px]">
             {t("current.source")}
           </span>
 
-          <p className="text-foreground mt-2 text-sm font-medium">
+          <p className="text-foreground 3xl:mt-2 3xl:text-sm mt-2 text-sm font-medium xl:mt-1.5 xl:text-[13px]">
             {currentCatalogue.object_storage
               ? t("current.uploaded")
               : t("current.external")}
@@ -466,9 +479,13 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
             onClick={() =>
               window.open(currentCatalogue.url, "_blank", "noopener,noreferrer")
             }
-            className="text-custom-primary mt-3 flex cursor-pointer items-center gap-2 text-sm"
+            className="text-custom-primary 3xl:mt-3 3xl:gap-2 3xl:text-sm mt-3 flex cursor-pointer items-center gap-2 text-sm xl:mt-2.5 xl:gap-1.5 xl:text-[13px]"
           >
-            <ExternalLink size={15} strokeWidth={1.7} />
+            <ExternalLink
+              size={15}
+              strokeWidth={1.7}
+              className="3xl:size-[15px] xl:size-[14px]"
+            />
 
             {t("current.open")}
           </button>
@@ -476,24 +493,26 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
       </div>
 
       {/* Fields */}
-      <div className="relative min-h-0 p-8 pe-3">
+      <div className="3xl:p-8 3xl:pe-3 flex min-h-0 flex-col overflow-hidden p-8 pe-3 xl:p-5 xl:pe-2.5 2xl:p-6 2xl:pe-3">
         <ScrollArea
           dir={locale === "en" ? "ltr" : "rtl"}
-          className="h-[580px] w-full pe-5"
+          className="3xl:pe-5 min-h-0 flex-1 pe-5 xl:pe-4 2xl:pe-4.5"
           scrollBarClassName="me-0"
         >
-          <div className="flex flex-col gap-y-7 pb-28">
+          <div className="3xl:gap-y-7 flex flex-col gap-y-7 pb-8 xl:gap-y-5 2xl:gap-y-6">
             {/* Brand */}
-            <Controller
-              control={control}
-              name="brand_id"
-              render={({ field }) => (
-                <BrandSelect field={field} error={errors.brand_id} />
-              )}
-            />
+            <div className="edit-catalogue-form-field">
+              <Controller
+                control={control}
+                name="brand_id"
+                render={({ field }) => (
+                  <BrandSelect field={field} error={errors.brand_id} />
+                )}
+              />
+            </div>
 
             {/* Names */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="edit-catalogue-form-field 3xl:gap-6 grid grid-cols-2 gap-6 xl:gap-4 2xl:gap-5">
               <FormField
                 label={t("form.nameEn.label")}
                 placeholder={t("form.nameEn.placeholder")}
@@ -512,13 +531,13 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
             </div>
 
             {/* Current Cover */}
-            <div>
-              <label className="text-foreground mb-3 block text-sm font-medium">
+            <div className="edit-catalogue-form-field">
+              <label className="text-foreground 3xl:mb-3 mb-3 block text-sm font-medium xl:mb-2.5 xl:text-[13px] 2xl:text-sm">
                 {t("form.currentImage")}
               </label>
 
-              <div className="border-border-secondary bg-background flex items-center gap-5 border p-4">
-                <div className="relative h-24 w-20 shrink-0 overflow-hidden">
+              <div className="border-border-secondary bg-background 3xl:gap-5 flex items-center gap-5 border p-4 xl:gap-4 xl:p-3.5 2xl:gap-4.5 2xl:p-4">
+                <div className="3xl:h-24 3xl:w-20 relative h-24 w-20 shrink-0 overflow-hidden xl:h-20 xl:w-16 2xl:h-[88px] 2xl:w-[72px]">
                   <Image
                     src={currentCatalogue.image}
                     alt={currentCatalogue.name_en}
@@ -528,51 +547,57 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
                   />
                 </div>
 
-                <p className="text-muted-foreground text-sm leading-6">
+                <p className="text-muted-foreground 3xl:text-sm 3xl:leading-6 text-sm leading-6 xl:text-[13px] xl:leading-5">
                   {t("form.imageHint")}
                 </p>
               </div>
             </div>
 
             {/* Optional New Cover */}
-            <Controller
-              control={control}
-              name="image"
-              render={({ field }) => (
-                <BrandImageUploadField
-                  value={field.value}
-                  onChange={(file) => {
-                    field.onChange(file);
+            <div className="edit-catalogue-form-field">
+              <Controller
+                control={control}
+                name="image"
+                render={({ field }) => (
+                  <BrandImageUploadField
+                    value={field.value}
+                    onChange={(file) => {
+                      field.onChange(file);
 
-                    setImageUploadProgress(0);
+                      setImageUploadProgress(0);
 
-                    setIsImageFinalizing(false);
-                  }}
-                  error={errors.image?.message as string | undefined}
-                  progress={imageUploadProgress}
-                  isUploading={isSubmitting}
-                  isFinalizing={isImageFinalizing}
-                />
-              )}
-            />
+                      setIsImageFinalizing(false);
+                    }}
+                    error={errors.image?.message as string | undefined}
+                    progress={imageUploadProgress}
+                    isUploading={isSubmitting}
+                    isFinalizing={isImageFinalizing}
+                  />
+                )}
+              />
+            </div>
 
             {/* Source */}
-            <div>
-              <label className="text-foreground mb-3 block text-sm font-medium">
+            <div className="edit-catalogue-form-field">
+              <label className="text-foreground 3xl:mb-3 mb-3 block text-sm font-medium xl:mb-2.5 xl:text-[13px] 2xl:text-sm">
                 {t("form.source.label")}
               </label>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="3xl:gap-3 grid grid-cols-2 gap-3 xl:gap-2.5">
                 <button
                   type="button"
                   onClick={selectUploadSource}
                   className={
                     source === "upload"
-                      ? "border-custom-primary bg-custom-primary/[0.05] text-custom-primary flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium"
-                      : "border-border-secondary text-foreground hover:border-custom-primary/40 flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium transition-colors"
+                      ? "border-custom-primary bg-custom-primary/[0.05] text-custom-primary 3xl:h-12 3xl:gap-2 3xl:text-sm flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium xl:h-11 xl:gap-1.5 xl:text-[13px] 2xl:h-[46px]"
+                      : "border-border-secondary text-foreground hover:border-custom-primary/40 3xl:h-12 3xl:gap-2 3xl:text-sm flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium transition-colors xl:h-11 xl:gap-1.5 xl:text-[13px] 2xl:h-[46px]"
                   }
                 >
-                  <FileUp size={17} strokeWidth={1.7} />
+                  <FileUp
+                    size={17}
+                    strokeWidth={1.7}
+                    className="3xl:size-[17px] xl:size-[15px]"
+                  />
 
                   {t("form.source.upload")}
                 </button>
@@ -582,11 +607,15 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
                   onClick={selectUrlSource}
                   className={
                     source === "url"
-                      ? "border-custom-primary bg-custom-primary/[0.05] text-custom-primary flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium"
-                      : "border-border-secondary text-foreground hover:border-custom-primary/40 flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium transition-colors"
+                      ? "border-custom-primary bg-custom-primary/[0.05] text-custom-primary 3xl:h-12 3xl:gap-2 3xl:text-sm flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium xl:h-11 xl:gap-1.5 xl:text-[13px] 2xl:h-[46px]"
+                      : "border-border-secondary text-foreground hover:border-custom-primary/40 3xl:h-12 3xl:gap-2 3xl:text-sm flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium transition-colors xl:h-11 xl:gap-1.5 xl:text-[13px] 2xl:h-[46px]"
                   }
                 >
-                  <Link2 size={17} strokeWidth={1.7} />
+                  <Link2
+                    size={17}
+                    strokeWidth={1.7}
+                    className="3xl:size-[17px] xl:size-[15px]"
+                  />
 
                   {t("form.source.url")}
                 </button>
@@ -597,58 +626,65 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
             {source === "upload" && (
               <>
                 {currentCatalogue.object_storage && (
-                  <div className="border-border-secondary bg-background border px-5 py-4">
-                    <p className="text-muted-foreground text-sm leading-6">
+                  <div className="edit-catalogue-form-field border-border-secondary bg-background 3xl:px-5 3xl:py-4 border px-5 py-4 xl:px-4 xl:py-3 2xl:px-4.5 2xl:py-3.5">
+                    <p className="text-muted-foreground 3xl:text-sm 3xl:leading-6 text-sm leading-6 xl:text-[13px] xl:leading-5">
                       {t("form.pdfHint")}
                     </p>
                   </div>
                 )}
 
-                <Controller
-                  control={control}
-                  name="pdf"
-                  render={({ field }) => (
-                    <CataloguePdfUploadField
-                      value={field.value}
-                      onChange={(file) => {
-                        field.onChange(file);
+                <div className="edit-catalogue-form-field">
+                  <Controller
+                    control={control}
+                    name="pdf"
+                    render={({ field }) => (
+                      <CataloguePdfUploadField
+                        value={field.value}
+                        onChange={(file) => {
+                          field.onChange(file);
 
-                        setPdfUploadProgress(0);
+                          setPdfUploadProgress(0);
 
-                        setIsPdfFinalizing(false);
-                      }}
-                      error={errors.pdf?.message as string | undefined}
-                      progress={pdfUploadProgress}
-                      isUploading={isSubmitting}
-                      isFinalizing={isPdfFinalizing}
-                    />
-                  )}
-                />
+                          setIsPdfFinalizing(false);
+                        }}
+                        error={errors.pdf?.message as string | undefined}
+                        progress={pdfUploadProgress}
+                        isUploading={isSubmitting}
+                        isFinalizing={isPdfFinalizing}
+                      />
+                    )}
+                  />
+                </div>
               </>
             )}
 
             {/* URL */}
             {source === "url" && (
-              <FormField
-                label={t("form.externalUrl.label")}
-                placeholder={t("form.externalUrl.placeholder")}
-                register={register("external_url")}
-                error={errors.external_url}
-                as="input"
-              />
+              <div className="edit-catalogue-form-field">
+                <FormField
+                  label={t("form.externalUrl.label")}
+                  placeholder={t("form.externalUrl.placeholder")}
+                  register={register("external_url")}
+                  error={errors.external_url}
+                  as="input"
+                />
+              </div>
             )}
           </div>
         </ScrollArea>
 
         {/* Submit */}
-        <div className="border-border-secondary bg-secondary-bg absolute inset-x-8 bottom-0 flex justify-end border-t py-6">
+        <div className="edit-catalogue-form-submit border-border-secondary bg-secondary-bg 3xl:mt-5 3xl:pt-6 mt-5 flex shrink-0 justify-end border-t pt-6 xl:mt-4 xl:pt-4 2xl:mt-5 2xl:pt-5">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-custom-primary text-primary-foreground flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
+            className="bg-custom-primary text-primary-foreground 3xl:min-w-[190px] 3xl:px-6 3xl:py-3 3xl:text-sm flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60 xl:min-w-[165px] xl:px-5 xl:py-2.5 xl:text-[13px] 2xl:min-w-[175px]"
           >
             {isSubmitting && (
-              <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
+              <LoaderCircle
+                className="3xl:size-4 size-4 animate-spin xl:size-[15px]"
+                strokeWidth={1.8}
+              />
             )}
 
             {isFinalizing
