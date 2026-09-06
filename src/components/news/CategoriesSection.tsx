@@ -8,12 +8,15 @@ import CategoryRow from "./CategoryRow";
 
 interface Category {
   id: number;
+
   name: string;
+
   lang: "fa" | "en";
 }
 
 interface CategoriesSectionProps {
   categories: Category[];
+
   onDelete: (id: number) => void;
 }
 
@@ -22,13 +25,14 @@ const CategoriesSection = ({
   onDelete,
 }: CategoriesSectionProps) => {
   const t = useTranslations("news");
+
   const locale = useLocale();
 
   return (
-    <section className="border-border-secondary bg-secondary-bg relative flex h-full flex-col overflow-hidden border">
-      {/* Table header */}
-      <div className="border-border-secondary bg-tertiary border-b px-10">
-        <div className="text-muted-foreground grid h-14 grid-cols-4 items-center text-xs font-medium tracking-[0.04em]">
+    <section className="border-border-secondary bg-secondary-bg relative flex h-full max-h-full min-h-0 w-full flex-1 flex-col overflow-hidden border">
+      {/* Table Header */}
+      <div className="border-border-secondary bg-tertiary 3xl:px-10 shrink-0 border-b px-10 xl:px-5 2xl:px-7">
+        <div className="text-muted-foreground 3xl:h-14 grid h-14 grid-cols-4 items-center text-xs font-medium tracking-[0.04em] xl:h-11 xl:text-[11px] 2xl:h-12 2xl:text-xs">
           <div>{t("categories.table.id")}</div>
 
           <div>{t("categories.table.name")}</div>
@@ -39,13 +43,14 @@ const CategoriesSection = ({
         </div>
       </div>
 
-      {/* Table body */}
-      <div className="min-h-0 flex-1">
+      {/* Table Body */}
+      <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
         <ScrollArea
           dir={locale === "en" ? "ltr" : "rtl"}
-          className="h-full w-full"
+          className="h-full min-h-0 w-full flex-1"
+          scrollBarClassName="me-0"
         >
-          <div className="px-6 pb-6 pt-4">
+          <div className="3xl:px-6 3xl:pt-4 3xl:pb-6 w-full px-6 pt-4 pb-6 xl:px-4 xl:pt-3 xl:pb-4 2xl:px-5 2xl:pt-3.5 2xl:pb-5">
             {categories.map((item) => (
               <CategoryRow
                 key={`${item.lang}-${item.id}`}

@@ -1,13 +1,16 @@
 "use client";
 
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
+
 import { useLocale } from "next-intl";
 
 interface AnimatedSectionsProps {
   children: ReactNode;
+
   sectionKey: string;
+
   direction: 1 | -1;
 }
 
@@ -23,12 +26,12 @@ export default function AnimatedSections({
   const slide = (isRTL ? -direction : direction) * 70;
 
   return (
-    <div className="relative min-h-[666px] overflow-hidden">
+    <div className="relative min-h-0 w-full flex-1 overflow-hidden">
       <AnimatePresence initial={false} mode="sync" custom={slide}>
         <motion.div
           key={sectionKey}
           custom={slide}
-          className="absolute inset-0"
+          className="absolute inset-0 flex min-h-0 w-full overflow-hidden"
           initial={{
             x: slide,
             opacity: 0,
