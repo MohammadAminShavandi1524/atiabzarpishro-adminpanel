@@ -64,7 +64,7 @@ export default function BrandSelect({ field, error }: BrandSelectProps) {
       value={String(field.value || "")}
       onChange={(value) => field.onChange(Number(value))}
       options={brands.map((brand) => ({
-        label: `${brand.name_en}`,
+        label: brand.name_en,
         value: String(brand.id),
       }))}
       disabled={loading}

@@ -181,7 +181,7 @@
     },
 
     "table": {
-      "index": "Index",
+      "index": "Order",
       "name": "Brand Name",
       "image": "Image",
       "descriptionEn": "English Description",
@@ -359,7 +359,7 @@
     },
 
     "table": {
-      "id": "ID",
+      "index": "Order",
       "nameEn": "English Name",
       "nameFa": "Persian Name",
       "image": "Image",

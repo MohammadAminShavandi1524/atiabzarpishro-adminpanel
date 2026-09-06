@@ -3,7 +3,8 @@
 import { useTranslations } from "next-intl";
 
 import { CustomSelect } from "@/components/ui/custom-select";
-import { ProductBrand } from "@/components/products/products.api";
+
+import type { ProductBrand } from "@/components/products/products.api";
 
 interface ProductBrandSelectProps {
   brands: ProductBrand[];
@@ -20,7 +21,6 @@ export default function ProductBrandSelect({
 
   return (
     <CustomSelect
-      //   label={t("filters.brand")}
       label=""
       placeholder={t("filters.allBrands")}
       value={value}
