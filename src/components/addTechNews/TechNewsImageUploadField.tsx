@@ -30,11 +30,11 @@ export default function TechNewsImageUploadField({
 
   return (
     <div>
-      <label className="text-foreground mb-2 block text-sm font-medium">
+      <label className="text-foreground mb-2 block text-sm font-medium xl:text-[13px] 2xl:text-sm">
         {t("form.image.label")}
       </label>
 
-      <div className="border-border-secondary bg-background relative min-h-[150px] border p-5">
+      <div className="border-border-secondary bg-background 3xl:min-h-[150px] 3xl:p-5 relative min-h-[150px] border p-5 xl:min-h-[130px] xl:p-4 2xl:min-h-[140px] 2xl:p-4.5">
         <input
           type="file"
           accept="image/*"
@@ -49,26 +49,29 @@ export default function TechNewsImageUploadField({
           className="absolute inset-0 z-10 cursor-pointer opacity-0 disabled:cursor-not-allowed"
         />
 
-        <div className="flex min-h-[110px] flex-col items-center justify-center text-center">
-          <ImagePlus className="text-custom-primary size-7" strokeWidth={1.5} />
+        <div className="3xl:min-h-[110px] flex min-h-[110px] flex-col items-center justify-center text-center xl:min-h-[96px] 2xl:min-h-[102px]">
+          <ImagePlus
+            className="text-custom-primary 3xl:size-7 size-7 xl:size-6"
+            strokeWidth={1.5}
+          />
 
           {value ? (
             <>
-              <p className="text-foreground mt-3 max-w-full truncate text-sm font-medium">
+              <p className="text-foreground 3xl:mt-3 3xl:text-sm mt-3 max-w-full truncate text-sm font-medium xl:mt-2.5 xl:text-[13px]">
                 {value.name}
               </p>
 
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="text-muted-foreground 3xl:text-xs mt-1 text-xs xl:text-[11px]">
                 {(value.size / 1024 / 1024).toFixed(2)} MB
               </p>
             </>
           ) : (
             <>
-              <p className="text-foreground mt-3 text-sm font-medium">
+              <p className="text-foreground 3xl:mt-3 3xl:text-sm mt-3 text-sm font-medium xl:mt-2.5 xl:text-[13px]">
                 {t("form.image.placeholder")}
               </p>
 
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="text-muted-foreground 3xl:text-xs mt-1 text-xs xl:text-[11px]">
                 JPG, PNG, WEBP
               </p>
             </>
@@ -83,15 +86,19 @@ export default function TechNewsImageUploadField({
 
               onChange(undefined);
             }}
-            className="text-muted-foreground hover:text-destructive absolute end-3 top-3 z-20 cursor-pointer transition-colors"
+            className="text-muted-foreground hover:text-destructive 3xl:end-3 3xl:top-3 absolute end-3 top-3 z-20 cursor-pointer transition-colors xl:end-2.5 xl:top-2.5"
           >
-            <X size={17} strokeWidth={1.7} />
+            <X
+              size={17}
+              strokeWidth={1.7}
+              className="3xl:size-[17px] xl:size-4"
+            />
           </button>
         )}
       </div>
 
       {isUploading && (
-        <div className="mt-3">
+        <div className="3xl:mt-3 mt-3 xl:mt-2.5">
           <div className="bg-border-secondary h-1 overflow-hidden">
             <div
               className="bg-custom-primary h-full transition-[width] duration-200"
@@ -101,7 +108,7 @@ export default function TechNewsImageUploadField({
             />
           </div>
 
-          <div className="text-muted-foreground mt-2 flex items-center justify-between text-xs">
+          <div className="text-muted-foreground 3xl:text-xs mt-2 flex items-center justify-between text-xs xl:text-[11px]">
             <span>
               {isFinalizing ? t("form.finalizing") : t("form.uploading")}
             </span>
@@ -112,7 +119,11 @@ export default function TechNewsImageUploadField({
       )}
 
       <div className="mt-2 min-h-5">
-        {error && <p className="text-destructive text-xs">{error}</p>}
+        {error && (
+          <p className="text-destructive 3xl:text-xs text-xs xl:text-[11px]">
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

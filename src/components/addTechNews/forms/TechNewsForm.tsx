@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -29,12 +29,16 @@ import {
 
 import { uploadTechNewsFile } from "./technews-upload";
 
+import { useTechNewsFormAnimation } from "./useTechNewsFormAnimation";
+
 export default function TechNewsForm() {
   const t = useTranslations("addTechNews");
 
   const locale = useLocale();
 
   const toast = useCustomToast();
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
 
@@ -75,6 +79,11 @@ export default function TechNewsForm() {
   const source = useWatch({
     control,
     name: "source",
+  });
+
+  useTechNewsFormAnimation({
+    formRef,
+    locale,
   });
 
   const selectUploadSource = () => {
@@ -205,25 +214,26 @@ export default function TechNewsForm() {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit(onSubmit)}
-      className="border-border-secondary bg-secondary-bg grid min-h-[700px] grid-cols-[0.36fr_1fr] overflow-hidden border"
+      className="border-border-secondary bg-secondary-bg 3xl:grid-cols-[0.36fr_1fr] grid min-h-0 flex-1 grid-cols-[0.36fr_1fr] grid-rows-[minmax(0,1fr)] overflow-hidden border xl:grid-cols-[0.32fr_1fr] 2xl:grid-cols-[0.34fr_1fr]"
     >
       {/* Information */}
-      <div className="border-border-secondary relative flex flex-col justify-between border-e p-7">
+      <div className="tech-news-form-info border-border-secondary 3xl:p-7 relative flex min-h-0 flex-col justify-between overflow-hidden border-e p-7 xl:p-5 2xl:p-6">
         <div>
-          <div className="border-border-secondary flex size-11 items-center justify-center border">
+          <div className="border-border-secondary 3xl:size-11 flex size-11 items-center justify-center border xl:size-10">
             <FilePenLine
-              className="text-custom-primary size-5"
+              className="text-custom-primary 3xl:size-5 size-5 xl:size-[18px]"
               strokeWidth={1.6}
             />
           </div>
 
-          <div className="mt-5">
-            <h2 className="text-foreground text-xl font-semibold">
+          <div className="tech-news-form-heading 3xl:mt-5 mt-5 xl:mt-4">
+            <h2 className="text-foreground 3xl:text-xl text-xl font-semibold xl:text-[18px] 2xl:text-[19px]">
               {t("formHeader.title")}
             </h2>
 
-            <p className="text-muted-foreground mt-3 max-w-[280px] text-sm leading-7">
+            <p className="text-muted-foreground 3xl:mt-3 3xl:max-w-[280px] 3xl:text-sm 3xl:leading-7 mt-3 max-w-[280px] text-sm leading-7 xl:mt-2.5 xl:max-w-[240px] xl:text-[13px] xl:leading-6 2xl:max-w-[260px]">
               {t("formHeader.description")}
             </p>
           </div>
@@ -231,15 +241,15 @@ export default function TechNewsForm() {
       </div>
 
       {/* Fields */}
-      <div className="relative min-h-0 p-8 pe-3">
+      <div className="3xl:p-8 3xl:pe-3 flex min-h-0 flex-col overflow-hidden p-8 pe-3 xl:p-5 xl:pe-2.5 2xl:p-6 2xl:pe-3">
         <ScrollArea
           dir={locale === "en" ? "ltr" : "rtl"}
-          className="h-[580px] w-full pe-5"
+          className="3xl:pe-5 min-h-0 flex-1 pe-5 xl:pe-4 2xl:pe-4.5"
           scrollBarClassName="me-0"
         >
-          <div className="flex flex-col gap-y-7">
+          <div className="3xl:gap-y-7 flex flex-col gap-y-7 pb-8 xl:gap-y-5 2xl:gap-y-6">
             {/* Names */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="tech-news-form-field 3xl:gap-6 grid grid-cols-2 gap-6 xl:gap-4 2xl:gap-5">
               <FormField
                 label={t("form.nameEn.label")}
                 placeholder={t("form.nameEn.placeholder")}
@@ -258,44 +268,50 @@ export default function TechNewsForm() {
             </div>
 
             {/* Image */}
-            <Controller
-              control={control}
-              name="image"
-              render={({ field }) => (
-                <TechNewsImageUploadField
-                  value={field.value}
-                  onChange={(file) => {
-                    field.onChange(file);
+            <div className="tech-news-form-field">
+              <Controller
+                control={control}
+                name="image"
+                render={({ field }) => (
+                  <TechNewsImageUploadField
+                    value={field.value}
+                    onChange={(file) => {
+                      field.onChange(file);
 
-                    setImageUploadProgress(0);
+                      setImageUploadProgress(0);
 
-                    setIsImageFinalizing(false);
-                  }}
-                  error={errors.image?.message as string | undefined}
-                  progress={imageUploadProgress}
-                  isUploading={isSubmitting}
-                  isFinalizing={isImageFinalizing}
-                />
-              )}
-            />
+                      setIsImageFinalizing(false);
+                    }}
+                    error={errors.image?.message as string | undefined}
+                    progress={imageUploadProgress}
+                    isUploading={isSubmitting}
+                    isFinalizing={isImageFinalizing}
+                  />
+                )}
+              />
+            </div>
 
             {/* Source */}
-            <div>
-              <label className="text-foreground mb-3 block text-sm font-medium">
+            <div className="tech-news-form-field">
+              <label className="text-foreground 3xl:mb-3 mb-3 block text-sm font-medium xl:mb-2.5 xl:text-[13px] 2xl:text-sm">
                 {t("form.source.label")}
               </label>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="3xl:gap-3 grid grid-cols-2 gap-3 xl:gap-2.5">
                 <button
                   type="button"
                   onClick={selectUploadSource}
                   className={
                     source === "upload"
-                      ? "border-custom-primary bg-custom-primary/[0.05] text-custom-primary flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium"
-                      : "border-border-secondary text-foreground hover:border-custom-primary/40 flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium transition-colors"
+                      ? "border-custom-primary bg-custom-primary/[0.05] text-custom-primary 3xl:h-12 3xl:gap-2 3xl:text-sm flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium xl:h-11 xl:gap-1.5 xl:text-[13px] 2xl:h-[46px]"
+                      : "border-border-secondary text-foreground hover:border-custom-primary/40 3xl:h-12 3xl:gap-2 3xl:text-sm flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium transition-colors xl:h-11 xl:gap-1.5 xl:text-[13px] 2xl:h-[46px]"
                   }
                 >
-                  <FileUp size={17} strokeWidth={1.7} />
+                  <FileUp
+                    size={17}
+                    strokeWidth={1.7}
+                    className="3xl:size-[17px] xl:size-[15px]"
+                  />
 
                   {t("form.source.upload")}
                 </button>
@@ -305,11 +321,15 @@ export default function TechNewsForm() {
                   onClick={selectUrlSource}
                   className={
                     source === "url"
-                      ? "border-custom-primary bg-custom-primary/[0.05] text-custom-primary flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium"
-                      : "border-border-secondary text-foreground hover:border-custom-primary/40 flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium transition-colors"
+                      ? "border-custom-primary bg-custom-primary/[0.05] text-custom-primary 3xl:h-12 3xl:gap-2 3xl:text-sm flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium xl:h-11 xl:gap-1.5 xl:text-[13px] 2xl:h-[46px]"
+                      : "border-border-secondary text-foreground hover:border-custom-primary/40 3xl:h-12 3xl:gap-2 3xl:text-sm flex h-12 cursor-pointer items-center justify-center gap-2 border text-sm font-medium transition-colors xl:h-11 xl:gap-1.5 xl:text-[13px] 2xl:h-[46px]"
                   }
                 >
-                  <Link2 size={17} strokeWidth={1.7} />
+                  <Link2
+                    size={17}
+                    strokeWidth={1.7}
+                    className="3xl:size-[17px] xl:size-[15px]"
+                  />
 
                   {t("form.source.url")}
                 </button>
@@ -318,50 +338,57 @@ export default function TechNewsForm() {
 
             {/* PDF */}
             {source === "upload" && (
-              <Controller
-                control={control}
-                name="pdf"
-                render={({ field }) => (
-                  <TechNewsPdfUploadField
-                    value={field.value}
-                    onChange={(file) => {
-                      field.onChange(file);
+              <div className="tech-news-form-field">
+                <Controller
+                  control={control}
+                  name="pdf"
+                  render={({ field }) => (
+                    <TechNewsPdfUploadField
+                      value={field.value}
+                      onChange={(file) => {
+                        field.onChange(file);
 
-                      setPdfUploadProgress(0);
+                        setPdfUploadProgress(0);
 
-                      setIsPdfFinalizing(false);
-                    }}
-                    error={errors.pdf?.message as string | undefined}
-                    progress={pdfUploadProgress}
-                    isUploading={isSubmitting}
-                    isFinalizing={isPdfFinalizing}
-                  />
-                )}
-              />
+                        setIsPdfFinalizing(false);
+                      }}
+                      error={errors.pdf?.message as string | undefined}
+                      progress={pdfUploadProgress}
+                      isUploading={isSubmitting}
+                      isFinalizing={isPdfFinalizing}
+                    />
+                  )}
+                />
+              </div>
             )}
 
             {/* External URL */}
             {source === "url" && (
-              <FormField
-                label={t("form.externalUrl.label")}
-                placeholder={t("form.externalUrl.placeholder")}
-                register={register("external_url")}
-                error={errors.external_url}
-                as="input"
-              />
+              <div className="tech-news-form-field">
+                <FormField
+                  label={t("form.externalUrl.label")}
+                  placeholder={t("form.externalUrl.placeholder")}
+                  register={register("external_url")}
+                  error={errors.external_url}
+                  as="input"
+                />
+              </div>
             )}
           </div>
         </ScrollArea>
 
         {/* Submit */}
-        <div className="border-border-secondary bg-secondary-bg absolute inset-x-8 bottom-0 flex justify-end border-t py-6">
+        <div className="tech-news-form-submit border-border-secondary bg-secondary-bg 3xl:mt-5 3xl:pt-6 mt-5 flex shrink-0 justify-end border-t pt-6 xl:mt-4 xl:pt-4 2xl:mt-5 2xl:pt-5">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-custom-primary text-primary-foreground flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
+            className="bg-custom-primary text-primary-foreground 3xl:min-w-[190px] 3xl:px-6 3xl:py-3 3xl:text-sm flex min-w-[190px] cursor-pointer items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-60 xl:min-w-[165px] xl:px-5 xl:py-2.5 xl:text-[13px] 2xl:min-w-[175px]"
           >
             {isSubmitting && (
-              <LoaderCircle className="size-4 animate-spin" strokeWidth={1.8} />
+              <LoaderCircle
+                className="3xl:size-4 size-4 animate-spin xl:size-[15px]"
+                strokeWidth={1.8}
+              />
             )}
 
             {isFinalizing
