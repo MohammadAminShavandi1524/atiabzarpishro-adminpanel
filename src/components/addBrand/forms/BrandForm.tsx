@@ -353,10 +353,10 @@ const BrandForm = () => {
     <form
       ref={formRef}
       onSubmit={handleSubmit(onSubmit)}
-      className="border-border-secondary bg-secondary-bg 3xl:min-h-[700px] 3xl:grid-cols-[0.36fr_1fr] grid min-h-[700px] grid-cols-[0.36fr_1fr] overflow-hidden border xl:min-h-[585px] xl:grid-cols-[0.32fr_1fr] 2xl:min-h-[625px] 2xl:grid-cols-[0.34fr_1fr]"
+      className="border-border-secondary bg-secondary-bg 3xl:grid-cols-[0.36fr_1fr] grid min-h-0 flex-1 grid-cols-[0.36fr_1fr] grid-rows-[minmax(0,1fr)] overflow-hidden border xl:grid-cols-[0.32fr_1fr] 2xl:grid-cols-[0.34fr_1fr]"
     >
       {/* Information */}
-      <div className="brand-form-info border-border-secondary 3xl:p-7 relative flex flex-col justify-between border-e p-7 xl:p-5 2xl:p-6">
+      <div className="brand-form-info border-border-secondary 3xl:p-7 relative flex min-h-0 flex-col justify-between overflow-hidden border-e p-7 xl:p-5 2xl:p-6">
         <div>
           <div className="border-border-secondary 3xl:size-11 flex size-11 items-center justify-center border xl:size-10">
             <BadgePlus
@@ -386,13 +386,13 @@ const BrandForm = () => {
       </div>
 
       {/* Fields */}
-      <div className="3xl:p-8 3xl:pe-3 relative min-h-0 p-8 pe-3 xl:p-5 xl:pe-2.5 2xl:p-6 2xl:pe-3">
+      <div className="3xl:p-8 3xl:pe-3 flex min-h-0 flex-col overflow-hidden p-8 pe-3 xl:p-5 xl:pe-2.5 2xl:p-6 2xl:pe-3">
         <ScrollArea
           dir={locale === "en" ? "ltr" : "rtl"}
-          className="3xl:h-[620px] 3xl:pe-5 h-[620px] w-full pe-5 xl:h-[535px] xl:pe-4 2xl:h-[570px] 2xl:pe-4.5"
+          className="3xl:pe-5 min-h-0 flex-1 overflow-hidden pe-5 xl:pe-4 2xl:pe-4.5"
           scrollBarClassName="me-0"
         >
-          <div className="3xl:gap-y-7 3xl:pb-4 flex flex-col gap-y-7 pb-8 xl:gap-y-5 2xl:gap-y-6">
+          <div className="3xl:gap-y-7 flex flex-col gap-y-7 pb-8 xl:gap-y-5 2xl:gap-y-6">
             {/* Names */}
             <div className="brand-form-field 3xl:gap-6 grid grid-cols-2 gap-6 xl:gap-4 2xl:gap-5">
               <FormField
@@ -468,7 +468,7 @@ const BrandForm = () => {
         </ScrollArea>
 
         {/* Submit */}
-        <div className="brand-form-submit border-border-secondary bg-secondary-bg 3xl:inset-x-8 3xl:py-6 absolute inset-x-8 bottom-0 flex justify-end border-t py-6 xl:inset-x-5 xl:py-4 2xl:inset-x-6 2xl:py-5">
+        <div className="brand-form-submit border-border-secondary bg-secondary-bg 3xl:mt-5 3xl:pt-6 mt-5 flex shrink-0 justify-end border-t pt-6 xl:mt-4 xl:pt-4 2xl:mt-5 2xl:pt-5">
           <button
             type="submit"
             disabled={isSubmitting}

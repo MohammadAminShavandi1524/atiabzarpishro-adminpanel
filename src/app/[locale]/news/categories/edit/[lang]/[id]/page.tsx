@@ -144,7 +144,7 @@ const Page = ({ params }: PageProps) => {
               </div>
 
               <div className="mt-5">
-                <h2 className="text-foreground text-xl font-semibold">
+                <h2 className="text-foreground text-xl">
                   {t("header.title")}
                 </h2>
 
@@ -180,7 +180,7 @@ const Page = ({ params }: PageProps) => {
                 variant="solid"
                 disabled={loading || isSubmitting}
                 className={cn(
-                  "h-12 px-6 font-semibold",
+                  "h-12 px-6",
                   (loading || isSubmitting) && "cursor-not-allowed opacity-60",
                 )}
               >
