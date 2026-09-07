@@ -1177,6 +1177,11 @@
         "placeholder": "https://example.com/catalogue.pdf"
       },
 
+      "image": {
+        "label": "Cover Image",
+        "placeholder": "Select or drop a cover image"
+      },
+
       "uploading": "Uploading...",
       "submit": "Create Catalogue",
       "submitting": "Creating Catalogue...",

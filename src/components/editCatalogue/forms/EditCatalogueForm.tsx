@@ -501,7 +501,7 @@ const EditCatalogueForm = ({ catalogueId }: EditCatalogueFormProps) => {
         >
           <div className="3xl:gap-y-7 flex flex-col gap-y-7 pb-8 xl:gap-y-5 2xl:gap-y-6">
             {/* Brand */}
-            <div className="edit-catalogue-form-field">
+            <div className="edit-catalogue-form-field relative z-10">
               <Controller
                 control={control}
                 name="brand_id"

@@ -31,8 +31,7 @@ import {
 
 import { uploadCatalogueFile } from "./catalogue-upload";
 import { useCatalogueFormAnimation } from "./useCatalogueFormAnimation";
-
-
+import CatalogeImageUploadField from "../CatalogeImageUploadField";
 
 const CatalogueForm = () => {
   const t = useTranslations("addCatalogue");
@@ -274,7 +273,7 @@ const CatalogueForm = () => {
         >
           <div className="3xl:gap-y-7 flex flex-col gap-y-7 pb-8 xl:gap-y-5 2xl:gap-y-6">
             {/* Brand */}
-            <div className="catalogue-form-field">
+            <div className="catalogue-form-field relative z-10">
               <Controller
                 control={control}
                 name="brand_id"
@@ -309,7 +308,7 @@ const CatalogueForm = () => {
                 control={control}
                 name="image"
                 render={({ field }) => (
-                  <BrandImageUploadField
+                  <CatalogeImageUploadField
                     value={field.value}
                     onChange={(file) => {
                       field.onChange(file);

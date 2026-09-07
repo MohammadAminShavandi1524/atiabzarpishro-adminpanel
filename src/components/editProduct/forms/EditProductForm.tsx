@@ -366,7 +366,7 @@ const EditProductForm = ({ productId }: EditProductFormProps) => {
             </div>
 
             {/* Brand */}
-            <div className="edit-product-form-field">
+            <div className="edit-product-form-field relative z-10">
               <Controller
                 control={control}
                 name="brand_id"

@@ -1178,6 +1178,11 @@
         "placeholder": "https://example.com/catalogue.pdf"
       },
 
+      "image": {
+        "label": "تصویر کاور",
+        "placeholder": "تصویر کاور را انتخاب کنید یا اینجا رها کنید"
+      },
+
       "uploading": "در حال آپلود...",
       "submit": "ایجاد کاتالوگ",
       "submitting": "در حال ایجاد کاتالوگ...",

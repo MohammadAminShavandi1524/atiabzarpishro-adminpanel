@@ -309,7 +309,7 @@ export default function ProductForm() {
             </div>
 
             {/* Brand */}
-            <div className="product-form-field">
+            <div className="product-form-field relative z-10">
               <Controller
                 control={control}
                 name="brand_id"
