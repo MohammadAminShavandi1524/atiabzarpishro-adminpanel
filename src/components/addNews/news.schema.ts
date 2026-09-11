@@ -6,16 +6,21 @@ export const newsSchema = (t: (key: string) => string) =>
       .number()
       .min(1, t("forms.news.validation.parentNewsRequired")),
 
-    title: z.string().min(1, t("forms.news.validation.titleRequired")),
+    title: z.string().trim().optional(),
 
-    description: z
-      .string()
-      .min(1, t("forms.news.validation.descriptionRequired")),
+    description: z.string().trim().optional(),
 
     image: z
-      .string()
-      .url(t("forms.news.validation.imageInvalid"))
-      .or(z.literal("")),
+      .custom<File | undefined>()
+      .optional()
+      .refine(
+        (file) =>
+          file === undefined ||
+          (file instanceof File && file.type.startsWith("image/")),
+        {
+          message: t("forms.news.validation.imageInvalid"),
+        },
+      ),
   });
 
 export type NewsFormValues = z.infer<ReturnType<typeof newsSchema>>;

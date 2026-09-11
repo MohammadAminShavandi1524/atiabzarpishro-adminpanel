@@ -69,6 +69,7 @@ const VideoRow = ({ video, setVideos, animationIndex = 0 }: VideoRowProps) => {
   return (
     <article
       ref={rowRef}
+      dir={locale === "en" ? "ltr" : "rtl"}
       className="group/video border-border bg-background hover:border-border-secondary hover:bg-card-secondary/40 relative w-full border transition-[background-color,border-color] duration-300"
     >
       {/* Hover Indicator */}

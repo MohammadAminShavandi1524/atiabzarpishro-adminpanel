@@ -13,7 +13,7 @@ const Logo = () => {
       className="flex size-14 shrink-0 items-center justify-center 2xl:size-16"
     >
       <Image
-        src="/logo2.webp"
+        src="/logo3.webp"
         alt="ATI Abzar Pishro"
         width={64}
         height={64}

@@ -815,8 +815,10 @@
         "save": "ذخیره",
         "title": "عنوان",
         "titlePlaceholder": "عنوان خبر والد را وارد کنید",
-        "featuredImage": "آدرس تصویر شاخص",
-        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "featuredImage": "تصویر شاخص",
+        "featuredImagePlaceholder": "یک تصویر انتخاب کنید",
+        "imageUploading": "در حال آپلود تصویر...",
+        "imageFinalizing": "در حال نهایی‌سازی آپلود...",
         "description": "توضیحات",
         "descriptionPlaceholder": "توضیح کوتاهی برای این خبر والد بنویسید",
         "language": "زبان",
@@ -829,18 +831,20 @@
           "categoryRequired": "لطفاً یک دسته‌بندی انتخاب کنید.",
           "titleRequired": "وارد کردن عنوان الزامی است.",
           "descriptionRequired": "وارد کردن توضیحات الزامی است.",
-          "imageInvalid": "لطفاً یک آدرس معتبر برای تصویر وارد کنید.",
+          "imageInvalid": "لطفاً یک فایل تصویری معتبر انتخاب کنید.",
           "languageRequired": "لطفاً یک زبان انتخاب کنید.",
           "tagsRequired": "لطفاً حداقل یک برچسب انتخاب کنید."
         }
       },
       "news": {
         "title": "عنوان",
-        "titlePlaceholder": "عنوان خبر را وارد کنید",
-        "featuredImage": "آدرس تصویر شاخص",
-        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "titlePlaceholder": "عنوان خبر را وارد کنید (اختیاری)",
+        "featuredImage": "تصویر شاخص",
+        "featuredImagePlaceholder": "یک تصویر انتخاب کنید (اختیاری)",
+        "imageUploading": "در حال آپلود تصویر...",
+        "imageFinalizing": "در حال نهایی‌سازی آپلود...",
         "description": "توضیحات",
-        "descriptionPlaceholder": "توضیح کوتاهی برای این خبر بنویسید",
+        "descriptionPlaceholder": "توضیح کوتاهی برای این خبر بنویسید (اختیاری)",
         "parentNews": "خبر والد",
         "parentNewsPlaceholder": "خبر والد را انتخاب کنید",
         "loadingParentNews": "در حال بارگذاری خبرهای والد...",
@@ -848,7 +852,7 @@
           "parentNewsRequired": "لطفاً یک خبر والد انتخاب کنید.",
           "titleRequired": "وارد کردن عنوان الزامی است.",
           "descriptionRequired": "وارد کردن توضیحات الزامی است.",
-          "imageInvalid": "لطفاً یک آدرس معتبر برای تصویر وارد کنید."
+          "imageInvalid": "لطفاً یک فایل تصویری معتبر انتخاب کنید."
         }
       }
     },
@@ -918,7 +922,9 @@
       },
       "image": {
         "label": "تصویر شاخص",
-        "placeholder": "آدرس تصویر را وارد کنید"
+        "placeholder": "یک تصویر انتخاب کنید",
+        "current": "تصویر فعلی",
+        "hint": "فقط در صورتی که می‌خواهید تصویر فعلی را تغییر دهید، تصویر جدیدی از بخش زیر انتخاب کنید."
       },
       "category": {
         "label": "دسته‌بندی"
@@ -932,12 +938,14 @@
         "titleMax": "عنوان خبر نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد.",
         "descriptionRequired": "وارد کردن توضیحات خبر الزامی است.",
         "imageRequired": "تصویر خبر الزامی است.",
+        "imageInvalid": "لطفاً یک فایل تصویری معتبر انتخاب کنید.",
         "categoryRequired": "انتخاب دسته‌بندی الزامی است.",
         "tagsRequired": "حداقل یک برچسب انتخاب کنید."
       },
       "actions": {
         "saveChanges": "ذخیره تغییرات",
-        "saving": "در حال ذخیره..."
+        "saving": "در حال ذخیره...",
+        "finalizing": "در حال نهایی‌سازی آپلود..."
       }
     },
     "toast": {
@@ -955,24 +963,28 @@
     "form": {
       "title": {
         "label": "عنوان",
-        "placeholder": "عنوان خبر را وارد کنید"
+        "placeholder": "عنوان خبر را وارد کنید (اختیاری)"
       },
       "description": {
         "label": "توضیحات",
-        "placeholder": "توضیحات خبر را وارد کنید"
+        "placeholder": "توضیحات خبر را وارد کنید (اختیاری)"
       },
       "image": {
         "label": "تصویر",
-        "placeholder": "آدرس تصویر را وارد کنید (اختیاری)"
+        "placeholder": "یک تصویر انتخاب کنید (اختیاری)",
+        "current": "تصویر فعلی",
+        "hint": "فقط در صورتی که می‌خواهید تصویر فعلی را تغییر دهید، تصویر جدیدی از بخش زیر انتخاب کنید."
       },
       "validation": {
         "titleRequired": "وارد کردن عنوان خبر الزامی است.",
         "titleMax": "عنوان خبر نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد.",
-        "descriptionRequired": "وارد کردن توضیحات خبر الزامی است."
+        "descriptionRequired": "وارد کردن توضیحات خبر الزامی است.",
+        "imageInvalid": "لطفاً یک فایل تصویری معتبر انتخاب کنید."
       },
       "actions": {
         "saveChanges": "ذخیره تغییرات",
-        "saving": "در حال ذخیره..."
+        "saving": "در حال ذخیره...",
+        "finalizing": "در حال نهایی‌سازی آپلود..."
       }
     },
     "toast": {

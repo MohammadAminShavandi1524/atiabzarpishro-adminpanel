@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import Image from "next/image";
+
 import { z } from "zod";
 
 import { useRouter } from "next/navigation";
@@ -31,6 +33,10 @@ import { tags } from "@/components/addNews/data";
 import { CategorySelect } from "@/components/addNews/CategorySelect";
 
 import { TagSelector } from "@/components/addNews/TagSelector";
+
+import ParentNewsImageUploadField from "@/components/addNews/forms/ParentNewsImageUploadField";
+
+import { uploadParentNewsImage } from "@/components/addNews/forms/parent-news-upload";
 
 interface PageProps {
   params: Promise<{
@@ -83,6 +89,12 @@ const Page = ({ params }: PageProps) => {
 
   const [newsLang, setNewsLang] = useState<NewsLang>("fa");
 
+  const [currentImage, setCurrentImage] = useState("");
+
+  const [imageUploadProgress, setImageUploadProgress] = useState(0);
+
+  const [isImageFinalizing, setIsImageFinalizing] = useState(false);
+
   const [parentMeta, setParentMeta] = useState<{
     root_blog: string;
 
@@ -98,7 +110,17 @@ const Page = ({ params }: PageProps) => {
 
     description: z.string().min(1, t("form.validation.descriptionRequired")),
 
-    image: z.string(),
+    image: z
+      .custom<File | undefined>()
+      .optional()
+      .refine(
+        (file) =>
+          file === undefined ||
+          (file instanceof File && file.type.startsWith("image/")),
+        {
+          message: t("form.validation.imageInvalid"),
+        },
+      ),
 
     category: z.string().min(1, t("form.validation.categoryRequired")),
 
@@ -128,7 +150,7 @@ const Page = ({ params }: PageProps) => {
 
       description: "",
 
-      image: "",
+      image: undefined,
 
       category: "",
 
@@ -155,6 +177,8 @@ const Page = ({ params }: PageProps) => {
 
         setNewsLang(lang);
 
+        setCurrentImage(data.image ?? "");
+
         setParentMeta({
           root_blog: String(data.root_blog),
 
@@ -178,7 +202,7 @@ const Page = ({ params }: PageProps) => {
 
           description: data.description ?? "",
 
-          image: data.image ?? "",
+          image: undefined,
 
           category: String(data.category.id),
 
@@ -205,7 +229,7 @@ const Page = ({ params }: PageProps) => {
     };
 
     fetchNews();
-  }, [params, reset, t]);
+  }, [params, reset, t, toast]);
 
   const onSubmit = async (data: FormValues) => {
     const { id } = await params;
@@ -216,23 +240,39 @@ const Page = ({ params }: PageProps) => {
       return;
     }
 
-    const payload = {
-      title: data.title,
-
-      description: data.description,
-
-      image: data.image,
-
-      tags: data.tags.map((item) => item.label),
-
-      root_blog: parentMeta.root_blog,
-
-      category: String(data.category),
-
-      lang: parentMeta.lang,
-    };
-
     try {
+      setImageUploadProgress(0);
+
+      setIsImageFinalizing(false);
+
+      let finalImageUrl = currentImage;
+
+      if (data.image instanceof File) {
+        finalImageUrl = await uploadParentNewsImage({
+          file: data.image,
+
+          onProgress: setImageUploadProgress,
+
+          onFinalizing: setIsImageFinalizing,
+        });
+      }
+
+      const payload = {
+        title: data.title,
+
+        description: data.description,
+
+        image: finalImageUrl,
+
+        tags: data.tags.map((item) => item.label),
+
+        root_blog: parentMeta.root_blog,
+
+        category: String(data.category),
+
+        lang: parentMeta.lang,
+      };
+
       const res = await fetch(`/api/blog/parent/update/${id}`, {
         method: "PUT",
 
@@ -258,6 +298,10 @@ const Page = ({ params }: PageProps) => {
       router.push(`/${locale}/news`);
     } catch (error) {
       console.error(error);
+
+      setImageUploadProgress(0);
+
+      setIsImageFinalizing(false);
 
       toast.error(t("toast.error"));
     }
@@ -363,14 +407,52 @@ const Page = ({ params }: PageProps) => {
                   />
                 </div>
 
-                {/* Image */}
+                {/* Current Image */}
+                {currentImage && (
+                  <div className="min-w-0">
+                    <label className="text-foreground mb-2 block text-sm font-medium xl:text-[13px] 2xl:text-sm">
+                      {t("form.image.current")}
+                    </label>
+
+                    <div className="border-border-secondary bg-background flex items-center gap-4 border p-4">
+                      <div className="relative h-24 w-36 shrink-0 overflow-hidden">
+                        <Image
+                          src={currentImage}
+                          alt={t("form.image.current")}
+                          fill
+                          sizes="144px"
+                          className="object-cover"
+                        />
+                      </div>
+
+                      <p className="text-muted-foreground text-sm leading-6 xl:text-[13px]">
+                        {t("form.image.hint")}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* New Image */}
                 <div className="min-w-0">
-                  <FormField
-                    label={t("form.image.label")}
-                    placeholder={t("form.image.placeholder")}
-                    register={register("image")}
-                    error={errors.image}
-                    as="input"
+                  <Controller
+                    control={control}
+                    name="image"
+                    render={({ field }) => (
+                      <ParentNewsImageUploadField
+                        value={field.value}
+                        onChange={(file) => {
+                          field.onChange(file);
+
+                          setImageUploadProgress(0);
+
+                          setIsImageFinalizing(false);
+                        }}
+                        error={errors.image?.message as string | undefined}
+                        progress={imageUploadProgress}
+                        isUploading={isSubmitting}
+                        isFinalizing={isImageFinalizing}
+                      />
+                    )}
                   />
                 </div>
 
@@ -399,9 +481,11 @@ const Page = ({ params }: PageProps) => {
                   (loading || isSubmitting) && "cursor-not-allowed opacity-60",
                 )}
               >
-                {isSubmitting
-                  ? t("form.actions.saving")
-                  : t("form.actions.saveChanges")}
+                {isImageFinalizing
+                  ? t("form.actions.finalizing")
+                  : isSubmitting
+                    ? t("form.actions.saving")
+                    : t("form.actions.saveChanges")}
               </CustomButton>
             </div>
           </div>

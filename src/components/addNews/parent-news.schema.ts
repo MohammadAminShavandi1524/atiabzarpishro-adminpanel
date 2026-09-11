@@ -32,10 +32,16 @@ export const parentNewsSchema = (t: (key: string) => string) =>
       .min(1, t("forms.parentNews.validation.descriptionRequired")),
 
     image: z
-      .string()
-      .trim()
-      .url(t("forms.parentNews.validation.imageInvalid"))
-      .or(z.literal("")),
+      .custom<File | undefined>()
+      .optional()
+      .refine(
+        (file) =>
+          file === undefined ||
+          (file instanceof File && file.type.startsWith("image/")),
+        {
+          message: t("forms.parentNews.validation.imageInvalid"),
+        },
+      ),
   });
 
 export type ParentNewsFormValues = z.infer<ReturnType<typeof parentNewsSchema>>;

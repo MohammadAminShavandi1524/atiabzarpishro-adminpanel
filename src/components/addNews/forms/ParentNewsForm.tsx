@@ -26,7 +26,11 @@ import { CategorySelect } from "../CategorySelect";
 
 import { TagSelector } from "../TagSelector";
 
+import ParentNewsImageUploadField from "./ParentNewsImageUploadField";
+
 import { ParentNewsFormValues, parentNewsSchema } from "../parent-news.schema";
+
+import { uploadParentNewsImage } from "./parent-news-upload";
 
 import { tags } from "../data";
 
@@ -43,6 +47,10 @@ const ParentNewsForm = () => {
   const toast = useCustomToast();
 
   const [categories, setCategories] = useState<Category[]>([]);
+
+  const [imageUploadProgress, setImageUploadProgress] = useState(0);
+
+  const [isImageFinalizing, setIsImageFinalizing] = useState(false);
 
   const {
     register,
@@ -64,7 +72,7 @@ const ParentNewsForm = () => {
 
       description: "",
 
-      image: "",
+      image: undefined,
 
       lang: "fa",
 
@@ -99,23 +107,39 @@ const ParentNewsForm = () => {
   }, [lang]);
 
   const onSubmit = async (data: ParentNewsFormValues) => {
-    const payload = {
-      title: data.title,
-
-      description: data.description,
-
-      image: data.image,
-
-      category: data.category,
-
-      root_blog: data.root_blog,
-
-      tags: data.tags.map((item) => item.label),
-
-      lang: data.lang,
-    };
-
     try {
+      setImageUploadProgress(0);
+
+      setIsImageFinalizing(false);
+
+      let imageUrl = "";
+
+      if (data.image instanceof File) {
+        imageUrl = await uploadParentNewsImage({
+          file: data.image,
+
+          onProgress: setImageUploadProgress,
+
+          onFinalizing: setIsImageFinalizing,
+        });
+      }
+
+      const payload = {
+        title: data.title,
+
+        description: data.description,
+
+        image: imageUrl,
+
+        category: data.category,
+
+        root_blog: data.root_blog,
+
+        tags: data.tags.map((item) => item.label),
+
+        lang: data.lang,
+      };
+
       const res = await fetch("/api/blog/parent", {
         method: "POST",
 
@@ -145,14 +169,22 @@ const ParentNewsForm = () => {
 
         description: "",
 
-        image: "",
+        image: undefined,
 
         lang: "fa",
 
         tags: [],
       });
+
+      setImageUploadProgress(0);
+
+      setIsImageFinalizing(false);
     } catch (error) {
       console.error("CREATE PARENT NEWS ERROR =>", error);
+
+      setImageUploadProgress(0);
+
+      setIsImageFinalizing(false);
 
       toast.error(t("toast.parentNews.error"));
     }
@@ -277,12 +309,25 @@ const ParentNewsForm = () => {
 
             {/* Featured Image */}
             <div className="min-w-0">
-              <FormField
-                label={t("forms.parentNews.featuredImage")}
-                placeholder={t("forms.parentNews.featuredImagePlaceholder")}
-                register={register("image")}
-                error={errors.image}
-                as="input"
+              <Controller
+                control={control}
+                name="image"
+                render={({ field }) => (
+                  <ParentNewsImageUploadField
+                    value={field.value}
+                    onChange={(file) => {
+                      field.onChange(file);
+
+                      setImageUploadProgress(0);
+
+                      setIsImageFinalizing(false);
+                    }}
+                    error={errors.image?.message as string | undefined}
+                    progress={imageUploadProgress}
+                    isUploading={isSubmitting}
+                    isFinalizing={isImageFinalizing}
+                  />
+                )}
               />
             </div>
 

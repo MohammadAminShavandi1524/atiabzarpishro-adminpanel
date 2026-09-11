@@ -29,6 +29,7 @@ const NewsHierarchy = () => {
   const [rootNews, setRootNews] = useState<RootNews[]>([]);
 
   const [parentNews, setParentNews] = useState<ParentNews[]>([]);
+  console.log("🚀 ~ NewsHierarchy ~ parentNews:", parentNews)
 
   const [loading, setLoading] = useState(true);
 

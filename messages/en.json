@@ -723,7 +723,9 @@
       },
       "image": {
         "label": "Featured Image",
-        "placeholder": "Enter image URL"
+        "placeholder": "Select an image",
+        "current": "Current Image",
+        "hint": "Select a new image below only if you want to replace the current image."
       },
       "category": {
         "label": "Category"
@@ -737,12 +739,14 @@
         "titleMax": "News title cannot exceed 100 characters.",
         "descriptionRequired": "News description is required.",
         "imageRequired": "News image is required.",
+        "imageInvalid": "Please select a valid image file.",
         "categoryRequired": "Category is required.",
         "tagsRequired": "At least one tag is required."
       },
       "actions": {
         "saveChanges": "Save Changes",
-        "saving": "Saving..."
+        "saving": "Saving...",
+        "finalizing": "Finalizing upload..."
       }
     },
     "toast": {
@@ -760,24 +764,28 @@
     "form": {
       "title": {
         "label": "Title",
-        "placeholder": "Enter news title"
+        "placeholder": "Enter news title (optional)"
       },
       "description": {
         "label": "Description",
-        "placeholder": "Enter news description"
+        "placeholder": "Enter news description (optional)"
       },
       "image": {
         "label": "Image",
-        "placeholder": "Enter image URL (optional)"
+        "placeholder": "Select an image (optional)",
+        "current": "Current Image",
+        "hint": "Select a new image below only if you want to replace the current image."
       },
       "validation": {
         "titleRequired": "News title is required.",
         "titleMax": "News title cannot exceed 100 characters.",
-        "descriptionRequired": "News description is required."
+        "descriptionRequired": "News description is required.",
+        "imageInvalid": "Please select a valid image file."
       },
       "actions": {
         "saveChanges": "Save Changes",
-        "saving": "Saving..."
+        "saving": "Saving...",
+        "finalizing": "Finalizing upload..."
       }
     },
     "toast": {
@@ -946,8 +954,10 @@
         "save": "Save",
         "title": "Title",
         "titlePlaceholder": "Enter the parent news title",
-        "featuredImage": "Featured Image URL",
-        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "featuredImage": "Featured Image",
+        "featuredImagePlaceholder": "Select an image",
+        "imageUploading": "Uploading image...",
+        "imageFinalizing": "Finalizing upload...",
         "description": "Description",
         "descriptionPlaceholder": "Write a short description for this parent news item",
         "language": "Language",
@@ -960,18 +970,20 @@
           "categoryRequired": "Please select a category.",
           "titleRequired": "Title is required.",
           "descriptionRequired": "Description is required.",
-          "imageInvalid": "Please enter a valid image URL.",
+          "imageInvalid": "Please select a valid image file.",
           "languageRequired": "Please select a language.",
           "tagsRequired": "Please select at least one tag."
         }
       },
       "news": {
         "title": "Title",
-        "titlePlaceholder": "Enter the news title",
-        "featuredImage": "Featured Image URL",
-        "featuredImagePlaceholder": "https://example.com/image.jpg",
+        "titlePlaceholder": "Enter the news title (optional)",
+        "featuredImage": "Featured Image",
+        "featuredImagePlaceholder": "Select an image (optional)",
+        "imageUploading": "Uploading image...",
+        "imageFinalizing": "Finalizing upload...",
         "description": "Description",
-        "descriptionPlaceholder": "Write a short description for this news item",
+        "descriptionPlaceholder": "Write a short description for this news item (optional)",
         "parentNews": "Parent News",
         "parentNewsPlaceholder": "Select parent news",
         "loadingParentNews": "Loading parent news...",
@@ -979,7 +991,7 @@
           "parentNewsRequired": "Please select parent news.",
           "titleRequired": "Title is required.",
           "descriptionRequired": "Description is required.",
-          "imageInvalid": "Please enter a valid image URL."
+          "imageInvalid": "Please select a valid image file."
         }
       }
     },
